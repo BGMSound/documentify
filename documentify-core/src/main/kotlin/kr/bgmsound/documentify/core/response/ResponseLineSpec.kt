@@ -11,6 +11,8 @@ class ResponseLineSpec(
 
     fun statusCode(statusCode: HttpStatus) = run { this.statusCode = statusCode.value() }
 
+    fun statusCode(statusCode: Int) = run { this.statusCode = statusCode }
+
     override fun build(): List<Snippet> {
         return emptyList()
     }

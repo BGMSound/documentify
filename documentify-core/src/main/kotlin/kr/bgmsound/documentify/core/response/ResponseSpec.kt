@@ -12,6 +12,18 @@ class ResponseSpec(
 
     val statusCode get() = responseLineSpec.statusCode
 
+    fun status(statusCode: HttpStatus) {
+        responseLineSpec.statusCode = statusCode.value()
+    }
+
+    fun status(statusCode: Int) {
+        responseLineSpec.statusCode = statusCode
+    }
+
+    fun line(specCustomizer: ResponseLineSpec.() -> Unit) {
+        responseLineSpec.apply(specCustomizer)
+    }
+
     fun headers(spec: ResponseHeaderSpec.() -> Unit) {
         responseHeaderSpec.apply(spec)
     }
