@@ -13,9 +13,8 @@ import org.springframework.restdocs.restassured.RestAssuredRestDocumentation.doc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
-
     @LocalServerPort
-    protected var port: Int = 0
+    protected var port: Int = -1
     private lateinit var spec: RequestSpecification
 
     @BeforeEach
