@@ -2,7 +2,6 @@ package kr.bgmsound.documentify.core.request
 
 import io.restassured.http.Method
 import kr.bgmsound.documentify.core.Spec
-import org.springframework.http.HttpStatus
 import org.springframework.restdocs.request.ParameterDescriptor
 import org.springframework.restdocs.request.PathParametersSnippet
 import org.springframework.restdocs.request.QueryParametersSnippet
@@ -17,8 +16,8 @@ class RequestLineSpec(
     private val queryParameters: MutableList<ParameterDescriptor> = mutableListOf()
 ) : Spec {
 
-    private var _pathVariablesSnippet: PathParametersSnippet? = null
-    private var _queryParametersSnippet: QueryParametersSnippet? = null
+    private var pathVariablesSnippet: PathParametersSnippet? = null
+    private var queryParametersSnippet: QueryParametersSnippet? = null
 
     fun pathVariable(key: String, sample: String, description: String) {
         pathParameters.add(
@@ -41,8 +40,15 @@ class RequestLineSpec(
     }
 
     override fun build(): List<Snippet> {
-        _pathVariablesSnippet = RequestDocumentation.pathParameters(pathParameters)
-        _queryParametersSnippet = RequestDocumentation.queryParameters(queryParameters)
-        return listOf(_pathVariablesSnippet!!, _queryParametersSnippet!!)
+        return buildList {
+            if (pathParameters.isNotEmpty()) {
+                pathVariablesSnippet = RequestDocumentation.pathParameters(pathParameters)
+                add(pathVariablesSnippet!!)
+            }
+            if (queryParameters.isNotEmpty()) {
+                queryParametersSnippet = RequestDocumentation.queryParameters(queryParameters)
+                add(queryParametersSnippet!!)
+            }
+        }
     }
 }
