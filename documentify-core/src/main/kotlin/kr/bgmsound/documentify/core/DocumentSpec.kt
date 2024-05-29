@@ -1,7 +1,5 @@
 package kr.bgmsound.documentify.core
 
-import io.restassured.http.Method
-import kr.bgmsound.documentify.core.request.RequestLineSpec
 import kr.bgmsound.documentify.core.request.RequestSpec
 import kr.bgmsound.documentify.core.response.ResponseSpec
 import org.springframework.restdocs.snippet.Snippet
