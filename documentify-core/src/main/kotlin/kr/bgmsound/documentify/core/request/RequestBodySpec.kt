@@ -6,13 +6,13 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet
 import org.springframework.restdocs.snippet.Snippet
 
 class RequestBodySpec : BodySpec() {
-    private var _fieldsSnippet: RequestFieldsSnippet? = null
+    private var fieldsSnippet: RequestFieldsSnippet? = null
 
     override fun build(): List<Snippet> {
         if (fields.isEmpty()) {
             return emptyList()
         }
-        _fieldsSnippet = PayloadDocumentation.requestFields(fields.map { it.descriptor })
-        return listOf(_fieldsSnippet!!)
+        fieldsSnippet = PayloadDocumentation.requestFields(fields.map { it.descriptor })
+        return listOf(fieldsSnippet!!)
     }
 }
