@@ -10,14 +10,14 @@ class ResponseSpec(
     private val responseBodySpec: ResponseBodySpec = ResponseBodySpec(),
 ) : Spec {
 
-    val statusCode get() = responseLineSpec.statusCode
+    val statusCode get() = responseLineSpec.statusCode()
 
     fun status(statusCode: HttpStatus) {
-        responseLineSpec.statusCode = statusCode.value()
+        responseLineSpec.statusCode(statusCode.value())
     }
 
     fun status(statusCode: Int) {
-        responseLineSpec.statusCode = statusCode
+        responseLineSpec.statusCode(statusCode)
     }
 
     fun line(specCustomizer: ResponseLineSpec.() -> Unit) {
