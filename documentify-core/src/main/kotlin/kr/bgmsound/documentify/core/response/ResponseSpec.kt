@@ -5,37 +5,37 @@ import org.springframework.http.HttpStatus
 import org.springframework.restdocs.snippet.Snippet
 
 class ResponseSpec(
-    private val responseLineSpec: ResponseLineSpec = ResponseLineSpec(HttpStatus.OK),
-    private val responseHeaderSpec: ResponseHeaderSpec = ResponseHeaderSpec(),
-    private val responseBodySpec: ResponseBodySpec = ResponseBodySpec(),
+    private val responseLine: ResponseLineSpec = ResponseLineSpec(HttpStatus.OK),
+    private val responseHeader: ResponseHeaderSpec = ResponseHeaderSpec(),
+    private val responseBody: ResponseBodySpec = ResponseBodySpec(),
 ) : APISpec {
 
-    val statusCode get() = responseLineSpec.statusCode()
+    val statusCode get() = responseLine.statusCode()
 
     fun status(statusCode: HttpStatus) {
-        responseLineSpec.statusCode(statusCode.value())
+        responseLine.statusCode(statusCode.value())
     }
 
     fun status(statusCode: Int) {
-        responseLineSpec.statusCode(statusCode)
+        responseLine.statusCode(statusCode)
     }
 
     fun line(specCustomizer: ResponseLineSpec.() -> Unit) {
-        responseLineSpec.apply(specCustomizer)
+        responseLine.apply(specCustomizer)
     }
 
     fun headers(spec: ResponseHeaderSpec.() -> Unit) {
-        responseHeaderSpec.apply(spec)
+        responseHeader.apply(spec)
     }
 
     fun body(spec: ResponseBodySpec.() -> Unit) {
-        responseBodySpec.apply(spec)
+        responseBody.apply(spec)
     }
 
     override fun build(): List<Snippet> {
         return buildList {
-            addAll(responseHeaderSpec.build())
-            addAll(responseBodySpec.build())
+            addAll(responseHeader.build())
+            addAll(responseBody.build())
         }
     }
 }

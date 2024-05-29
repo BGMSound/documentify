@@ -9,14 +9,14 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors.*
 import org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document
 
 class RestDocsEmitter(
-    private val documentSpec: DocumentSpec
+    private val document: DocumentSpec
 ) {
     fun emit(requestSpecification: RequestSpecification) {
-        val snippets = documentSpec.build()
+        val snippets = document.build()
         val response = given(requestSpecification)
             .filter(
                 document(
-                    documentSpec.name,
+                    document.name,
                     preprocessRequest(prettyPrint()),
                     preprocessResponse(prettyPrint()),
                     *snippets.toTypedArray()
@@ -27,17 +27,17 @@ class RestDocsEmitter(
             .sendRequest()
         response.prettyPrint()
         response.then()
-            .statusCode(documentSpec.statusCode)
+            .statusCode(document.response.statusCode)
     }
 
     private fun RequestSpecification.sendRequest(): Response {
-        return when (documentSpec.method) {
-            Method.GET -> get(documentSpec.url)
-            Method.POST -> post(documentSpec.url)
-            Method.PUT -> put(documentSpec.url)
-            Method.PATCH -> patch(documentSpec.url)
-            Method.DELETE -> delete(documentSpec.url)
-            else -> throw IllegalArgumentException("Unsupported method: ${documentSpec.method}")
+        return when (document.request.method) {
+            Method.GET -> get(document.request.url)
+            Method.POST -> post(document.request.url)
+            Method.PUT -> put(document.request.url)
+            Method.PATCH -> patch(document.request.url)
+            Method.DELETE -> delete(document.request.url)
+            else -> throw IllegalArgumentException("Unsupported method: ${document.request.method}")
         }
     }
 }

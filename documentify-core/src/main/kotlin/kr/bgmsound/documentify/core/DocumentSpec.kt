@@ -10,25 +10,21 @@ class DocumentSpec(
 
     private val snippets = mutableListOf<Snippet>()
 
-    private val requestSpec: RequestSpec = RequestSpec()
-    private val responseSpec: ResponseSpec = ResponseSpec()
-
-    val url get() = requestSpec.url
-    val method get() = requestSpec.method
-    val statusCode get() = responseSpec.statusCode
+    val request: RequestSpec = RequestSpec()
+    val response: ResponseSpec = ResponseSpec()
 
     fun request(specCustomizer: RequestSpec.() -> Unit) {
-        requestSpec.apply(specCustomizer)
+        request.apply(specCustomizer)
     }
 
     fun response(specCustomizer: ResponseSpec.() -> Unit) {
-        responseSpec.apply(specCustomizer)
+        response.apply(specCustomizer)
     }
 
     override fun build(): List<Snippet> {
          val subSnippets =  buildList {
-            addAll(requestSpec.build())
-            addAll(responseSpec.build())
+            addAll(request.build())
+            addAll(response.build())
         }
         snippets.addAll(subSnippets)
         return snippets
