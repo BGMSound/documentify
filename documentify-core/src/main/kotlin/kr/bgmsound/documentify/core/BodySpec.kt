@@ -6,7 +6,7 @@ import org.springframework.restdocs.snippet.Attributes
 
 abstract class BodySpec(
     protected val fields: MutableList<Field> = mutableListOf()
-) : Spec {
+) : APISpec {
     inline fun <reified T> field(path: String, description: String, sample: T): Field {
         return putField(T::class.java, path, description, sample, Type.REQUIRED)
     }

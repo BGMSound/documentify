@@ -6,7 +6,7 @@ import org.springframework.restdocs.snippet.Attributes
 
 abstract class HeaderSpec(
     protected val headers: MutableList<Header> = mutableListOf()
-) : Spec {
+) : APISpec {
 
     fun header(header: Header) {
         headers.add(header)

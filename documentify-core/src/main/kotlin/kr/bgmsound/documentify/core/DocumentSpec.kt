@@ -6,7 +6,7 @@ import org.springframework.restdocs.snippet.Snippet
 
 class DocumentSpec(
     val name: String,
-) : Spec {
+) : APISpec {
 
     private val snippets = mutableListOf<Snippet>()
 

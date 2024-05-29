@@ -1,15 +1,14 @@
 package kr.bgmsound.documentify.core.request
 
 import io.restassured.http.Method
-import kr.bgmsound.documentify.core.Spec
-import org.springframework.http.HttpStatus
+import kr.bgmsound.documentify.core.APISpec
 import org.springframework.restdocs.snippet.Snippet
 
 class RequestSpec(
     private val requestLineSpec: RequestLineSpec = RequestLineSpec("", Method.GET),
     private val requestHeaderSpec: RequestHeaderSpec = RequestHeaderSpec(),
     private val requestBodySpec: RequestBodySpec = RequestBodySpec()
-) : Spec {
+) : APISpec {
 
     val url get() = requestLineSpec.url
     val method get() = requestLineSpec.method

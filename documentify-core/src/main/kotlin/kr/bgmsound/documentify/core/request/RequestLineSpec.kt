@@ -1,7 +1,7 @@
 package kr.bgmsound.documentify.core.request
 
 import io.restassured.http.Method
-import kr.bgmsound.documentify.core.Spec
+import kr.bgmsound.documentify.core.APISpec
 import org.springframework.restdocs.request.ParameterDescriptor
 import org.springframework.restdocs.request.PathParametersSnippet
 import org.springframework.restdocs.request.QueryParametersSnippet
@@ -14,7 +14,7 @@ class RequestLineSpec(
     var method: Method,
     private val pathParameters: MutableList<ParameterDescriptor> = mutableListOf(),
     private val queryParameters: MutableList<ParameterDescriptor> = mutableListOf()
-) : Spec {
+) : APISpec {
 
     private var pathVariablesSnippet: PathParametersSnippet? = null
     private var queryParametersSnippet: QueryParametersSnippet? = null

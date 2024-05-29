@@ -1,6 +1,6 @@
 package kr.bgmsound.documentify.core.response
 
-import kr.bgmsound.documentify.core.Spec
+import kr.bgmsound.documentify.core.APISpec
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.snippet.Snippet
 
@@ -8,7 +8,7 @@ class ResponseSpec(
     private val responseLineSpec: ResponseLineSpec = ResponseLineSpec(HttpStatus.OK),
     private val responseHeaderSpec: ResponseHeaderSpec = ResponseHeaderSpec(),
     private val responseBodySpec: ResponseBodySpec = ResponseBodySpec(),
-) : Spec {
+) : APISpec {
 
     val statusCode get() = responseLineSpec.statusCode()
 
