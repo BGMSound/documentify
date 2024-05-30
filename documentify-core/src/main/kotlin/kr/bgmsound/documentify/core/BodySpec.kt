@@ -19,6 +19,8 @@ abstract class BodySpec(
         return putField(T::class.java, path, description, sample, Type.IGNORED)
     }
 
+    fun fields(): List<Field> = fields
+
     fun <T> putField(
         clazz: Class<*>,
         path: String,
@@ -30,7 +32,7 @@ abstract class BodySpec(
             .fieldWithPath(path)
             .description(description)
             .attributes(
-                Attributes.Attribute("sample", sample)
+                Attributes.Attribute(SAMPLE, sample)
             )
         when (type) {
             Type.REQUIRED -> {}

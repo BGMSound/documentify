@@ -8,6 +8,8 @@ abstract class HeaderSpec(
     protected val headers: MutableList<Header> = mutableListOf()
 ) : APISpec {
 
+    fun headers(): List<Header> = headers
+
     fun header(header: Header) {
         headers.add(header)
     }
@@ -29,7 +31,7 @@ abstract class HeaderSpec(
         val descriptor = HeaderDocumentation.headerWithName(key)
             .description(description)
             .attributes(
-                Attributes.Attribute("sample", sample)
+                Attributes.Attribute(SAMPLE, sample)
             )
         when (type) {
             Type.REQUIRED -> {}
