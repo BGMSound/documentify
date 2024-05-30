@@ -12,6 +12,8 @@ class RequestSpec(
 
     val url get() = requestLine.url
     val method get() = requestLine.method
+    val pathVariables get() = requestLine.pathVariables()
+    val queryParameters get() = requestLine.queryParameters()
 
     fun line(
         method: Method,

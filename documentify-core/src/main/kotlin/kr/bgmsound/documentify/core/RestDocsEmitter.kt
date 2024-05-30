@@ -13,7 +13,11 @@ class RestDocsEmitter(
 ) {
     fun emit(requestSpecification: RequestSpecification) {
         val snippets = document.build()
+        val pathVariables = document.request.pathVariables.associate { it.key to it.sample }
+        val queryParameters = document.request.queryParameters.associate { it.key to it.sample }
         val response = given(requestSpecification)
+            .pathParams(pathVariables)
+            .queryParams(queryParameters)
             .filter(
                 document(
                     document.name,
