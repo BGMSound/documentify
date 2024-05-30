@@ -2,10 +2,6 @@ package kr.bgmsound.documentify.core
 
 import org.springframework.restdocs.request.ParameterDescriptor
 
-data class QueryParameter(
-    val descriptor: ParameterDescriptor
-) {
-    val key get() = descriptor.name
-    val description get() = descriptor.description as String
-    val sample get() = descriptor.sample() as String
-}
+class QueryParameter(
+    descriptor: ParameterDescriptor
+) : Parameter(descriptor)

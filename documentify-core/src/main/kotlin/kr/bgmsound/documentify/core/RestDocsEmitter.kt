@@ -13,16 +13,13 @@ class RestDocsEmitter(
 ) {
     fun emit(requestSpecification: RequestSpecification) {
         val snippets = document.build()
-        val pathVariables = document.request.pathVariables.associate { it.key to it.sample }
-        val queryParameters = document.request.queryParameters.associate { it.key to it.sample }
-        val headers = document.request.headers.associate { it.key to it.sample }
-        val body = document.request.fields.associate { it.key to it.sample }
 
-        val response = given(requestSpecification)
-            .pathParams(pathVariables)
-            .queryParams(queryParameters)
-            .headers(headers)
-            .body(body)
+        given(requestSpecification)
+            .log().all()
+            .pathParams(document.request.pathVariables)
+            .queryParams(document.request.queryParameters)
+            .headers(document.request.headers)
+            .body(document.request.fields)
             .filter(
                 document(
                     document.name,
@@ -34,8 +31,8 @@ class RestDocsEmitter(
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .sendRequest()
-        response.prettyPrint()
-        response.then()
+            .then()
+            .log().all()
             .statusCode(document.response.statusCode)
     }
 
