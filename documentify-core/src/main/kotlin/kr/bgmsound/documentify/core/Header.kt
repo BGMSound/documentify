@@ -2,7 +2,7 @@ package kr.bgmsound.documentify.core
 
 import org.springframework.restdocs.headers.HeaderDescriptor
 
-data class Header(
+class Header(
     val descriptor: HeaderDescriptor
 ) {
 

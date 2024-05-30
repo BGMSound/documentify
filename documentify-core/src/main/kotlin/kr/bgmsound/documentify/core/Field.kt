@@ -2,7 +2,7 @@ package kr.bgmsound.documentify.core
 
 import org.springframework.restdocs.payload.FieldDescriptor
 
-data class Field(
+class Field(
     val descriptor: FieldDescriptor
 ) {
 
