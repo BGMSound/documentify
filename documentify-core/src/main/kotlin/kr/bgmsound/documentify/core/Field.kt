@@ -13,7 +13,7 @@ data class Field(
         else -> Type.REQUIRED
     }
     val description: String = descriptor.description as String
-    val sample: String = descriptor.attributes["sample"] as String
+    val sample: String = descriptor.sample() as String
 
     fun type(type: DocsFieldType) {
         descriptor.type(type.type)
