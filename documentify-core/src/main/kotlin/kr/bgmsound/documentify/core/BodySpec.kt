@@ -19,7 +19,7 @@ abstract class BodySpec(
         return putField(T::class.java, path, description, sample, Type.IGNORED)
     }
 
-    fun fields(): List<Field> = fields
+    fun fields(): Map<String, Any> = fields.of()
 
     fun <T> putField(
         clazz: Class<*>,
@@ -46,5 +46,9 @@ abstract class BodySpec(
 
     fun putField(field: Field) {
         fields.add(field)
+    }
+
+    private fun List<Field>.of(): Map<String, Any> {
+        return associate { it.key to it.sample }
     }
 }

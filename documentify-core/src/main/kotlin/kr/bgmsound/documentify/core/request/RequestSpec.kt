@@ -2,9 +2,6 @@ package kr.bgmsound.documentify.core.request
 
 import io.restassured.http.Method
 import kr.bgmsound.documentify.core.APISpec
-import kr.bgmsound.documentify.core.Field
-import kr.bgmsound.documentify.core.Header
-import kr.bgmsound.documentify.core.Parameter
 import org.springframework.restdocs.snippet.Snippet
 
 class RequestSpec(
@@ -15,10 +12,10 @@ class RequestSpec(
 
     val url get() = requestLine.url
     val method get() = requestLine.method
-    val pathVariables get() = requestLine.pathVariables().of()
-    val queryParameters get() = requestLine.queryParameters().of()
-    val headers get() = requestHeader.headers().of()
-    val fields get() = requestBody.fields().of()
+    val pathVariables get() = requestLine.pathVariables()
+    val queryParameters get() = requestLine.queryParameters()
+    val headers get() = requestHeader.headers()
+    val fields get() = requestBody.fields()
 
     fun line(
         method: Method,
@@ -49,17 +46,5 @@ class RequestSpec(
             addAll(requestHeader.build())
             addAll(requestBody.build())
         }
-    }
-
-    private fun List<Parameter>.of(): Map<String, String> {
-        return associate { it.key to it.sample }
-    }
-
-    private fun List<Header>.of(): Map<String, Any> {
-        return associate { it.key to it.sample }
-    }
-
-    private fun List<Field>.of(): Map<String, Any> {
-        return associate { it.key to it.sample }
     }
 }

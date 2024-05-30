@@ -8,7 +8,7 @@ abstract class HeaderSpec(
     protected val headers: MutableList<Header> = mutableListOf()
 ) : APISpec {
 
-    fun headers(): List<Header> = headers
+    fun headers(): Map<String, String> = headers.of()
 
     fun header(header: Header) {
         headers.add(header)
@@ -39,5 +39,9 @@ abstract class HeaderSpec(
         }
         val header = Header(descriptor)
         this.header(header)
+    }
+
+    private fun List<Header>.of(): Map<String, String> {
+        return associate { it.key to it.sample }
     }
 }
