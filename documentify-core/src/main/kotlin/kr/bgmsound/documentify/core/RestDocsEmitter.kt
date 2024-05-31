@@ -13,12 +13,15 @@ class RestDocsEmitter(
 ) {
     fun emit(requestSpecification: RequestSpecification) {
         val snippets = document.build()
-        given(requestSpecification)
+        val response = given(requestSpecification)
             .log().all()
             .pathParams(document.request.samplePathVariables())
             .queryParams(document.request.sampleQueryParameters())
             .headers(document.request.sampleHeaders())
-            .body(document.request.sampleFields())
+        if (document.request.fields.isNotEmpty()) {
+            response.body(document.request.sampleFields())
+        }
+        response
             .filter(
                 document(
                     document.name,

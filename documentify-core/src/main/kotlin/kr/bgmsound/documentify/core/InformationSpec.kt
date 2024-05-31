@@ -2,6 +2,7 @@ package kr.bgmsound.documentify.core
 
 import com.epages.restdocs.apispec.ResourceDocumentation
 import com.epages.restdocs.apispec.ResourceSnippetParameters
+import com.epages.restdocs.apispec.Schema
 import kr.bgmsound.documentify.core.request.RequestSpec
 import kr.bgmsound.documentify.core.response.ResponseSpec
 import org.springframework.restdocs.snippet.Snippet
@@ -13,6 +14,8 @@ class InformationSpec(
     private val tags = mutableListOf<String>()
     private var summary: String? = null
     private var description: String? = null
+    private var requestSchema: String? = null
+    private var responseSchema: String? = null
 
     fun tag(tag: String) {
         tags.add(tag)
@@ -28,6 +31,14 @@ class InformationSpec(
 
     fun description(description: String) {
         this.description = description
+    }
+
+    fun requestSchema(schema: String) {
+        this.requestSchema = schema
+    }
+
+    fun responseSchema(schema: String) {
+        this.responseSchema = schema
     }
 
     override fun build(): List<Snippet> {
@@ -53,8 +64,18 @@ class InformationSpec(
         if (response.headers.isNotEmpty()) {
             resourceBuilder.responseHeaders(*response.headers.map { it.descriptor }.reversed().toTypedArray())
         }
-        resourceBuilder.requestFields(request.fields.map { it.descriptor })
-        resourceBuilder.responseFields(response.fields.map { it.descriptor })
+        if (request.fields.isNotEmpty()) {
+            resourceBuilder.requestFields(request.fields.map { it.descriptor })
+        }
+        if (response.fields.isNotEmpty()) {
+            resourceBuilder.responseFields(response.fields.map { it.descriptor })
+        }
+        requestSchema?.let {
+            resourceBuilder.requestSchema(Schema.schema(it))
+        }
+        responseSchema?.let {
+            resourceBuilder.responseSchema(Schema.schema(it))
+        }
         return listOf(ResourceDocumentation.resource(resourceBuilder.build()))
     }
 }
