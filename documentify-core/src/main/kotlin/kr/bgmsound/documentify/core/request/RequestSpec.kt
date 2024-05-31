@@ -17,6 +17,11 @@ class RequestSpec(
     val headers get() = requestHeader.headers()
     val fields get() = requestBody.fields()
 
+    fun samplePathVariables() = requestLine.samplePathVariables()
+    fun sampleQueryParameters() = requestLine.sampleQueryParameters()
+    fun sampleFields() = requestBody.sampleFields()
+    fun sampleHeaders() = requestHeader.sampleHeaders()
+
     fun line(
         method: Method,
         url: String
@@ -47,4 +52,5 @@ class RequestSpec(
             addAll(requestBody.build())
         }
     }
+
 }

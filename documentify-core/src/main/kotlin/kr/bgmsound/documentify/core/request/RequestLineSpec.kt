@@ -2,7 +2,6 @@ package kr.bgmsound.documentify.core.request
 
 import io.restassured.http.Method
 import kr.bgmsound.documentify.core.*
-import org.springframework.restdocs.request.ParameterDescriptor
 import org.springframework.restdocs.request.PathParametersSnippet
 import org.springframework.restdocs.request.QueryParametersSnippet
 import org.springframework.restdocs.request.RequestDocumentation
@@ -19,10 +18,13 @@ class RequestLineSpec(
     private var pathVariablesSnippet: PathParametersSnippet? = null
     private var queryParametersSnippet: QueryParametersSnippet? = null
 
-    fun pathVariables(): Map<String, String> = pathParameters.of()
-    fun queryParameters(): Map<String, String> = queryParameters.of()
+    fun pathVariables(): List<PathVariable> = pathParameters
+    fun queryParameters(): List<QueryParameter> = queryParameters
 
-    fun pathVariable(key: String, sample: String, description: String) {
+    fun samplePathVariables(): Map<String, String> = pathParameters.sample()
+    fun sampleQueryParameters(): Map<String, String> = queryParameters.sample()
+
+    fun pathVariable(key: String, description: String, sample: String) {
         val descriptor = RequestDocumentation.parameterWithName(key)
             .description(description)
             .attributes(
@@ -31,7 +33,7 @@ class RequestLineSpec(
         pathParameters.add(PathVariable(descriptor))
     }
 
-    fun queryParameter(key: String, sample: String, description: String) {
+    fun queryParameter(key: String, description: String, sample: String) {
         val descriptor = RequestDocumentation.parameterWithName(key)
             .description(description)
             .attributes(
@@ -53,7 +55,7 @@ class RequestLineSpec(
         }
     }
 
-    private fun List<Parameter>.of(): Map<String, String> {
+    private fun List<Parameter>.sample(): Map<String, String> {
         return associate { it.key to it.sample }
     }
 }

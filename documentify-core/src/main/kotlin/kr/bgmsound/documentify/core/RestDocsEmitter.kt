@@ -5,21 +5,20 @@ import io.restassured.http.ContentType
 import io.restassured.http.Method
 import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
+import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
-import org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document
 
 class RestDocsEmitter(
     private val document: DocumentSpec
 ) {
     fun emit(requestSpecification: RequestSpecification) {
         val snippets = document.build()
-
         given(requestSpecification)
             .log().all()
-            .pathParams(document.request.pathVariables)
-            .queryParams(document.request.queryParameters)
-            .headers(document.request.headers)
-            .body(document.request.fields)
+            .pathParams(document.request.samplePathVariables())
+            .queryParams(document.request.sampleQueryParameters())
+            .headers(document.request.sampleHeaders())
+            .body(document.request.sampleFields())
             .filter(
                 document(
                     document.name,

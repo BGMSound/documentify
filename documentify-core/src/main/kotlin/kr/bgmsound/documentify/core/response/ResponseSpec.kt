@@ -12,6 +12,10 @@ class ResponseSpec(
 
     val statusCode get() = responseLine.statusCode()
 
+    val headers get() = responseHeader.headers()
+
+    val fields get() = responseBody.fields()
+
     fun status(statusCode: HttpStatus) {
         responseLine.statusCode(statusCode.value())
     }
