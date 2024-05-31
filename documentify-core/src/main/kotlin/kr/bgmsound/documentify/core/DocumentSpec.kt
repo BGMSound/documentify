@@ -14,11 +14,13 @@ import org.springframework.restdocs.snippet.Snippet
 class DocumentSpec(
     val name: String,
 ) : APISpec {
-
-    private val snippets = mutableListOf<Snippet>()
-
     val request: RequestSpec = RequestSpec()
     val response: ResponseSpec = ResponseSpec()
+    private val information: InformationSpec = InformationSpec(request, response)
+
+    fun information(specCustomizer: InformationSpec.() -> Unit) {
+        information.apply(specCustomizer)
+    }
 
     fun request(specCustomizer: RequestSpec.() -> Unit) {
         request.apply(specCustomizer)
@@ -26,13 +28,13 @@ class DocumentSpec(
 
     fun requestLine(
         method: Method,
-        url: String
+        url: String,
     ) = requestLine(method, url) {}
 
     fun requestLine(
         method: Method,
         url: String,
-        specCustomizer: RequestLineSpec.() -> Unit
+        specCustomizer: RequestLineSpec.() -> Unit,
     ) {
         request.line(method, url, specCustomizer)
     }
@@ -55,23 +57,23 @@ class DocumentSpec(
 
     fun responseLine(
         status: HttpStatus,
-        specCustomizer: ResponseHeaderSpec.() -> Unit
+        specCustomizer: ResponseHeaderSpec.() -> Unit,
     ) = responseLine(status.value(), specCustomizer)
 
     fun responseLine(
-        status: Int
+        status: Int,
     ) = responseLine(status) {}
 
     fun responseLine(
         status: Int,
-        specCustomizer: ResponseHeaderSpec.() -> Unit
+        specCustomizer: ResponseHeaderSpec.() -> Unit,
     ) {
         response.status(status)
         response.headers(specCustomizer)
     }
 
     fun responseHeaders(
-        specCustomizer: ResponseHeaderSpec.() -> Unit
+        specCustomizer: ResponseHeaderSpec.() -> Unit,
     ) {
         response.headers(specCustomizer)
     }
@@ -81,11 +83,10 @@ class DocumentSpec(
     }
 
     override fun build(): List<Snippet> {
-         val subSnippets =  buildList {
+        return buildList {
             addAll(request.build())
             addAll(response.build())
+            addAll(information.build())
         }
-        snippets.addAll(subSnippets)
-        return snippets
     }
 }

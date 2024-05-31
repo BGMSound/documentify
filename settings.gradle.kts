@@ -1,8 +1,6 @@
 rootProject.name = "documentify"
 
 include("documentify-core")
-include("documentify-example")
-
 pluginManagement {
     fun property(key: String): String {
         return extra[key]?.toString() ?: throw IllegalArgumentException("property with $key not found")
@@ -36,7 +34,7 @@ dependencyResolutionManagement {
             library("restdocs-assured", "org.springframework.restdocs:spring-restdocs-restassured:${property("spring-restdocs-version")}")
         }
         create("lib") {
-            library("rest-assured", "io.rest-assured:spring-mock-mvc:5.3.1")
+            library("rest-assured", "io.rest-assured:spring-mock-mvc:5.4.0")
         }
     }
 }
