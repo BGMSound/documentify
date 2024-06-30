@@ -4,8 +4,8 @@ import org.springframework.restdocs.request.ParameterDescriptor
 
 open class Parameter(
     val descriptor: ParameterDescriptor
-) {
-    val key: String get() = descriptor.name
+) : SpecElement {
+    override val key: String get() = descriptor.name
     val description: String get() = descriptor.description as String
-    val sample: String get() = descriptor.sample() as String
+    override val sample: Any get() = descriptor.sample()
 }

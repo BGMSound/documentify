@@ -10,8 +10,6 @@ abstract class HeaderSpec(
 
     fun headers(): List<Header> = headers
 
-    fun sampleHeaders(): Map<String, String> = headers.sample()
-
     fun header(header: Header) {
         headers.add(header)
     }
@@ -41,9 +39,5 @@ abstract class HeaderSpec(
         }
         val header = Header(descriptor)
         this.header(header)
-    }
-
-    private fun List<Header>.sample(): Map<String, String> {
-        return associate { it.key to it.sample }
     }
 }

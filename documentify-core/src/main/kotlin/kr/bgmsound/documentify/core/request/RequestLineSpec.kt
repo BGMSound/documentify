@@ -21,9 +21,6 @@ class RequestLineSpec(
     fun pathVariables(): List<PathVariable> = pathParameters
     fun queryParameters(): List<QueryParameter> = queryParameters
 
-    fun samplePathVariables(): Map<String, String> = pathParameters.sample()
-    fun sampleQueryParameters(): Map<String, String> = queryParameters.sample()
-
     fun pathVariable(key: String, description: String, sample: String) {
         val descriptor = RequestDocumentation.parameterWithName(key)
             .description(description)
@@ -53,9 +50,5 @@ class RequestLineSpec(
                 add(queryParametersSnippet!!)
             }
         }
-    }
-
-    private fun List<Parameter>.sample(): Map<String, String> {
-        return associate { it.key to it.sample }
     }
 }

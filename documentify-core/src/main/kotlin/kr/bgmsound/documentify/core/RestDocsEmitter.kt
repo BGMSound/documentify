@@ -20,10 +20,10 @@ class RestDocsEmitter(
         )
         val response = requestSpecification
             .log().all()
-            .pathParams(document.request.samplePathVariables())
-            .queryParams(document.request.sampleQueryParameters())
-            .headers(document.request.sampleHeaders())
-            .bodyIfExists(document.request.sampleFields())
+            .pathParams(document.request.pathVariables.sample())
+            .queryParams(document.request.queryParameters.sample())
+            .headers(document.request.headers.sample())
+            .bodyIfExists(document.request.fields.sample())
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .sendRequest()
@@ -52,5 +52,9 @@ class RestDocsEmitter(
             Method.DELETE -> delete(document.request.url)
             else -> throw IllegalArgumentException("Unsupported method: ${document.request.method}")
         }
+    }
+
+    private fun List<SpecElement>.sample(): Map<String, Any> {
+        return associate { it.key to it.sample }
     }
 }

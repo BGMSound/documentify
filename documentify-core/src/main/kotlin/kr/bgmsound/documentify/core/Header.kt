@@ -4,11 +4,11 @@ import org.springframework.restdocs.headers.HeaderDescriptor
 
 class Header(
     val descriptor: HeaderDescriptor
-) {
+) : SpecElement {
 
-    val key get() = descriptor.name
+    override val key: String get() = descriptor.name
     val description get() = descriptor.description as String
-    val sample get() = descriptor.attributes[SAMPLE] as String
+    override val sample get() = descriptor.sample()
 
     enum class Type {
         REQUIRED,
