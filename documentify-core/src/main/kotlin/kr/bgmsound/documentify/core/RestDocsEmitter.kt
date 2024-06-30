@@ -5,11 +5,15 @@ import io.restassured.http.Method
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import io.restassured.module.mockmvc.response.MockMvcResponse
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
+import org.hamcrest.Matchers.equalTo
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
+import com.fasterxml.jackson.databind.ObjectMapper
 
 class RestDocsEmitter(
     private val document: DocumentSpec
 ) {
+    private val objectMapper = ObjectMapper()
+
     fun emit(requestSpecification: MockMvcRequestSpecification) {
         val snippets = document.build()
         val documentSchema = document(
@@ -33,6 +37,7 @@ class RestDocsEmitter(
             .assertThat()
             .apply(documentSchema)
             .statusCode(document.response.statusCode)
+            .body(equalTo(document.response.fields.sample().toJson()))
     }
 
     private fun MockMvcRequestSpecification.bodyIfExists(
@@ -57,4 +62,6 @@ class RestDocsEmitter(
     private fun List<SpecElement>.sample(): Map<String, Any> {
         return associate { it.key to it.sample }
     }
+
+    private fun Map<String, Any>.toJson(): String = objectMapper.writeValueAsString(this)
 }
