@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
+import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 
@@ -20,11 +21,9 @@ abstract class Documentify {
         restDocumentation: RestDocumentationContextProvider
     ) {
         // TODO: 나중에 유연하게 설정할 수 있도록 변경
-        val temporal = MockMvcBuilders.webAppContextSetup(
-            webApplicationContext
-        ).apply {
-            documentationConfiguration(restDocumentation)
-        }
+        val temporal = MockMvcBuilders
+            .webAppContextSetup(webApplicationContext)
+            .apply<DefaultMockMvcBuilder>(documentationConfiguration(restDocumentation))
         spec = given().mockMvc(temporal.build())
     }
 
