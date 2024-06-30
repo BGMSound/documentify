@@ -1,28 +1,31 @@
 package kr.bgmsound.documentify.core
 
-import io.restassured.builder.RequestSpecBuilder
-import io.restassured.specification.RequestSpecification
+import io.restassured.module.mockmvc.RestAssuredMockMvc.given
+import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification;
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
-import org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.context.WebApplicationContext
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
-    @LocalServerPort
-    protected var port: Int = -1
-    private lateinit var spec: RequestSpecification
+    protected lateinit var spec: MockMvcRequestSpecification
 
     @BeforeEach
-    fun setUp(restDocumentation: RestDocumentationContextProvider) {
-        this.spec = RequestSpecBuilder()
-            .setPort(port)
-            .addFilter(documentationConfiguration(restDocumentation))
-            .build()
+    fun setUp(
+        webApplicationContext: WebApplicationContext,
+        restDocumentation: RestDocumentationContextProvider
+    ) {
+        // TODO: 나중에 유연하게 설정할 수 있도록 변경
+        val temporal = MockMvcBuilders.webAppContextSetup(
+            webApplicationContext
+        ).apply {
+            documentationConfiguration(restDocumentation)
+        }
+        spec = given().mockMvc(temporal.build())
     }
 
     fun documentation(

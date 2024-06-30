@@ -1,44 +1,49 @@
 package kr.bgmsound.documentify.core
 
-import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import io.restassured.http.Method
-import io.restassured.response.Response
-import io.restassured.specification.RequestSpecification
-import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
+import io.restassured.module.mockmvc.response.MockMvcResponse
+import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
 
 class RestDocsEmitter(
     private val document: DocumentSpec
 ) {
-    fun emit(requestSpecification: RequestSpecification) {
+    fun emit(requestSpecification: MockMvcRequestSpecification) {
         val snippets = document.build()
-        val response = given(requestSpecification)
+        val documentSchema = document(
+            document.name,
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            *snippets.toTypedArray()
+        )
+        val response = requestSpecification
             .log().all()
             .pathParams(document.request.samplePathVariables())
             .queryParams(document.request.sampleQueryParameters())
             .headers(document.request.sampleHeaders())
-        if (document.request.fields.isNotEmpty()) {
-            response.body(document.request.sampleFields())
-        }
-        response
-            .filter(
-                document(
-                    document.name,
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
-                    *snippets.toTypedArray()
-                )
-            )
+            .bodyIfExists(document.request.sampleFields())
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .sendRequest()
+        response
             .then()
             .log().all()
+            .assertThat()
+            .apply(documentSchema)
             .statusCode(document.response.statusCode)
     }
 
-    private fun RequestSpecification.sendRequest(): Response {
+    private fun MockMvcRequestSpecification.bodyIfExists(
+        fields: Map<String, Any>
+    ): MockMvcRequestSpecification = if (fields.isEmpty()) {
+        this
+    } else {
+        body(fields)
+    }
+
+    private fun MockMvcRequestSpecification.sendRequest(): MockMvcResponse {
         return when (document.request.method) {
             Method.GET -> get(document.request.url)
             Method.POST -> post(document.request.url)
