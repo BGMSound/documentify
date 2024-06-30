@@ -1,10 +1,10 @@
-package kr.bgmsound.documentify.core
+package kr.bgmsound.documentify.core.specification
 
 import com.epages.restdocs.apispec.ResourceDocumentation
 import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.epages.restdocs.apispec.Schema
-import kr.bgmsound.documentify.core.request.RequestSpec
-import kr.bgmsound.documentify.core.response.ResponseSpec
+import kr.bgmsound.documentify.core.specification.request.RequestSpec
+import kr.bgmsound.documentify.core.specification.response.ResponseSpec
 import org.springframework.restdocs.snippet.Snippet
 
 class InformationSpec(

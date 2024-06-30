@@ -1,6 +1,8 @@
-package kr.bgmsound.documentify.core
+package kr.bgmsound.documentify.core.specification
 
-import kr.bgmsound.documentify.core.Header.Type
+import kr.bgmsound.documentify.core.specification.element.Header
+import kr.bgmsound.documentify.core.specification.element.Header.Type
+import kr.bgmsound.documentify.core.specification.element.SAMPLE
 import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.snippet.Attributes
 

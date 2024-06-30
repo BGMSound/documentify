@@ -1,6 +1,6 @@
-package kr.bgmsound.documentify.core.response
+package kr.bgmsound.documentify.core.specification.response
 
-import kr.bgmsound.documentify.core.APISpec
+import kr.bgmsound.documentify.core.specification.APISpec
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.snippet.Snippet
 

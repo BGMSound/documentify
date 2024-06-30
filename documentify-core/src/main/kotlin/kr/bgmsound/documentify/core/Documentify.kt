@@ -2,6 +2,7 @@ package kr.bgmsound.documentify.core
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc.given
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
+import kr.bgmsound.documentify.core.specification.DocumentSpec
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.restdocs.RestDocumentationContextProvider

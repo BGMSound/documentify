@@ -1,4 +1,4 @@
-package kr.bgmsound.documentify.core
+package kr.bgmsound.documentify.core.specification.element
 
 import org.springframework.restdocs.headers.HeaderDescriptor
 

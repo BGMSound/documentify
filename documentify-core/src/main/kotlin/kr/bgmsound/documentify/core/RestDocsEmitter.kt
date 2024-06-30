@@ -8,6 +8,8 @@ import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
 import org.hamcrest.Matchers.equalTo
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
 import com.fasterxml.jackson.databind.ObjectMapper
+import kr.bgmsound.documentify.core.specification.DocumentSpec
+import kr.bgmsound.documentify.core.specification.element.SpecElement
 
 class RestDocsEmitter(
     private val document: DocumentSpec
