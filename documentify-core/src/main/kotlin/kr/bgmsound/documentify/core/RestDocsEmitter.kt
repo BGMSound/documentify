@@ -31,6 +31,7 @@ class RestDocsEmitter(
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .sendRequest()
+        response.prettyPrint()
         response
             .then()
             .log().all()
