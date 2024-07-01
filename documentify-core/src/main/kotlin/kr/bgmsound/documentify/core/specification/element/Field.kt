@@ -12,7 +12,7 @@ class Field(
         descriptor.isIgnored -> Type.IGNORED
         else -> Type.REQUIRED
     }
-    val description = descriptor.description as String
+    override val description = descriptor.description as String
     override val sample get() = descriptor.sample()
 
     fun type(type: DocsFieldType) {

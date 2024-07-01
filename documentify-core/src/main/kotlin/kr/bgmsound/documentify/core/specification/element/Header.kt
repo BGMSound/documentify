@@ -7,7 +7,7 @@ class Header(
 ) : SpecElement {
 
     override val key: String get() = descriptor.name
-    val description get() = descriptor.description as String
+    override val description get() = descriptor.description as String
     override val sample get() = descriptor.sample()
 
     enum class Type {
