@@ -1,6 +1,6 @@
-package kr.bgmsound.documentify.core.specification.response
+package io.github.bgmsound.documentify.core.specification.response
 
-import kr.bgmsound.documentify.core.specification.BodySpec
+import io.github.bgmsound.documentify.core.specification.BodySpec
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.payload.ResponseFieldsSnippet
 import org.springframework.restdocs.snippet.Snippet

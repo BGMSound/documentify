@@ -1,6 +1,6 @@
-package kr.bgmsound.documentify.core.specification.element
+package io.github.bgmsound.documentify.core.specification.element
 
-import kr.bgmsound.documentify.core.specification.sample
+import io.github.bgmsound.documentify.core.specification.sample
 import org.springframework.restdocs.request.ParameterDescriptor
 
 open class Parameter(

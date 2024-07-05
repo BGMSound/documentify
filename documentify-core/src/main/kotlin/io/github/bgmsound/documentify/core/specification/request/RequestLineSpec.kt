@@ -1,10 +1,10 @@
-package kr.bgmsound.documentify.core.specification.request
+package io.github.bgmsound.documentify.core.specification.request
 
+import io.github.bgmsound.documentify.core.specification.APISpec
+import io.github.bgmsound.documentify.core.specification.SAMPLE
+import io.github.bgmsound.documentify.core.specification.element.PathVariable
+import io.github.bgmsound.documentify.core.specification.element.QueryParameter
 import io.restassured.http.Method
-import kr.bgmsound.documentify.core.specification.APISpec
-import kr.bgmsound.documentify.core.specification.SAMPLE
-import kr.bgmsound.documentify.core.specification.element.PathVariable
-import kr.bgmsound.documentify.core.specification.element.QueryParameter
 import org.springframework.restdocs.request.PathParametersSnippet
 import org.springframework.restdocs.request.QueryParametersSnippet
 import org.springframework.restdocs.request.RequestDocumentation

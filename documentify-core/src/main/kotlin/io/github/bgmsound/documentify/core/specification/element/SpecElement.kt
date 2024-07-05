@@ -1,4 +1,4 @@
-package kr.bgmsound.documentify.core.specification.element
+package io.github.bgmsound.documentify.core.specification.element
 
 interface SpecElement {
     val key: String

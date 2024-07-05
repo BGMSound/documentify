@@ -1,15 +1,15 @@
-package kr.bgmsound.documentify.core.specification
+package io.github.bgmsound.documentify.core.specification
 
 import com.epages.restdocs.apispec.ResourceDocumentation
 import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.epages.restdocs.apispec.Schema
-import kr.bgmsound.documentify.core.specification.request.RequestSpec
-import kr.bgmsound.documentify.core.specification.response.ResponseSpec
+import io.github.bgmsound.documentify.core.specification.request.RequestSpec
+import io.github.bgmsound.documentify.core.specification.response.ResponseSpec
 import org.springframework.restdocs.snippet.Snippet
 
 class InformationSpec(
     private val request: RequestSpec,
-    private val response: ResponseSpec,
+    private val response: ResponseSpec
 ) : APISpec {
     private val tags = mutableListOf<String>()
     private var summary: String? = null

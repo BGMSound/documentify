@@ -1,13 +1,13 @@
-package kr.bgmsound.documentify.core.specification
+package io.github.bgmsound.documentify.core.specification
 
+import io.github.bgmsound.documentify.core.specification.request.RequestBodySpec
+import io.github.bgmsound.documentify.core.specification.request.RequestHeaderSpec
+import io.github.bgmsound.documentify.core.specification.request.RequestLineSpec
+import io.github.bgmsound.documentify.core.specification.request.RequestSpec
+import io.github.bgmsound.documentify.core.specification.response.ResponseBodySpec
+import io.github.bgmsound.documentify.core.specification.response.ResponseHeaderSpec
+import io.github.bgmsound.documentify.core.specification.response.ResponseSpec
 import io.restassured.http.Method
-import kr.bgmsound.documentify.core.specification.request.RequestBodySpec
-import kr.bgmsound.documentify.core.specification.request.RequestHeaderSpec
-import kr.bgmsound.documentify.core.specification.request.RequestLineSpec
-import kr.bgmsound.documentify.core.specification.request.RequestSpec
-import kr.bgmsound.documentify.core.specification.response.ResponseBodySpec
-import kr.bgmsound.documentify.core.specification.response.ResponseHeaderSpec
-import kr.bgmsound.documentify.core.specification.response.ResponseSpec
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.snippet.Snippet
 

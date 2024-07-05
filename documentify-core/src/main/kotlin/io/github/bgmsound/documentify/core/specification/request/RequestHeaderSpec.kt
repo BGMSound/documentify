@@ -1,6 +1,6 @@
-package kr.bgmsound.documentify.core.specification.request
+package io.github.bgmsound.documentify.core.specification.request
 
-import kr.bgmsound.documentify.core.specification.HeaderSpec
+import io.github.bgmsound.documentify.core.specification.HeaderSpec
 import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.headers.RequestHeadersSnippet
 import org.springframework.restdocs.snippet.Snippet

@@ -1,7 +1,7 @@
-package kr.bgmsound.documentify.core.specification
+package io.github.bgmsound.documentify.core.specification
 
-import kr.bgmsound.documentify.core.specification.element.Field
-import kr.bgmsound.documentify.core.specification.element.Field.Type
+import io.github.bgmsound.documentify.core.specification.element.Field
+import io.github.bgmsound.documentify.core.specification.element.Field.Type
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.snippet.Attributes
 

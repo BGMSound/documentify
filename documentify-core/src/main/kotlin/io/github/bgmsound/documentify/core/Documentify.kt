@@ -1,8 +1,9 @@
-package kr.bgmsound.documentify.core
+package io.github.bgmsound.documentify.core
 
+import io.github.bgmsound.documentify.core.specification.DocumentSpec
 import io.restassured.module.mockmvc.RestAssuredMockMvc.given
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
-import kr.bgmsound.documentify.core.specification.DocumentSpec
+
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.restdocs.RestDocumentationContextProvider
@@ -21,16 +22,16 @@ abstract class Documentify {
         webApplicationContext: WebApplicationContext,
         restDocumentation: RestDocumentationContextProvider
     ) {
-        // TODO: 나중에 유연하게 설정할 수 있도록 변경
-        val temporal = MockMvcBuilders
+        val mockMvc = MockMvcBuilders
             .webAppContextSetup(webApplicationContext)
             .apply<DefaultMockMvcBuilder>(documentationConfiguration(restDocumentation))
-        spec = given().mockMvc(temporal.build())
+            .build()
+        spec = given().mockMvc(mockMvc)
     }
 
     fun documentation(
         name: String,
-        specCustomizer: DocumentSpec.() -> Unit,
+        specCustomizer: DocumentSpec.() -> Unit
     ) {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
         val emitter = RestDocsEmitter(documentSpec)

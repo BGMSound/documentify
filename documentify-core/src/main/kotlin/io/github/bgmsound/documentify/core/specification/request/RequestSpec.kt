@@ -1,7 +1,7 @@
-package kr.bgmsound.documentify.core.specification.request
+package io.github.bgmsound.documentify.core.specification.request
 
+import io.github.bgmsound.documentify.core.specification.APISpec
 import io.restassured.http.Method
-import kr.bgmsound.documentify.core.specification.APISpec
 import org.springframework.restdocs.snippet.Snippet
 
 class RequestSpec(
