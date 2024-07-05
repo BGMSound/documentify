@@ -6,7 +6,7 @@ plugins {
     id("io.spring.dependency-management")
 }
 
-group = "kr.bgmsound"
+group = "io.github.bgmsound"
 version = "0.0.1-SNAPSHOT"
 
 subprojects {

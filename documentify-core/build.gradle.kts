@@ -15,7 +15,7 @@ dependencies {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            groupId = "kr.bgmsound"
+            groupId = "io.github.bgmsound"
             artifactId = "documentify-core"
             version = rootProject.version.toString()
             from(components["java"])
