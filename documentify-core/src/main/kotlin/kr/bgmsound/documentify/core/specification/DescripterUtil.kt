@@ -1,4 +1,4 @@
-package kr.bgmsound.documentify.core.specification.element
+package kr.bgmsound.documentify.core.specification
 
 import org.springframework.restdocs.snippet.AbstractDescriptor
 
