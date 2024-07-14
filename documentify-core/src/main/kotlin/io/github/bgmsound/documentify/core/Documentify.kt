@@ -20,12 +20,12 @@ abstract class Documentify {
     fun setup(
         restDocumentation: RestDocumentationContextProvider,
         controllers: List<Any>,
-        exceptionHandlers: List<HandlerExceptionResolver>,
+        controllerAdvices: List<Any>,
         argumentResolvers: List<HandlerMethodArgumentResolver>
     ) {
         val mockMvc = MockMvcBuilders
             .standaloneSetup(*controllers.toTypedArray())
-            .setHandlerExceptionResolvers(exceptionHandlers)
+            .setControllerAdvice(*controllerAdvices.toTypedArray())
             .setCustomArgumentResolvers(*argumentResolvers.toTypedArray())
             .apply<StandaloneMockMvcBuilder>(documentationConfiguration(restDocumentation))
             .build()
