@@ -17,7 +17,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver
 abstract class Documentify {
     protected lateinit var spec: MockMvcRequestSpecification
 
-    fun setup(
+    fun setupMock(
         restDocumentation: RestDocumentationContextProvider,
         controllers: List<Any>,
         controllerAdvices: List<Any>,
