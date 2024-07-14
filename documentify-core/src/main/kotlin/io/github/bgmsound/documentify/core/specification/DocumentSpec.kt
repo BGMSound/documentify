@@ -26,6 +26,10 @@ class DocumentSpec(
         request.apply(specCustomizer)
     }
 
+    fun requestSchema(schema: String) {
+        information.requestSchema(schema)
+    }
+
     fun requestLine(
         method: Method,
         url: String,
@@ -49,6 +53,10 @@ class DocumentSpec(
 
     fun response(specCustomizer: ResponseSpec.() -> Unit) {
         response.apply(specCustomizer)
+    }
+
+    fun responseSchema(schema: String) {
+        information.responseSchema(schema)
     }
 
     fun responseLine(
