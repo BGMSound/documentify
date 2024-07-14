@@ -5,16 +5,19 @@ import io.restassured.http.Method
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import io.restassured.module.mockmvc.response.MockMvcResponse
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
-import org.hamcrest.Matchers.equalTo
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.github.bgmsound.documentify.core.specification.DocumentSpec
 import io.github.bgmsound.documentify.core.specification.element.SpecElement
+import java.time.LocalDate
+import java.time.LocalDateTime
+
 
 class RestDocsEmitter(
     private val document: DocumentSpec
 ) {
-    private val objectMapper = ObjectMapper()
+    private val objectMapper = ObjectMapper().registerModules(JavaTimeModule())
 
     fun emit(requestSpecification: MockMvcRequestSpecification) {
         val snippets = document.build()
@@ -34,15 +37,12 @@ class RestDocsEmitter(
             .accept(ContentType.JSON)
             .sendRequest()
         response.prettyPrint()
-        val validator = response
+        response
             .then()
             .log().all()
             .assertThat()
             .apply(documentSchema)
             .statusCode(document.response.statusCode)
-        if (document.response.fields.isNotEmpty()) {
-            validator.body(equalTo(document.response.fields.sample().toJson()))
-        }
     }
 
     private fun MockMvcRequestSpecification.bodyIfExists(
@@ -65,7 +65,15 @@ class RestDocsEmitter(
     }
 
     private fun List<SpecElement>.sample(): Map<String, Any> {
-        return associate { it.key to it.sample }
+        return associate {
+            it.key to it.sample.let { sample ->
+                if (sample is LocalDate || sample is LocalDateTime) {
+                    objectMapper.writeValueAsString(sample)
+                } else {
+                    sample
+                }
+            }
+        }
     }
 
     private fun Map<String, Any>.toJson(): String = objectMapper.writeValueAsString(this)

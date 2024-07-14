@@ -8,6 +8,7 @@ dependencies {
     implementation(spring.restdocs.assured)
     implementation(lib.rest.assured)
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
     implementation("com.epages:restdocs-api-spec-mockmvc:0.18.2")
     implementation("com.epages:restdocs-api-spec-restassured:0.18.2")
 }
