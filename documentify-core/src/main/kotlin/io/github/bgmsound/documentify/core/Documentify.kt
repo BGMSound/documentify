@@ -10,17 +10,23 @@ import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
+import org.springframework.web.method.support.HandlerMethodArgumentResolver
+import org.springframework.web.servlet.HandlerExceptionResolver
 
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
     protected lateinit var spec: MockMvcRequestSpecification
 
-    fun standAloneSetup(
+    fun setup(
         restDocumentation: RestDocumentationContextProvider,
-        vararg controller: Any
+        controllers: List<Any>,
+        exceptionHandlers: List<HandlerExceptionResolver>,
+        argumentResolvers: List<HandlerMethodArgumentResolver>
     ) {
         val mockMvc = MockMvcBuilders
-            .standaloneSetup(*controller)
+            .standaloneSetup(*controllers.toTypedArray())
+            .setHandlerExceptionResolvers(exceptionHandlers)
+            .setCustomArgumentResolvers(*argumentResolvers.toTypedArray())
             .apply<StandaloneMockMvcBuilder>(documentationConfiguration(restDocumentation))
             .build()
         spec = given().mockMvc(mockMvc)
