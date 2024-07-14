@@ -34,13 +34,15 @@ class RestDocsEmitter(
             .accept(ContentType.JSON)
             .sendRequest()
         response.prettyPrint()
-        response
+        val validator = response
             .then()
             .log().all()
             .assertThat()
             .apply(documentSchema)
             .statusCode(document.response.statusCode)
-            .body(equalTo(document.response.fields.sample().toJson()))
+        if (document.response.fields.isNotEmpty()) {
+            validator.body(equalTo(document.response.fields.sample().toJson()))
+        }
     }
 
     private fun MockMvcRequestSpecification.bodyIfExists(
