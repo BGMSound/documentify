@@ -20,7 +20,7 @@ abstract class HeaderSpec(
     }
 
     fun optionalHeader(path: String, description: String, sample: String) {
-        header(path, description, sample, Type.REQUIRED)
+        header(path, description, sample, Type.OPTIONAL)
     }
 
     fun header(
