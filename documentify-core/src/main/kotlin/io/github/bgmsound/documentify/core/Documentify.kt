@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
+import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
@@ -15,9 +16,9 @@ import org.springframework.web.servlet.HandlerExceptionResolver
 
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
-    protected lateinit var spec: MockMvcRequestSpecification
+    private lateinit var spec: MockMvcRequestSpecification
 
-    fun setupMock(
+    fun standalone(
         restDocumentation: RestDocumentationContextProvider,
         controllers: List<Any>,
         controllerAdvices: List<Any>,
@@ -30,6 +31,10 @@ abstract class Documentify {
             .apply<StandaloneMockMvcBuilder>(documentationConfiguration(restDocumentation))
             .build()
         spec = given().mockMvc(mockMvc)
+    }
+
+    fun setup(mock: MockMvc) {
+        spec = given().mockMvc(mock)
     }
 
     fun documentation(
