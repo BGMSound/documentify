@@ -1,4 +1,4 @@
-# Documentify
+# 📝 Documentify
 Documentify allows easy and convenient creation of OpenAPI specification documents through Kotlin DSL, making users from the complexity of traditional RestDocs. 
 It combines the advantages of both Swagger and RestDocs for efficient and intuitive document management.
 
