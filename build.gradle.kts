@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.bgmsound"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 
 subprojects {
     group = rootProject.group
