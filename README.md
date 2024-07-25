@@ -7,7 +7,7 @@ It combines the advantages of both Swagger and RestDocs for efficient and intuit
 Add the following dependency to your `build.gradle.kts` file:
 ```kotlin
 dependencies {
-    implementation("com.github.documentify:documentify:${version}")
+    implementation("com.github.documentify:documentify-core:${version}")
 }
 ```
 
