@@ -7,7 +7,7 @@ It combines the advantages of both Swagger and RestDocs for efficient and intuit
 Add the following dependency to your `build.gradle.kts` file:
 ```kotlin
 dependencies {
-    implementation("com.github.bgmsound:documentify-core:${version}")
+    implementation("io.github.bgmsound:documentify-core:${version}")
 }
 ```
 
