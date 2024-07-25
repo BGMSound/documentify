@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
-import org.springframework.web.servlet.HandlerExceptionResolver
 
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
