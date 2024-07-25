@@ -23,9 +23,6 @@ dependencies {
 }
 
 signing {
-    extra["mavenCentralUsername"] = System.getenv("MAVEN_CENTRAL_USERNAME")
-    extra["mavenCentralPassword"] = System.getenv("MAVEN_CENTRAL_PASSWORD")
-
     useGpgCmd()
     sign(publishing.publications)
 }
