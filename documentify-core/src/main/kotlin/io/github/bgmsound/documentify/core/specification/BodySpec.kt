@@ -1,5 +1,6 @@
 package io.github.bgmsound.documentify.core.specification
 
+import io.github.bgmsound.documentify.core.specification.RestDocUtil.Companion.SAMPLE_KEY
 import io.github.bgmsound.documentify.core.specification.element.Field
 import io.github.bgmsound.documentify.core.specification.element.Field.Type
 import org.springframework.restdocs.payload.PayloadDocumentation
@@ -30,10 +31,6 @@ abstract class BodySpec(
 
     fun fields(): List<Field> = fields
 
-    fun sampleFields(): Map<String, Any> {
-        return fields.sample()
-    }
-
     fun <T> putField(
         clazz: Class<*>,
         path: String,
@@ -59,9 +56,5 @@ abstract class BodySpec(
 
     fun putField(field: Field) {
         fields.add(field)
-    }
-
-    private fun List<Field>.sample(): Map<String, Any> {
-        return associate { it.key to it.sample }
     }
 }

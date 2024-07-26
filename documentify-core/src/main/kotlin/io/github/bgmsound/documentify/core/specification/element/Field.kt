@@ -1,11 +1,10 @@
 package io.github.bgmsound.documentify.core.specification.element
 
-import io.github.bgmsound.documentify.core.specification.sample
 import org.springframework.restdocs.payload.FieldDescriptor
 
 class Field(
     val descriptor: FieldDescriptor
-) : SpecElement {
+) : SpecElement(descriptor) {
 
     override val key: String get() = descriptor.path
     val type: Type = when {
@@ -13,8 +12,6 @@ class Field(
         descriptor.isIgnored -> Type.IGNORED
         else -> Type.REQUIRED
     }
-    override val description = descriptor.description as String
-    override val sample get() = descriptor.sample()
 
     fun type(type: DocsFieldType) {
         descriptor.type(type.type)

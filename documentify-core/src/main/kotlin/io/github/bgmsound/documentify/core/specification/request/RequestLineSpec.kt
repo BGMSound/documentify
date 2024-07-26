@@ -1,7 +1,7 @@
 package io.github.bgmsound.documentify.core.specification.request
 
 import io.github.bgmsound.documentify.core.specification.APISpec
-import io.github.bgmsound.documentify.core.specification.SAMPLE_KEY
+import io.github.bgmsound.documentify.core.specification.RestDocUtil.Companion.SAMPLE_KEY
 import io.github.bgmsound.documentify.core.specification.element.PathVariable
 import io.github.bgmsound.documentify.core.specification.element.QueryParameter
 import io.restassured.http.Method

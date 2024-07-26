@@ -1,5 +1,6 @@
 package io.github.bgmsound.documentify.core.specification
 
+import io.github.bgmsound.documentify.core.specification.RestDocUtil.Companion.SAMPLE_KEY
 import io.github.bgmsound.documentify.core.specification.element.Header
 import io.github.bgmsound.documentify.core.specification.element.Header.Type
 import org.springframework.restdocs.headers.HeaderDocumentation
