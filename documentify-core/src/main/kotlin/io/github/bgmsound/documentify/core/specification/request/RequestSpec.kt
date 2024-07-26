@@ -1,6 +1,6 @@
 package io.github.bgmsound.documentify.core.specification.request
 
-import io.github.bgmsound.documentify.core.specification.APISpec
+import io.github.bgmsound.documentify.core.specification.HttpSpec
 import io.restassured.http.Method
 import org.springframework.restdocs.snippet.Snippet
 
@@ -8,25 +8,22 @@ class RequestSpec(
     private val requestLine: RequestLineSpec = RequestLineSpec("", Method.GET),
     private val requestHeader: RequestHeaderSpec = RequestHeaderSpec(),
     private val requestBody: RequestBodySpec = RequestBodySpec(),
-) : APISpec {
+) : HttpSpec(requestHeader, requestBody) {
 
     val url get() = requestLine.url
     val method get() = requestLine.method
     val pathVariables get() = requestLine.pathVariables()
     val queryParameters get() = requestLine.queryParameters()
-    val headers get() = requestHeader.headers()
-    val fields get() = requestBody.fields()
-    val schema get() = requestBody.schema()
 
     fun line(
         method: Method,
-        url: String
+        url: String,
     ) = line(method, url) {}
 
     fun line(
         method: Method,
         url: String,
-        specCustomizer: RequestLineSpec.() -> Unit
+        specCustomizer: RequestLineSpec.() -> Unit,
     ) {
         requestLine.url = url
         requestLine.method = method
