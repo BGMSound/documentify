@@ -1,13 +1,10 @@
 package io.github.bgmsound.documentify.core.specification
 
-import io.github.bgmsound.documentify.core.specification.RestDocUtil.Companion.SAMPLE_KEY
 import io.github.bgmsound.documentify.core.specification.element.Field
-import io.github.bgmsound.documentify.core.specification.element.Field.Type
-import org.springframework.restdocs.payload.PayloadDocumentation
-import org.springframework.restdocs.snippet.Attributes
+import io.github.bgmsound.documentify.core.specification.element.SpecElement.Type
 
 abstract class BodySpec(
-    protected val fields: MutableList<Field> = mutableListOf()
+    protected val fields: MutableList<Field> = mutableListOf(),
 ) : APISpec {
     private var schemaName: String? = null
 
@@ -18,43 +15,24 @@ abstract class BodySpec(
     fun schema(): String? = schemaName
 
     inline fun <reified T> field(path: String, description: String, sample: T): Field {
-        return putField(T::class.java, path, description, sample, Type.REQUIRED)
+        val field = Field.newField(T::class.java, path, description, sample, Type.REQUIRED)
+        return putField(field)
     }
 
     inline fun <reified T> optionalField(path: String, description: String, sample: T): Field {
-        return putField(T::class.java, path, description, sample, Type.OPTIONAL)
+        val field = Field.newField(T::class.java, path, description, sample, Type.OPTIONAL)
+        return putField(field)
     }
 
     inline fun <reified T> ignoreField(path: String, description: String, sample: T): Field {
-        return putField(T::class.java, path, description, sample, Type.IGNORED)
+        val field = Field.newField(T::class.java, path, description, sample, Type.IGNORED)
+        return putField(field)
     }
 
     fun fields(): List<Field> = fields
 
-    fun <T> putField(
-        clazz: Class<*>,
-        path: String,
-        description: String,
-        sample: T,
-        type: Type
-    ): Field {
-        val descriptor = PayloadDocumentation
-            .fieldWithPath(path)
-            .description(description)
-            .attributes(
-                Attributes.Attribute(SAMPLE_KEY, sample)
-            )
-        when (type) {
-            Type.REQUIRED -> {}
-            Type.OPTIONAL -> descriptor.optional()
-            Type.IGNORED -> descriptor.ignored()
-        }
-        val field = Field(descriptor)
-        putField(field)
-        return field
-    }
-
-    fun putField(field: Field) {
+    fun putField(field: Field): Field {
         fields.add(field)
+        return field
     }
 }

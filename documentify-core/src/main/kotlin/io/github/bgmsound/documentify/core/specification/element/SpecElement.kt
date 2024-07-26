@@ -13,4 +13,10 @@ abstract class SpecElement(
     private fun AbstractDescriptor<*>.sample(): Any {
         return attributes[SAMPLE_KEY] ?: throw IllegalArgumentException("sample not found")
     }
+
+    enum class Type {
+        REQUIRED,
+        OPTIONAL,
+        IGNORED;
+    }
 }

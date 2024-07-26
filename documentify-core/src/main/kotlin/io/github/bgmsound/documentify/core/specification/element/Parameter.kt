@@ -9,11 +9,7 @@ open class Parameter(
 
     val type: Type = when {
         descriptor.isOptional -> Type.OPTIONAL
+        descriptor.isIgnored -> Type.IGNORED
         else -> Type.REQUIRED
-    }
-
-    enum class Type {
-        REQUIRED,
-        OPTIONAL;
     }
 }

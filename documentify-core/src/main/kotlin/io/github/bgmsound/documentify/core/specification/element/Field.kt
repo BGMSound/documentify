@@ -1,9 +1,12 @@
 package io.github.bgmsound.documentify.core.specification.element
 
+import io.github.bgmsound.documentify.core.specification.RestDocUtil.Companion.SAMPLE_KEY
 import org.springframework.restdocs.payload.FieldDescriptor
+import org.springframework.restdocs.payload.PayloadDocumentation
+import org.springframework.restdocs.snippet.Attributes
 
 class Field(
-    val descriptor: FieldDescriptor
+    val descriptor: FieldDescriptor,
 ) : SpecElement(descriptor) {
 
     override val key: String get() = descriptor.path
@@ -17,9 +20,26 @@ class Field(
         descriptor.type(type.type)
     }
 
-    enum class Type {
-        REQUIRED,
-        OPTIONAL,
-        IGNORED;
+    companion object {
+        fun <T> newField(
+            clazz: Class<*>,
+            path: String,
+            description: String,
+            sample: T,
+            type: Type
+        ): Field {
+            val descriptor = PayloadDocumentation
+                .fieldWithPath(path)
+                .description(description)
+                .attributes(
+                    Attributes.Attribute(SAMPLE_KEY, sample)
+                )
+            when (type) {
+                Type.REQUIRED -> {}
+                Type.OPTIONAL -> descriptor.optional()
+                Type.IGNORED -> descriptor.ignored()
+            }
+            return Field(descriptor)
+        }
     }
 }
