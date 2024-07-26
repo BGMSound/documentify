@@ -1,6 +1,5 @@
 package io.github.bgmsound.documentify.core.specification.response
 
-import io.github.bgmsound.documentify.core.specification.APISpec
 import io.github.bgmsound.documentify.core.specification.HttpSpec
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.snippet.Snippet

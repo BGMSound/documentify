@@ -6,7 +6,7 @@ import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.snippet.Attributes
 
 class Field(
-    val descriptor: FieldDescriptor,
+    val descriptor: FieldDescriptor
 ) : SpecElement(descriptor) {
 
     override val key: String get() = descriptor.path
@@ -16,8 +16,16 @@ class Field(
         else -> Type.REQUIRED
     }
 
-    fun type(type: DocsFieldType) {
+    infix fun type(type: DocsFieldType) {
         descriptor.type(type.type)
+    }
+
+    fun optional() {
+        descriptor.optional()
+    }
+
+    fun ignored() {
+        descriptor.ignored()
     }
 
     companion object {
