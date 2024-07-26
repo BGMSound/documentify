@@ -6,10 +6,10 @@ import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.snippet.Attributes
 
 class Field(
-    val descriptor: FieldDescriptor
+    private val descriptor: FieldDescriptor
 ) : SpecElement(descriptor) {
-
     override val key: String get() = descriptor.path
+
     val type: Type = when {
         descriptor.isOptional -> Type.OPTIONAL
         descriptor.isIgnored -> Type.IGNORED
@@ -26,6 +26,10 @@ class Field(
 
     fun ignored() {
         descriptor.ignored()
+    }
+
+    fun build(): List<FieldDescriptor> {
+        return listOf(descriptor)
     }
 
     companion object {

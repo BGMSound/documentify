@@ -56,11 +56,11 @@ class RequestLineSpec(
     override fun build(): List<Snippet> {
         return buildList {
             if (pathParameters.isNotEmpty()) {
-                pathVariablesSnippet = RequestDocumentation.pathParameters(pathParameters.map { it.descriptor })
+                pathVariablesSnippet = RequestDocumentation.pathParameters(pathParameters.map { it.build() })
                 add(pathVariablesSnippet!!)
             }
             if (queryParameters.isNotEmpty()) {
-                queryParametersSnippet = RequestDocumentation.queryParameters(queryParameters.map { it.descriptor })
+                queryParametersSnippet = RequestDocumentation.queryParameters(queryParameters.map { it.build() })
                 add(queryParametersSnippet!!)
             }
         }

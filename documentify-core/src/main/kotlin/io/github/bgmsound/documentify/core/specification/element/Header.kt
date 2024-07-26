@@ -6,10 +6,16 @@ import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.snippet.Attributes
 
 class Header(
-    val descriptor: HeaderDescriptor
+    private val descriptor: HeaderDescriptor,
 ) : SpecElement(descriptor) {
-
     override val key: String get() = descriptor.name
+
+    val type: Type = when {
+        descriptor.isOptional -> Type.OPTIONAL
+        else -> Type.REQUIRED
+    }
+
+    fun build() = descriptor
 
     companion object {
         fun newHeader(

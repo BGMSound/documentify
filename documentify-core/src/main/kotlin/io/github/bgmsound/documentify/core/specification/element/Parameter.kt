@@ -3,7 +3,7 @@ package io.github.bgmsound.documentify.core.specification.element
 import org.springframework.restdocs.request.ParameterDescriptor
 
 open class Parameter(
-    val descriptor: ParameterDescriptor
+    private val descriptor: ParameterDescriptor
 ) : SpecElement(descriptor) {
     override val key: String get() = descriptor.name
 
@@ -12,4 +12,6 @@ open class Parameter(
         descriptor.isIgnored -> Type.IGNORED
         else -> Type.REQUIRED
     }
+
+    fun build() = descriptor
 }

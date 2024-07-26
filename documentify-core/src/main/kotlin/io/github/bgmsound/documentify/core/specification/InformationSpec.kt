@@ -3,8 +3,10 @@ package io.github.bgmsound.documentify.core.specification
 import com.epages.restdocs.apispec.ResourceDocumentation
 import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.epages.restdocs.apispec.Schema
+import io.github.bgmsound.documentify.core.specification.element.Field
 import io.github.bgmsound.documentify.core.specification.request.RequestSpec
 import io.github.bgmsound.documentify.core.specification.response.ResponseSpec
+import org.springframework.restdocs.payload.FieldDescriptor
 import org.springframework.restdocs.snippet.Snippet
 
 class InformationSpec(
@@ -60,31 +62,37 @@ class InformationSpec(
         resourceBuilder.summary(summary)
         resourceBuilder.description(description)
         if (request.pathVariables.isNotEmpty()) {
-            resourceBuilder.pathParameters(*request.pathVariables.map { it.descriptor }.toTypedArray())
+            resourceBuilder.pathParameters(*request.pathVariables.map { it.build() }.toTypedArray())
         }
         if (request.queryParameters.isNotEmpty()) {
-            resourceBuilder.queryParameters(*request.queryParameters.map { it.descriptor }.toTypedArray())
+            resourceBuilder.queryParameters(*request.queryParameters.map { it.build() }.toTypedArray())
         }
         if (request.headers.isNotEmpty()) {
-            resourceBuilder.requestHeaders(*request.headers.map { it.descriptor }.toTypedArray())
+            resourceBuilder.requestHeaders(*request.headers.map { it.build() }.toTypedArray())
         }
         if (response.headers.isNotEmpty()) {
-            resourceBuilder.responseHeaders(*response.headers.map { it.descriptor }.toTypedArray())
+            resourceBuilder.responseHeaders(*response.headers.map { it.build() }.toTypedArray())
         }
         if (request.fields.isNotEmpty()) {
             if (request.schema != null) {
                 baseRequestSchema = request.schema!!
             }
-            resourceBuilder.requestFields(request.fields.map { it.descriptor })
+            resourceBuilder.requestFields(buildFields(request.fields))
             resourceBuilder.requestSchema(Schema.schema(baseRequestSchema))
         }
         if (response.fields.isNotEmpty()) {
             if (response.schema != null) {
                 baseResponseSchema = response.schema!!
             }
-            resourceBuilder.responseFields(response.fields.map { it.descriptor })
+            resourceBuilder.responseFields(buildFields(response.fields))
             resourceBuilder.responseSchema(Schema.schema(baseResponseSchema))
         }
         return listOf(ResourceDocumentation.resource(resourceBuilder.build()))
+    }
+
+    private fun buildFields(fields: List<Field>): List<FieldDescriptor> {
+        return buildList {
+            fields.forEach { addAll(it.build()) }
+        }
     }
 }
