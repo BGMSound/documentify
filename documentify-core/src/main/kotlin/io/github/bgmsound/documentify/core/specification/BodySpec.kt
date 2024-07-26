@@ -8,6 +8,14 @@ import org.springframework.restdocs.snippet.Attributes
 abstract class BodySpec(
     protected val fields: MutableList<Field> = mutableListOf()
 ) : APISpec {
+    private var schemaName: String? = null
+
+    fun schema(name: String) {
+        schemaName = name
+    }
+
+    fun schema(): String? = schemaName
+
     inline fun <reified T> field(path: String, description: String, sample: T): Field {
         return putField(T::class.java, path, description, sample, Type.REQUIRED)
     }

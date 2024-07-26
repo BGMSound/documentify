@@ -51,6 +51,10 @@ class DocumentSpec(
         request.body(specCustomizer)
     }
 
+    fun requestBody(schema: String, specCustomizer: RequestBodySpec.() -> Unit) {
+        request.body(schema, specCustomizer)
+    }
+
     fun response(specCustomizer: ResponseSpec.() -> Unit) {
         response.apply(specCustomizer)
     }
@@ -88,6 +92,10 @@ class DocumentSpec(
 
     fun responseBody(specCustomizer: ResponseBodySpec.() -> Unit) {
         response.body(specCustomizer)
+    }
+
+    fun responseBody(schema: String, specCustomizer: ResponseBodySpec.() -> Unit) {
+        response.body(schema, specCustomizer)
     }
 
     override fun build(): List<Snippet> {

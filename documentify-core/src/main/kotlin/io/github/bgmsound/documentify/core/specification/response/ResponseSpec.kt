@@ -11,10 +11,9 @@ class ResponseSpec(
 ) : APISpec {
 
     val statusCode get() = responseLine.statusCode()
-
     val headers get() = responseHeader.headers()
-
     val fields get() = responseBody.fields()
+    val schema get() = responseBody.schema()
 
     fun status(statusCode: HttpStatus) {
         responseLine.statusCode(statusCode.value())
@@ -33,6 +32,11 @@ class ResponseSpec(
     }
 
     fun body(spec: ResponseBodySpec.() -> Unit) {
+        responseBody.apply(spec)
+    }
+
+    fun body(schema: String, spec: ResponseBodySpec.() -> Unit) {
+        responseBody.schema(schema)
         responseBody.apply(spec)
     }
 

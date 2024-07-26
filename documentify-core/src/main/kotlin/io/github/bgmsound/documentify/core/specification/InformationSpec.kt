@@ -15,13 +15,13 @@ class InformationSpec(
     private val tags = mutableListOf<String>()
     private var summary: String
     private var description: String = ""
-    private var requestSchema: String
-    private var responseSchema: String
+    private var baseRequestSchema: String
+    private var baseResponseSchema: String
 
     init {
         summary = documentName
-        requestSchema = "${documentName}-request"
-        responseSchema = "${documentName}-response"
+        baseRequestSchema = "$documentName Request"
+        baseResponseSchema = "$documentName Response"
     }
 
     fun tag(tag: String) {
@@ -45,11 +45,11 @@ class InformationSpec(
     }
 
     fun requestSchema(schema: String) {
-        this.requestSchema = schema
+        this.baseRequestSchema = schema
     }
 
     fun responseSchema(schema: String) {
-        this.responseSchema = schema
+        this.baseResponseSchema = schema
     }
 
     override fun build(): List<Snippet> {
@@ -72,12 +72,18 @@ class InformationSpec(
             resourceBuilder.responseHeaders(*response.headers.map { it.descriptor }.toTypedArray())
         }
         if (request.fields.isNotEmpty()) {
+            if (request.schema != null) {
+                baseRequestSchema = request.schema!!
+            }
             resourceBuilder.requestFields(request.fields.map { it.descriptor })
-            resourceBuilder.requestSchema(Schema.schema(requestSchema))
+            resourceBuilder.requestSchema(Schema.schema(baseRequestSchema))
         }
         if (response.fields.isNotEmpty()) {
+            if (response.schema != null) {
+                baseResponseSchema = response.schema!!
+            }
             resourceBuilder.responseFields(response.fields.map { it.descriptor })
-            resourceBuilder.responseSchema(Schema.schema(responseSchema))
+            resourceBuilder.responseSchema(Schema.schema(baseResponseSchema))
         }
         return listOf(ResourceDocumentation.resource(resourceBuilder.build()))
     }

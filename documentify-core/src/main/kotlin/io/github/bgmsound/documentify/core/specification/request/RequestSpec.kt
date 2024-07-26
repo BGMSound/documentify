@@ -7,7 +7,7 @@ import org.springframework.restdocs.snippet.Snippet
 class RequestSpec(
     private val requestLine: RequestLineSpec = RequestLineSpec("", Method.GET),
     private val requestHeader: RequestHeaderSpec = RequestHeaderSpec(),
-    private val requestBody: RequestBodySpec = RequestBodySpec()
+    private val requestBody: RequestBodySpec = RequestBodySpec(),
 ) : APISpec {
 
     val url get() = requestLine.url
@@ -16,6 +16,7 @@ class RequestSpec(
     val queryParameters get() = requestLine.queryParameters()
     val headers get() = requestHeader.headers()
     val fields get() = requestBody.fields()
+    val schema get() = requestBody.schema()
 
     fun line(
         method: Method,
@@ -37,6 +38,11 @@ class RequestSpec(
     }
 
     fun body(specCustomizer: RequestBodySpec.() -> Unit) {
+        requestBody.apply(specCustomizer)
+    }
+
+    fun body(schema: String, specCustomizer: RequestBodySpec.() -> Unit) {
+        requestBody.schema(schema)
         requestBody.apply(specCustomizer)
     }
 
