@@ -32,7 +32,7 @@ abstract class HeaderSpec(
         val descriptor = HeaderDocumentation.headerWithName(key)
             .description(description)
             .attributes(
-                Attributes.Attribute(SAMPLE, sample)
+                Attributes.Attribute(SAMPLE_KEY, sample)
             )
         when (type) {
             Type.REQUIRED -> {}

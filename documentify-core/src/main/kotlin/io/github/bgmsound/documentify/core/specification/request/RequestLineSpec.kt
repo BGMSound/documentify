@@ -1,7 +1,7 @@
 package io.github.bgmsound.documentify.core.specification.request
 
 import io.github.bgmsound.documentify.core.specification.APISpec
-import io.github.bgmsound.documentify.core.specification.SAMPLE
+import io.github.bgmsound.documentify.core.specification.SAMPLE_KEY
 import io.github.bgmsound.documentify.core.specification.element.PathVariable
 import io.github.bgmsound.documentify.core.specification.element.QueryParameter
 import io.restassured.http.Method
@@ -28,7 +28,7 @@ class RequestLineSpec(
         val descriptor = RequestDocumentation.parameterWithName(key)
             .description(description)
             .attributes(
-                Attributes.Attribute(SAMPLE, sample)
+                Attributes.Attribute(SAMPLE_KEY, sample)
             )
         pathParameters.add(PathVariable(descriptor))
     }
@@ -37,7 +37,7 @@ class RequestLineSpec(
         val descriptor = RequestDocumentation.parameterWithName(key)
             .description(description)
             .attributes(
-                Attributes.Attribute(SAMPLE, sample)
+                Attributes.Attribute(SAMPLE_KEY, sample)
             )
         queryParameters.add(QueryParameter(descriptor))
     }

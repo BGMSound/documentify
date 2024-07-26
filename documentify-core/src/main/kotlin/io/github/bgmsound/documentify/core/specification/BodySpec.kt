@@ -37,7 +37,7 @@ abstract class BodySpec(
             .fieldWithPath(path)
             .description(description)
             .attributes(
-                Attributes.Attribute(SAMPLE, sample)
+                Attributes.Attribute(SAMPLE_KEY, sample)
             )
         when (type) {
             Type.REQUIRED -> {}
