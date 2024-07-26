@@ -16,7 +16,7 @@ class DocumentSpec(
 ) : APISpec {
     val request: RequestSpec = RequestSpec()
     val response: ResponseSpec = ResponseSpec()
-    private val information: InformationSpec = InformationSpec(request, response)
+    private val information: InformationSpec = InformationSpec(name, request, response)
 
     fun information(specCustomizer: InformationSpec.() -> Unit) {
         information.apply(specCustomizer)
