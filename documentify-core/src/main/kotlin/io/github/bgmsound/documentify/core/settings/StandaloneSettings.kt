@@ -43,10 +43,6 @@ class StandaloneSettings private constructor() {
     }
 
     companion object {
-        fun settings(): StandaloneSettings {
-            return StandaloneSettings()
-        }
-
         fun controllers(vararg controllers: Any): StandaloneSettings {
             return StandaloneSettings().controllers(*controllers)
         }

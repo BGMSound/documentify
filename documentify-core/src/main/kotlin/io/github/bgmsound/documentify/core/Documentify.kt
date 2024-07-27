@@ -5,7 +5,6 @@ import io.github.bgmsound.documentify.core.specification.DocumentSpec
 import io.restassured.module.mockmvc.RestAssuredMockMvc.given
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
 import io.github.bgmsound.documentify.core.settings.StandaloneSettings.Companion.controllers
-import io.github.bgmsound.documentify.core.settings.StandaloneSettings.Companion.settings
 
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.restdocs.RestDocumentationContextProvider
@@ -26,6 +25,27 @@ abstract class Documentify {
         emitter.emit(spec)
     }
 
+    fun with(mock: MockMvc) {
+        spec = given().mockMvc(mock)
+    }
+
+    fun standalone(
+        provider: RestDocumentationContextProvider,
+        settingCustomizer: StandaloneSettings.() -> Unit
+    ) {
+        val standaloneContext = controllers().also(settingCustomizer)
+        val mockMvc = standaloneContext.build(provider)
+        spec = given().mockMvc(mockMvc)
+    }
+
+    fun standalone(
+        provider: RestDocumentationContextProvider,
+        settings: StandaloneSettings
+    ) {
+        val mockMvc = settings.build(provider)
+        spec = given().mockMvc(mockMvc)
+    }
+
     fun standalone(
         provider: RestDocumentationContextProvider,
         controllers: List<Any>,
@@ -37,18 +57,5 @@ abstract class Documentify {
             .argumentResolvers(argumentResolvers)
             .build(provider)
         spec = given().mockMvc(mockMvc)
-    }
-
-    fun standalone(
-        provider: RestDocumentationContextProvider,
-        settingCustomizer: StandaloneSettings.() -> Unit
-    ) {
-        val settings = settings().also(settingCustomizer)
-        val mockMvc = settings.build(provider)
-        spec = given().mockMvc(mockMvc)
-    }
-
-    fun setup(mock: MockMvc) {
-        spec = given().mockMvc(mock)
     }
 }
