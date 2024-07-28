@@ -7,11 +7,5 @@ open class Parameter(
 ) : SpecElement(descriptor) {
     override val key: String get() = descriptor.name
 
-    val type: Type = when {
-        descriptor.isOptional -> Type.OPTIONAL
-        descriptor.isIgnored -> Type.IGNORED
-        else -> Type.REQUIRED
-    }
-
     fun build() = descriptor
 }

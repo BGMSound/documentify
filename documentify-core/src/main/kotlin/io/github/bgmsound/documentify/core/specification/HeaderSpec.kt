@@ -1,7 +1,7 @@
 package io.github.bgmsound.documentify.core.specification
 
 import io.github.bgmsound.documentify.core.specification.element.Header
-import io.github.bgmsound.documentify.core.specification.element.SpecElement.Type
+import io.github.bgmsound.documentify.core.specification.element.SpecElement.Requirement
 
 abstract class HeaderSpec(
     protected val headers: MutableList<Header> = mutableListOf(),
@@ -14,12 +14,12 @@ abstract class HeaderSpec(
     }
 
     fun header(path: String, description: String, sample: String): Header {
-        val header = Header.newHeader(path, description, sample, Type.REQUIRED)
+        val header = Header.newHeader(path, description, sample, Requirement.REQUIRED)
         return putHeader(header)
     }
 
     fun optionalHeader(path: String, description: String, sample: String): Header {
-        val header = Header.newHeader(path, description, sample, Type.OPTIONAL)
+        val header = Header.newHeader(path, description, sample, Requirement.OPTIONAL)
         return putHeader(header)
     }
 

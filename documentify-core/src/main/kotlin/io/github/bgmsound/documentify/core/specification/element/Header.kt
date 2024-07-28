@@ -10,11 +10,6 @@ class Header(
 ) : SpecElement(descriptor) {
     override val key: String get() = descriptor.name
 
-    val type: Type = when {
-        descriptor.isOptional -> Type.OPTIONAL
-        else -> Type.REQUIRED
-    }
-
     fun build() = descriptor
 
     companion object {
@@ -22,16 +17,16 @@ class Header(
             key: String,
             sample: String,
             description: String,
-            type: Type
+            requirement: Requirement
         ): Header {
             val descriptor = HeaderDocumentation.headerWithName(key)
                 .description(description)
                 .attributes(
                     Attributes.Attribute(SAMPLE_KEY, sample)
                 )
-            when (type) {
-                Type.REQUIRED -> {}
-                Type.OPTIONAL -> descriptor.optional()
+            when (requirement) {
+                Requirement.REQUIRED -> {}
+                Requirement.OPTIONAL -> descriptor.optional()
                 else -> throw IllegalArgumentException("Header type must be REQUIRED or OPTIONAL")
             }
             return Header(descriptor)

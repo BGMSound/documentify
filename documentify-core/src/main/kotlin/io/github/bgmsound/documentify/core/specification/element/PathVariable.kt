@@ -13,17 +13,17 @@ class PathVariable(
             key: String,
             description: String,
             sample: String,
-            type: Type
+            requirement: Requirement
         ): PathVariable {
             val descriptor = RequestDocumentation.parameterWithName(key)
                 .description(description)
                 .attributes(
                     Attributes.Attribute(SAMPLE_KEY, sample)
                 )
-            when (type) {
-                Type.REQUIRED -> {}
-                Type.OPTIONAL -> descriptor.optional()
-                Type.IGNORED -> descriptor.ignored()
+            when (requirement) {
+                Requirement.REQUIRED -> {}
+                Requirement.OPTIONAL -> descriptor.optional()
+                Requirement.IGNORED -> descriptor.ignored()
             }
             return PathVariable(descriptor)
         }
