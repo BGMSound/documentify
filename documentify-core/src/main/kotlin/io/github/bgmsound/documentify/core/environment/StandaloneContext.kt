@@ -1,4 +1,4 @@
-package io.github.bgmsound.documentify.core.settings
+package io.github.bgmsound.documentify.core.environment
 
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
