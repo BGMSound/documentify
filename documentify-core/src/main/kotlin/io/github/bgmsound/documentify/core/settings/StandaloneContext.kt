@@ -7,67 +7,67 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 
-class StandaloneSettings private constructor() {
+class StandaloneContext private constructor() {
     private var controllers: List<Any> = listOf()
     private var controllerAdvices: List<Any> = listOf()
     private var argumentResolvers: List<HandlerMethodArgumentResolver> = listOf()
 
-    fun controller(controller: Any): StandaloneSettings {
+    fun controller(controller: Any): StandaloneContext {
         this.controllers.plus(controller)
         return this
     }
 
-    fun controllers(vararg controllers: Any): StandaloneSettings {
+    fun controllers(vararg controllers: Any): StandaloneContext {
         this.controllers.plus(controllers)
         return this
     }
 
-    fun controllers(controllers: List<Any>): StandaloneSettings {
+    fun controllers(controllers: List<Any>): StandaloneContext {
         this.controllers.plus(controllers)
         return this
     }
 
-    fun controllerAdvice(controllerAdvice: Any): StandaloneSettings {
+    fun controllerAdvice(controllerAdvice: Any): StandaloneContext {
         this.controllerAdvices.plus(controllerAdvice)
         return this
     }
 
-    fun controllerAdvices(vararg controllerAdvices: Any): StandaloneSettings {
+    fun controllerAdvices(vararg controllerAdvices: Any): StandaloneContext {
         this.controllerAdvices.plus(controllerAdvices)
         return this
     }
 
-    fun controllerAdvices(controllerAdvices: List<Any>): StandaloneSettings {
+    fun controllerAdvices(controllerAdvices: List<Any>): StandaloneContext {
         this.controllerAdvices.plus(controllerAdvices)
         return this
     }
 
-    fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneSettings {
+    fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneContext {
         this.argumentResolvers.plus(argumentResolver)
         return this
     }
 
-    fun argumentResolvers(vararg argumentResolvers: HandlerMethodArgumentResolver): StandaloneSettings {
+    fun argumentResolvers(vararg argumentResolvers: HandlerMethodArgumentResolver): StandaloneContext {
         this.argumentResolvers.plus(argumentResolvers)
         return this
     }
 
-    fun argumentResolvers(argumentResolvers: List<HandlerMethodArgumentResolver>): StandaloneSettings {
+    fun argumentResolvers(argumentResolvers: List<HandlerMethodArgumentResolver>): StandaloneContext {
         this.argumentResolvers.plus(argumentResolvers)
         return this
     }
 
     companion object {
-        fun controller(controller: Any): StandaloneSettings {
-            return StandaloneSettings().controller(controller)
+        fun controller(controller: Any): StandaloneContext {
+            return StandaloneContext().controller(controller)
         }
 
-        fun controllers(vararg controllers: Any): StandaloneSettings {
-            return StandaloneSettings().controllers(*controllers)
+        fun controllers(vararg controllers: Any): StandaloneContext {
+            return StandaloneContext().controllers(*controllers)
         }
 
-        fun controllers(controllers: List<Any>): StandaloneSettings {
-            return StandaloneSettings().controllers(controllers)
+        fun controllers(controllers: List<Any>): StandaloneContext {
+            return StandaloneContext().controllers(controllers)
         }
     }
 
