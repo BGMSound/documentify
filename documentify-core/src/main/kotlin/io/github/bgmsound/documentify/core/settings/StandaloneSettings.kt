@@ -12,37 +12,56 @@ class StandaloneSettings private constructor() {
     private var controllerAdvices: List<Any> = listOf()
     private var argumentResolvers: List<HandlerMethodArgumentResolver> = listOf()
 
+    fun controller(controller: Any): StandaloneSettings {
+        this.controllers.plus(controller)
+        return this
+    }
+
     fun controllers(vararg controllers: Any): StandaloneSettings {
-        this.controllers = controllers.toList()
+        this.controllers.plus(controllers)
         return this
     }
 
     fun controllers(controllers: List<Any>): StandaloneSettings {
-        this.controllers = controllers
+        this.controllers.plus(controllers)
+        return this
+    }
+
+    fun controllerAdvice(controllerAdvice: Any): StandaloneSettings {
+        this.controllerAdvices.plus(controllerAdvice)
         return this
     }
 
     fun controllerAdvices(vararg controllerAdvices: Any): StandaloneSettings {
-        this.controllerAdvices = controllerAdvices.toList()
+        this.controllerAdvices.plus(controllerAdvices)
         return this
     }
 
     fun controllerAdvices(controllerAdvices: List<Any>): StandaloneSettings {
-        this.controllerAdvices = controllerAdvices
+        this.controllerAdvices.plus(controllerAdvices)
+        return this
+    }
+
+    fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneSettings {
+        this.argumentResolvers.plus(argumentResolver)
         return this
     }
 
     fun argumentResolvers(vararg argumentResolvers: HandlerMethodArgumentResolver): StandaloneSettings {
-        this.argumentResolvers = argumentResolvers.toList()
+        this.argumentResolvers.plus(argumentResolvers)
         return this
     }
 
     fun argumentResolvers(argumentResolvers: List<HandlerMethodArgumentResolver>): StandaloneSettings {
-        this.argumentResolvers = argumentResolvers
+        this.argumentResolvers.plus(argumentResolvers)
         return this
     }
 
     companion object {
+        fun controller(controller: Any): StandaloneSettings {
+            return StandaloneSettings().controller(controller)
+        }
+
         fun controllers(vararg controllers: Any): StandaloneSettings {
             return StandaloneSettings().controllers(*controllers)
         }
