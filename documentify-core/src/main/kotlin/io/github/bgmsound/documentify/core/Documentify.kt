@@ -34,8 +34,7 @@ abstract class Documentify {
         contextCustomizer: StandaloneContext.() -> Unit
     ) {
         val standaloneContext = controllers().also(contextCustomizer)
-        val mockMvc = standaloneContext.build(provider)
-        spec = given().mockMvc(mockMvc)
+        standalone(provider, standaloneContext)
     }
 
     fun standalone(
@@ -52,10 +51,9 @@ abstract class Documentify {
         controllerAdvices: List<Any>,
         argumentResolvers: List<HandlerMethodArgumentResolver>
     ) {
-        val mockMvc = controllers(controllers)
+        val standaloneContext = controllers(controllers)
             .controllerAdvices(controllerAdvices)
             .argumentResolvers(argumentResolvers)
-            .build(provider)
-        spec = given().mockMvc(mockMvc)
+        standalone(provider, standaloneContext)
     }
 }
