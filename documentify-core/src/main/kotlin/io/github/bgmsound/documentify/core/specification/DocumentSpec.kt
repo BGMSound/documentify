@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.restdocs.snippet.Snippet
 
 class DocumentSpec(
-    val name: String,
+    val name: String
 ) : APISpec {
     val request: RequestSpec = RequestSpec()
     val response: ResponseSpec = ResponseSpec()
@@ -63,29 +63,37 @@ class DocumentSpec(
         information.responseSchema(schema)
     }
 
+    fun responseStatus(
+        status: HttpStatus
+    ) = responseLine(status)
+
+    fun responseStatus(
+        status: Int
+    ) = responseLine(status)
+
     fun responseLine(
-        status: HttpStatus,
+        status: HttpStatus
     ) = responseLine(status.value())
 
     fun responseLine(
         status: HttpStatus,
-        specCustomizer: ResponseHeaderSpec.() -> Unit,
+        specCustomizer: ResponseHeaderSpec.() -> Unit
     ) = responseLine(status.value(), specCustomizer)
 
     fun responseLine(
-        status: Int,
+        status: Int
     ) = responseLine(status) {}
 
     fun responseLine(
         status: Int,
-        specCustomizer: ResponseHeaderSpec.() -> Unit,
+        specCustomizer: ResponseHeaderSpec.() -> Unit
     ) {
         response.status(status)
         response.headers(specCustomizer)
     }
 
     fun responseHeaders(
-        specCustomizer: ResponseHeaderSpec.() -> Unit,
+        specCustomizer: ResponseHeaderSpec.() -> Unit
     ) {
         response.headers(specCustomizer)
     }
