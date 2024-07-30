@@ -31,18 +31,18 @@ abstract class Documentify {
 
     fun standalone(
         provider: RestDocumentationContextProvider,
-        settingCustomizer: StandaloneContext.() -> Unit
+        contextCustomizer: StandaloneContext.() -> Unit
     ) {
-        val standaloneContext = controllers().also(settingCustomizer)
+        val standaloneContext = controllers().also(contextCustomizer)
         val mockMvc = standaloneContext.build(provider)
         spec = given().mockMvc(mockMvc)
     }
 
     fun standalone(
         provider: RestDocumentationContextProvider,
-        context: StandaloneContext
+        standaloneContext: StandaloneContext
     ) {
-        val mockMvc = context.build(provider)
+        val mockMvc = standaloneContext.build(provider)
         spec = given().mockMvc(mockMvc)
     }
 
