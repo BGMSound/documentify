@@ -1,10 +1,10 @@
 package io.github.bgmsound.documentify.core
 
-import io.github.bgmsound.documentify.core.settings.StandaloneContext
+import io.github.bgmsound.documentify.core.environment.StandaloneContext
 import io.github.bgmsound.documentify.core.specification.DocumentSpec
 import io.restassured.module.mockmvc.RestAssuredMockMvc.given
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
-import io.github.bgmsound.documentify.core.settings.StandaloneContext.Companion.controllers
+import io.github.bgmsound.documentify.core.environment.StandaloneContext.Companion.controllers
 
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.restdocs.RestDocumentationContextProvider
