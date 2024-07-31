@@ -38,7 +38,7 @@ class DocumentSpec(
     fun requestLine(
         method: Method,
         url: String,
-        specCustomizer: RequestLineSpec.() -> Unit,
+        specCustomizer: RequestLineSpec.() -> Unit
     ) {
         request.line(method, url, specCustomizer)
     }
