@@ -18,6 +18,26 @@ abstract class HeaderSpec(
         return putHeader(header)
     }
 
+    fun bearer(path: String, description: String, sample: String): Header {
+        val header = Header.newHeader(
+            path,
+            description,
+            "Bearer $sample",
+            Requirement.REQUIRED
+        )
+        return putHeader(header)
+    }
+
+    fun bearer(description: String, sample: String): Header {
+        val header = Header.newHeader(
+            "Authorization",
+            description,
+            "Bearer $sample",
+            Requirement.REQUIRED
+        )
+        return putHeader(header)
+    }
+
     fun optionalHeader(path: String, description: String, sample: String): Header {
         val header = Header.newHeader(path, description, sample, Requirement.OPTIONAL)
         return putHeader(header)
