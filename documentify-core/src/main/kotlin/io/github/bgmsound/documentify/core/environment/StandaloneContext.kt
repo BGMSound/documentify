@@ -8,52 +8,52 @@ import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 
 class StandaloneContext private constructor() {
-    private var controllers: List<Any> = listOf()
-    private var controllerAdvices: List<Any> = listOf()
-    private var argumentResolvers: List<HandlerMethodArgumentResolver> = listOf()
+    private val controllers: MutableList<Any> = mutableListOf()
+    private val controllerAdvices: MutableList<Any> = mutableListOf()
+    private val argumentResolvers: MutableList<HandlerMethodArgumentResolver> = mutableListOf()
 
     fun controller(controller: Any): StandaloneContext {
-        this.controllers.plus(controller)
+        this.controllers.add(controller)
         return this
     }
 
     fun controllers(vararg controllers: Any): StandaloneContext {
-        this.controllers.plus(controllers)
+        this.controllers.addAll(controllers)
         return this
     }
 
     fun controllers(controllers: List<Any>): StandaloneContext {
-        this.controllers.plus(controllers)
+        this.controllers.addAll(controllers)
         return this
     }
 
     fun controllerAdvice(controllerAdvice: Any): StandaloneContext {
-        this.controllerAdvices.plus(controllerAdvice)
+        this.controllerAdvices.add(controllerAdvice)
         return this
     }
 
     fun controllerAdvices(vararg controllerAdvices: Any): StandaloneContext {
-        this.controllerAdvices.plus(controllerAdvices)
+        this.controllerAdvices.addAll(controllerAdvices)
         return this
     }
 
     fun controllerAdvices(controllerAdvices: List<Any>): StandaloneContext {
-        this.controllerAdvices.plus(controllerAdvices)
+        this.controllerAdvices.addAll(controllerAdvices)
         return this
     }
 
     fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneContext {
-        this.argumentResolvers.plus(argumentResolver)
+        this.argumentResolvers.add(argumentResolver)
         return this
     }
 
     fun argumentResolvers(vararg argumentResolvers: HandlerMethodArgumentResolver): StandaloneContext {
-        this.argumentResolvers.plus(argumentResolvers)
+        this.argumentResolvers.addAll(argumentResolvers)
         return this
     }
 
     fun argumentResolvers(argumentResolvers: List<HandlerMethodArgumentResolver>): StandaloneContext {
-        this.argumentResolvers.plus(argumentResolvers)
+        this.argumentResolvers.addAll(argumentResolvers)
         return this
     }
 
