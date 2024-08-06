@@ -1,15 +1,14 @@
 package io.github.bgmsound.documentify.core
 
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
+import io.github.bgmsound.documentify.core.specification.DocumentSpec
+import io.github.bgmsound.documentify.core.specification.element.Field
+import io.github.bgmsound.documentify.core.specification.element.SpecElement
 import io.restassured.http.ContentType
 import io.restassured.http.Method
-import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import io.restassured.module.mockmvc.response.MockMvcResponse
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import io.github.bgmsound.documentify.core.specification.DocumentSpec
-import io.github.bgmsound.documentify.core.specification.element.SpecElement
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -17,11 +16,9 @@ import java.time.LocalDateTime
 class RestDocsEmitter(
     private val document: DocumentSpec
 ) {
-    private val objectMapper = ObjectMapper().registerModules(JavaTimeModule())
-
     fun emit(requestSpecification: MockMvcRequestSpecification) {
         val snippets = document.build()
-        val documentSchema = document(
+        val documentSpec = document(
             document.name,
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
@@ -32,7 +29,7 @@ class RestDocsEmitter(
             .pathParams(document.request.pathVariables.sample())
             .queryParams(document.request.queryParameters.sample())
             .headers(document.request.headers.sample())
-            .bodyIfExists(document.request.fields.sample())
+            .bodyIfExists(document.request.fields.associate())
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .sendRequest()
@@ -40,7 +37,7 @@ class RestDocsEmitter(
             .then()
             .log().all()
             .assertThat()
-            .apply(documentSchema)
+            .apply(documentSpec)
             .statusCode(document.response.statusCode)
     }
 
@@ -65,15 +62,37 @@ class RestDocsEmitter(
 
     private fun List<SpecElement>.sample(): Map<String, Any> {
         return associate {
-            it.key to it.sample.let { sample ->
-                if (sample is LocalDate || sample is LocalDateTime) {
-                    objectMapper.writeValueAsString(sample)
-                } else {
-                    sample
-                }
-            }
+            it.key to it.sample
         }
     }
 
-    private fun Map<String, Any>.toJson(): String = objectMapper.writeValueAsString(this)
+    private fun List<Field>.associate(): Map<String, Any> {
+        return filter { it.hasSample() || it.canHaveChild() || !it.isIgnored() }.associate { it.associate() }
+    }
+
+    private fun Field.associate(): Pair<String, Any> {
+        if (isIgnored()) {
+            throw IllegalStateException("can't associate ignored field $key")
+        }
+        if (!hasSample() && !canHaveChild()) {
+            throw IllegalStateException("Field $key must have sample or child fields")
+        }
+        return key to if (hasSample()) {
+            if (sample is LocalDate || sample is LocalDateTime) {
+                sample.toString()
+            } else {
+                sample
+            }
+        } else {
+            if (childFields().isEmpty()) {
+                throw IllegalStateException("Field $key must have child fields")
+            }
+            val sample = childFields().associate { it.associate() }
+            if (isArray()) {
+                listOf(sample)
+            } else {
+                sample
+            }
+        }
+    }
 }
