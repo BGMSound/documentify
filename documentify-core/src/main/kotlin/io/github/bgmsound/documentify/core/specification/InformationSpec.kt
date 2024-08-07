@@ -78,15 +78,15 @@ class InformationSpec(
                 baseRequestSchema = request.schema!!
             }
             resourceBuilder.requestFields(buildFields(request.fields))
-            resourceBuilder.requestSchema(Schema.schema(baseRequestSchema))
         }
+        resourceBuilder.requestSchema(Schema.schema(baseRequestSchema))
         if (response.fields.isNotEmpty()) {
             if (response.schema != null) {
                 baseResponseSchema = response.schema!!
             }
             resourceBuilder.responseFields(buildFields(response.fields))
-            resourceBuilder.responseSchema(Schema.schema(baseResponseSchema))
         }
+        resourceBuilder.responseSchema(Schema.schema(baseResponseSchema))
         return listOf(ResourceDocumentation.resource(resourceBuilder.build()))
     }
 
