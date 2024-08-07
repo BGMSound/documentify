@@ -2,6 +2,7 @@ package io.github.bgmsound.documentify.sample
 
 import io.github.bgmsound.documentify.sample.dto.request.SampleRequest
 import io.github.bgmsound.documentify.sample.dto.response.SampleResponse
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -34,5 +35,9 @@ class SampleController {
         @RequestBody request: SampleRequest
     ): SampleResponse {
         return SampleResponse(request.integerField, request.stringField)
+    }
+
+    @DeleteMapping("{id}")
+    fun sampleDelete(@PathVariable("id") id: String) {
     }
 }

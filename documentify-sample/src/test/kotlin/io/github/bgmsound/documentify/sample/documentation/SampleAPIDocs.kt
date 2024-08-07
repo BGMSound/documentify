@@ -50,6 +50,10 @@ class SampleAPIDocs : Documentify() {
                 field("stringField", "stringField", "string")
             }
             responseStatus(HttpStatus.OK)
+            responseBody {
+                field("integerField", "integerField", 1)
+                field("stringField", "stringField", "string")
+            }
         }
     }
 
@@ -73,6 +77,18 @@ class SampleAPIDocs : Documentify() {
                     field("integerField", "integerField", 1)
                     field("stringField", "stringField", "string")
                 }
+            }
+        }
+    }
+
+    @Test
+    fun sampleDeleteApi() {
+        documentation("Sample Delete API") {
+            information {
+                tag("flat")
+            }
+            requestLine(Method.DELETE, "/sample/{id}") {
+                pathVariable("id", "id", "id")
             }
         }
     }
