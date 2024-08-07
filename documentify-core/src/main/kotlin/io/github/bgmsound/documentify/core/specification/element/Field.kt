@@ -187,8 +187,6 @@ class Field(
                 descriptor.type(OBJECT.type)
             } else if (sample is String) {
                 descriptor.type(STRING.type)
-            } else if (!clazz.isPrimitiveOrWrapper()) {
-                descriptor.type(OBJECT.type)
             }
             return Field(descriptor, extractKeyFromPath(path))
         }
