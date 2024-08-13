@@ -16,7 +16,7 @@ Add the following code to your test class:
 ```kotlin
 @Test
 fun documentationGetApi() {
-    `when`(testService.test()).thenReturn("hi")
+    `when`(testService.test()).thenReturn("test")
     documentation("test-get-api") {
         information {
             summary("test get api")
@@ -28,7 +28,7 @@ fun documentationGetApi() {
         }
         responseBody {
             field("testField1", "path", "path")
-            field("testField2", "message", "hi")
+            field("testField2", "message", "test")
         }
     }
 }
