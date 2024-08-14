@@ -78,11 +78,7 @@ class RestDocsEmitter(
             throw IllegalStateException("Field $key must have sample or child fields")
         }
         return key to if (hasSample()) {
-            if (sample is LocalDate || sample is LocalDateTime) {
-                sample.toString()
-            } else {
-                sample
-            }
+            sample
         } else {
             if (childFields().isEmpty()) {
                 throw IllegalStateException("Field $key must have child fields")
