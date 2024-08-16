@@ -22,6 +22,10 @@ class DocumentSpec(
         information.apply(specCustomizer)
     }
 
+    fun description(description: String) {
+        information.description(description)
+    }
+
     fun tag(tag: String) {
         information.tag(tag)
     }
