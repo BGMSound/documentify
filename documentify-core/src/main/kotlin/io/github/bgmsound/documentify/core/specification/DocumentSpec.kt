@@ -22,6 +22,18 @@ class DocumentSpec(
         information.apply(specCustomizer)
     }
 
+    fun tag(tag: String) {
+        information.tag(tag)
+    }
+
+    fun tags(vararg tags: String) {
+        information.tags(*tags)
+    }
+
+    fun tags(tags: Collection<String>) {
+        information.tags(tags)
+    }
+
     fun request(specCustomizer: RequestSpec.() -> Unit) {
         request.apply(specCustomizer)
     }
