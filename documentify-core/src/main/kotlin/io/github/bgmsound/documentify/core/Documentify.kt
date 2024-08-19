@@ -13,7 +13,6 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentati
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 

@@ -1,5 +1,4 @@
 plugins {
-    kotlin("jvm")
     kotlin("plugin.spring")
     id("com.epages.restdocs-api-spec") version "0.18.2"
 }
