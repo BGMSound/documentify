@@ -14,6 +14,13 @@ dependencies {
 ### Getting Started
 Add the following code to your test class:
 ```kotlin
+@BeforeEach
+fun setUp(provider: RestDocumentationContextProvider) {
+    standalone(provider) {
+        controllers(TestController())
+    }
+}
+
 @Test
 fun documentationGetApi() {
     `when`(testService.test()).thenReturn("test")
