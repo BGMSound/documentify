@@ -2,7 +2,6 @@ package io.github.bgmsound.documentify.core.specification.element
 
 import io.github.bgmsound.documentify.core.FieldsSchemaSpec
 import io.github.bgmsound.documentify.core.specification.RestDocUtil.Companion.SAMPLE_KEY
-import io.github.bgmsound.documentify.core.specification.RestDocUtil.Companion.isPrimitiveOrWrapper
 import org.springframework.restdocs.payload.FieldDescriptor
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.snippet.Attributes
