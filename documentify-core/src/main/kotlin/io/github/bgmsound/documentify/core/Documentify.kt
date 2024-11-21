@@ -19,7 +19,7 @@ abstract class Documentify {
 
     fun documentation(
         name: String,
-        specCustomizer: DocumentSpec.() -> Unit,
+        specCustomizer: DocumentSpec.() -> Unit
     ) {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
         val emitter = EmitterFactory.emitterOf(documentSpec)
@@ -32,7 +32,7 @@ abstract class Documentify {
 
     fun standalone(
         provider: RestDocumentationContextProvider,
-        contextCustomizer: StandaloneContext.() -> Unit,
+        contextCustomizer: StandaloneContext.() -> Unit
     ) {
         val standaloneContext = controllers().also(contextCustomizer)
         standalone(provider, standaloneContext)
@@ -40,7 +40,7 @@ abstract class Documentify {
 
     fun standalone(
         provider: RestDocumentationContextProvider,
-        standaloneContext: StandaloneContext,
+        standaloneContext: StandaloneContext
     ) {
         val mockMvc = standaloneContext.build(provider)
         this.mockMvc = mockMvc
@@ -50,7 +50,7 @@ abstract class Documentify {
         provider: RestDocumentationContextProvider,
         controllers: List<Any>,
         controllerAdvices: List<Any>,
-        argumentResolvers: List<HandlerMethodArgumentResolver>,
+        argumentResolvers: List<HandlerMethodArgumentResolver>
     ) {
         val standaloneContext = controllers(controllers)
             .controllerAdvices(controllerAdvices)
@@ -60,7 +60,7 @@ abstract class Documentify {
 
     fun webApplicationContext(
         provider: RestDocumentationContextProvider,
-        context: WebApplicationContext,
+        context: WebApplicationContext
     ) {
         val mockMvc = MockMvcBuilders
             .webAppContextSetup(context)

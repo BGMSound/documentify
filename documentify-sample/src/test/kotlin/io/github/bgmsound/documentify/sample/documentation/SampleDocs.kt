@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.RestDocumentationContextProvider
 
-class SampleAPIDocs : Documentify() {
+class SampleDocs : Documentify() {
     private val api = SampleController()
 
     @BeforeEach
     fun setUp(provider: RestDocumentationContextProvider) {
         standalone(provider) {
-            controllers(api)
+            controller(api)
         }
     }
 

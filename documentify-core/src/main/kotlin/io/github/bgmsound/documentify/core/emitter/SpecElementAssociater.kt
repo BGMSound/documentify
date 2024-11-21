@@ -4,7 +4,7 @@ import io.github.bgmsound.documentify.core.documentation.element.SpecElement
 import io.github.bgmsound.documentify.core.documentation.element.field.Field
 
 object SpecElementAssociater {
-    fun List<Field>.associatedSample(): Map<String, Any> {
+    fun List<Field>.associatedFieldSample(): Map<String, Any> {
         return filter {
             it.hasSample() || it.canHaveChild() || !it.isIgnored()
         }.associate {

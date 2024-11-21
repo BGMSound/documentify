@@ -7,13 +7,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.restdocs.RestDocumentationContextProvider
 
-class ComplexSampleAPIDocs : Documentify() {
+class ComplexSampleDocs : Documentify() {
     private val api = ComplexSampleController()
 
     @BeforeEach
     fun setUp(provider: RestDocumentationContextProvider) {
         standalone(provider) {
-            controllers(api)
+            controller(api)
         }
     }
 

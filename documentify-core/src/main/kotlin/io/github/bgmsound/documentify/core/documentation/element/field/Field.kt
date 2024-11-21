@@ -155,8 +155,10 @@ class Field(
         var parent = this.path
         parent = if (descriptor.type == ARRAY.type) {
             "$parent[]."
-        } else {
+        } else if (parent.isNotEmpty() && parent.isNotBlank()) {
             "$parent."
+        } else {
+            this.path
         }
         return "$parent$path"
     }
