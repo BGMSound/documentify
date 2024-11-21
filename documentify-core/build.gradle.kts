@@ -1,4 +1,6 @@
 import com.vanniktech.maven.publish.SonatypeHost
+import java.net.HttpURLConnection
+import java.net.URL
 import java.time.Year
 
 plugins {
@@ -13,6 +15,7 @@ fun property(key: String): String {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-test")
+    compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
     api("org.springframework.restdocs:spring-restdocs-mockmvc")
     api("org.springframework.restdocs:spring-restdocs-restassured")
     api("io.rest-assured:spring-mock-mvc:5.5.0")
@@ -60,5 +63,30 @@ mavenPublishing {
             connection = "scm:git:git://github.com/${property("project.developer.id")}"
             developerConnection = "scm:git:ssh://git@github.com/${property("project.developer.id")}"
         }
+    }
+}
+
+tasks.register("checkVersionTask") {
+    doLast {
+        checkVersion()
+    }
+}
+
+tasks.named("publishAllPublicationsToMavenCentralRepository") {
+    dependsOn("checkVersionTask")
+}
+
+fun checkVersion() {
+    val version = property("project.version")
+    val group = property("project.group").replace(".", "/")
+    val name = property("project.name")
+
+    val mavenCentralUrl = "https://repo1.maven.org/maven2/${group}/${name}-core/${version}/"
+    val url = URL(mavenCentralUrl)
+    val connection = url.openConnection() as HttpURLConnection
+    connection.requestMethod = "GET"
+
+    if (connection.responseCode != 404) {
+        throw IllegalArgumentException("version $version already exists")
     }
 }

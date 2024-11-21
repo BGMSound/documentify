@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     kotlin("jvm") version "2.0.0"
@@ -31,10 +31,11 @@ subprojects {
     }
 
     tasks {
-        withType<KotlinCompile> {
-            kotlinOptions {
-                freeCompilerArgs += "-Xjsr305=strict"
-                jvmTarget = "17"
+        kotlin {
+            compilerOptions {
+                freeCompilerArgs.add("-Xjsr305=strict")
+                jvmTarget.set(JvmTarget.JVM_17)
+                version = "2.0.0"
             }
         }
     }
