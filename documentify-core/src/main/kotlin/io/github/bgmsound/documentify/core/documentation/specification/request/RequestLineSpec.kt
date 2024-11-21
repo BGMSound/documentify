@@ -4,7 +4,7 @@ import io.github.bgmsound.documentify.core.documentation.APISpec
 import io.github.bgmsound.documentify.core.documentation.element.SpecElement.Requirement
 import io.github.bgmsound.documentify.core.documentation.element.parameter.PathVariable
 import io.github.bgmsound.documentify.core.documentation.element.parameter.QueryParameter
-import io.restassured.http.Method
+import io.github.bgmsound.documentify.core.documentation.specification.Method
 import org.springframework.restdocs.request.RequestDocumentation
 import org.springframework.restdocs.snippet.Snippet
 

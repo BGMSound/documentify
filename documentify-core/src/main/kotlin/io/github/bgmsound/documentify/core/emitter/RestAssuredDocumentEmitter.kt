@@ -5,7 +5,7 @@ import io.github.bgmsound.documentify.core.documentation.specification.document.
 import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedSample
 import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedFieldSample
 import io.restassured.http.ContentType
-import io.restassured.http.Method
+import io.github.bgmsound.documentify.core.documentation.specification.Method
 import io.restassured.module.mockmvc.RestAssuredMockMvc.given
 import io.restassured.module.mockmvc.response.MockMvcResponse
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
@@ -57,7 +57,6 @@ class RestAssuredDocumentEmitter(
             Method.PUT -> put(document.request.url)
             Method.PATCH -> patch(document.request.url)
             Method.DELETE -> delete(document.request.url)
-            else -> throw IllegalArgumentException("Unsupported method: ${document.request.method}")
         }
     }
 }

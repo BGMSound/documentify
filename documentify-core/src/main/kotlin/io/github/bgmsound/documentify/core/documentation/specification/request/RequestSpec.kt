@@ -1,7 +1,7 @@
 package io.github.bgmsound.documentify.core.documentation.specification.request
 
 import io.github.bgmsound.documentify.core.documentation.specification.HttpSpec
-import io.restassured.http.Method
+import io.github.bgmsound.documentify.core.documentation.specification.Method
 import org.springframework.restdocs.snippet.Snippet
 
 class RequestSpec(

@@ -9,7 +9,7 @@ import io.github.bgmsound.documentify.core.documentation.specification.request.R
 import io.github.bgmsound.documentify.core.documentation.specification.response.ResponseBodySpec
 import io.github.bgmsound.documentify.core.documentation.specification.response.ResponseHeaderSpec
 import io.github.bgmsound.documentify.core.documentation.specification.response.ResponseSpec
-import io.restassured.http.Method
+import io.github.bgmsound.documentify.core.documentation.specification.Method
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.snippet.Snippet
 
