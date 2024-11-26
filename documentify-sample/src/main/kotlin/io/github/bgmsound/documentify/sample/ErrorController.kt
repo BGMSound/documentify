@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController
 class ErrorController {
     @GetMapping
     fun error(
-        @RequestParam("error") error: Boolean
+        @RequestParam("throw") throwError: Boolean
     ): Any {
-        if (error) {
+        if (throwError) {
             return ResponseEntity.status(400).body(ErrorResponse(400, "error"))
         }
         return SampleResponse(200, "ok")

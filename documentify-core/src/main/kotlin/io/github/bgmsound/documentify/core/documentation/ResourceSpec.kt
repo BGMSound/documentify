@@ -3,32 +3,46 @@ package io.github.bgmsound.documentify.core.documentation
 import com.epages.restdocs.apispec.ResourceDocumentation
 import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.epages.restdocs.apispec.Schema
+import io.github.bgmsound.documentify.core.documentation.element.Link
 import io.github.bgmsound.documentify.core.documentation.element.field.Field
 import io.github.bgmsound.documentify.core.documentation.specification.request.RequestSpec
 import io.github.bgmsound.documentify.core.documentation.specification.response.ResponseSpec
 import org.springframework.restdocs.payload.FieldDescriptor
 import org.springframework.restdocs.snippet.Snippet
 
-class InformationSpec(
+class ResourceSpec(
     documentName: String,
     private val request: RequestSpec,
     private val response: ResponseSpec
 ) : DocumentableSpec {
-    private val tags = mutableListOf<String>()
+    val tags = mutableListOf<String>()
+    private val links = mutableListOf<Link>()
     private var summary: String
     private var description: String = ""
-    private var baseRequestSchema: String
-    private var baseResponseSchema: String
 
     init {
         summary = ""
         val randomSuffix = randomSuffix()
-        baseRequestSchema = "$documentName Request ($randomSuffix)"
-        baseResponseSchema = "$documentName Response ($randomSuffix)"
+        request.schema = "$documentName Request ($randomSuffix)"
+        response.schema = "$documentName Response ($randomSuffix)"
+    }
+
+    fun link(rel: String): Link {
+        val link = Link.newLink(rel)
+        this.links.add(link)
+        return link
+    }
+
+    fun links(vararg links: String) {
+        this.links.addAll(links.map { Link.newLink(it) })
+    }
+
+    fun links(links: Collection<String>) {
+        this.links.addAll(links.map { Link.newLink(it) })
     }
 
     fun tag(tag: String) {
-        tags.add(tag)
+        this.tags.add(tag)
     }
 
     fun tags(tags: Collection<String>) {
@@ -48,11 +62,11 @@ class InformationSpec(
     }
 
     fun requestSchema(schema: String) {
-        this.baseRequestSchema = schema
+        request.schema = schema
     }
 
     fun responseSchema(schema: String) {
-        this.baseResponseSchema = schema
+        response.schema = schema
     }
 
     override fun build(): List<Snippet> {
@@ -62,6 +76,9 @@ class InformationSpec(
         }
         resourceBuilder.summary(summary)
         resourceBuilder.description(description)
+        if (links.isNotEmpty()) {
+            resourceBuilder.links(*links.map { it.build() }.toTypedArray())
+        }
         if (request.pathVariables.isNotEmpty()) {
             resourceBuilder.pathParameters(*request.pathVariables.map { it.build() }.toTypedArray())
         }
@@ -76,18 +93,16 @@ class InformationSpec(
         }
         if (request.fields.isNotEmpty()) {
             if (request.schema != null) {
-                baseRequestSchema = request.schema!!
+                resourceBuilder.requestSchema(Schema.schema(request.schema!!))
             }
             resourceBuilder.requestFields(buildFields(request.fields))
         }
-        resourceBuilder.requestSchema(Schema.schema(baseRequestSchema))
         if (response.fields.isNotEmpty()) {
             if (response.schema != null) {
-                baseResponseSchema = response.schema!!
+                resourceBuilder.responseSchema(Schema.schema(response.schema!!))
             }
             resourceBuilder.responseFields(buildFields(response.fields))
         }
-        resourceBuilder.responseSchema(Schema.schema(baseResponseSchema))
         return listOf(ResourceDocumentation.resource(resourceBuilder.build()))
     }
 
@@ -98,6 +113,10 @@ class InformationSpec(
     }
 
     private fun randomSuffix(): String {
-        return (1..7).map { ('a'..'z').random() }.joinToString("")
+        return (1..7).map {
+            val char = ('0'..'9').random()
+            val number = ('a'..'z').random()
+            (0..1).random().let { if (it == 0) char else number }
+        }.joinToString("")
     }
 }

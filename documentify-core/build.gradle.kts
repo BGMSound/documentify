@@ -14,6 +14,7 @@ fun property(key: String): String {
 }
 
 dependencies {
+    implementation("org.springframework:spring-web")
     implementation("org.springframework.boot:spring-boot-starter-test")
     implementation("io.rest-assured:spring-mock-mvc:5.5.0")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")

@@ -24,25 +24,18 @@ class ErrorDocs : Documentify() {
                 tag("error")
             }
             requestLine(Method.GET, "/error") {
-                queryParameter("error", "boolean", "false")
+                queryParameter("throw", "boolean", "false")
             }
             responseBody {
                 field("integerField", "this is error code", 1)
                 field("stringField", "this is error message", "error message")
             }
-        }
-    }
-
-    @Test
-    fun errorSampleGetApi() {
-        documentation("Error Sample Get API When Error Occurred") {
-            requestLine(Method.GET, "/error") {
-                queryParameter("error", "boolean", "true")
-            }
-            responseLine(400)
-            responseBody {
-                field("code", "this is error code", 1)
-                field("message", "this is error message", "error message")
+            alternativeResponse {
+                status(400)
+                body {
+                    field("integerField", "this is error code", 1)
+                    field("stringField", "this is error message", "error message")
+                }
             }
         }
     }

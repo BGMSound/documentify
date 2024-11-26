@@ -8,5 +8,10 @@ abstract class HttpSpec(
 ) : DocumentableSpec {
     val headers get() = header.headers()
     val fields get() = body.fields()
-    val schema get() = body.schema()
+    var schema get() = body.schema()
+        set(value) {
+            if (value != null) {
+                body.schema(value)
+            }
+        }
 }

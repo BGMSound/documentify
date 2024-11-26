@@ -15,6 +15,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver
 
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
+    private lateinit var provider: RestDocumentationContextProvider
     private lateinit var mockMvc: MockMvc
 
     fun documentation(
@@ -23,10 +24,14 @@ abstract class Documentify {
     ) {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
         val emitter = EmitterFactory.emitterOf(documentSpec)
-        emitter.emit(mockMvc)
+        emitter.emit(provider, mockMvc)
     }
 
-    fun mockMvc(mockMvc: MockMvc) {
+    fun mockMvc(
+        provider: RestDocumentationContextProvider,
+        mockMvc: MockMvc
+    ) {
+        this.provider = provider
         this.mockMvc = mockMvc
     }
 
@@ -44,6 +49,7 @@ abstract class Documentify {
     ) {
         val mockMvc = standaloneContext.build(provider)
         this.mockMvc = mockMvc
+        this.provider = provider
     }
 
     fun standalone(
@@ -67,5 +73,6 @@ abstract class Documentify {
             .apply<DefaultMockMvcBuilder>(documentationConfiguration(provider))
             .build()
         this.mockMvc = mockMvc
+        this.provider = provider
     }
 }

@@ -1,8 +1,8 @@
 package io.github.bgmsound.documentify.sample.documentation
 
 import io.github.bgmsound.documentify.core.Documentify
-import io.github.bgmsound.documentify.sample.ComplexSampleController
 import io.github.bgmsound.documentify.core.documentation.specification.Method
+import io.github.bgmsound.documentify.sample.ComplexSampleController
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.restdocs.RestDocumentationContextProvider

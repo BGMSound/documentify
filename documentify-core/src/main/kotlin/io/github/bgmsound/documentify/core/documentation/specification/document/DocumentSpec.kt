@@ -1,7 +1,7 @@
 package io.github.bgmsound.documentify.core.documentation.specification.document
 
 import io.github.bgmsound.documentify.core.documentation.DocumentableSpec
-import io.github.bgmsound.documentify.core.documentation.InformationSpec
+import io.github.bgmsound.documentify.core.documentation.ResourceSpec
 import io.github.bgmsound.documentify.core.documentation.specification.request.RequestBodySpec
 import io.github.bgmsound.documentify.core.documentation.specification.request.RequestHeaderSpec
 import io.github.bgmsound.documentify.core.documentation.specification.request.RequestLineSpec
@@ -18,26 +18,30 @@ class DocumentSpec(
 ) : DocumentableSpec {
     val request: RequestSpec = RequestSpec()
     val response: ResponseSpec = ResponseSpec()
-    private val information: InformationSpec = InformationSpec(name, request, response)
+    val tags: List<String> get() = resource.tags
+    val otherResponses get() = otherResponseCaseContext.responses
 
-    fun information(specCustomizer: InformationSpec.() -> Unit) {
-        information.apply(specCustomizer)
+    private val resource: ResourceSpec = ResourceSpec(name, request, response)
+    private val otherResponseCaseContext: ValidatelessResponseCaseContext = ValidatelessResponseCaseContext()
+
+    fun information(specCustomizer: ResourceSpec.() -> Unit) {
+        resource.apply(specCustomizer)
     }
 
     fun description(description: String) {
-        information.description(description)
+        resource.description(description)
     }
 
     fun tag(tag: String) {
-        information.tag(tag)
+        resource.tag(tag)
     }
 
     fun tags(vararg tags: String) {
-        information.tags(*tags)
+        resource.tags(*tags)
     }
 
     fun tags(tags: Collection<String>) {
-        information.tags(tags)
+        resource.tags(tags)
     }
 
     fun request(specCustomizer: RequestSpec.() -> Unit) {
@@ -45,7 +49,7 @@ class DocumentSpec(
     }
 
     fun requestSchema(schema: String) {
-        information.requestSchema(schema)
+        resource.requestSchema(schema)
     }
 
     fun requestLine(
@@ -78,7 +82,7 @@ class DocumentSpec(
     }
 
     fun responseSchema(schema: String) {
-        information.responseSchema(schema)
+        resource.responseSchema(schema)
     }
 
     fun responseStatus(
@@ -124,11 +128,19 @@ class DocumentSpec(
         response.body(schema, specCustomizer)
     }
 
+    fun alternativeResponse(specCustomizer: ResponseSpec.() -> Unit) {
+        otherResponseCaseContext.response(specCustomizer)
+    }
+
+    fun alternativeResponseCases(specCustomizer: ValidatelessResponseCaseContext.() -> Unit) {
+        otherResponseCaseContext.apply(specCustomizer)
+    }
+
     override fun build(): List<Snippet> {
         return buildList {
             addAll(request.build())
             addAll(response.build())
-            addAll(information.build())
+            addAll(resource.build())
         }
     }
 }
