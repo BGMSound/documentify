@@ -21,9 +21,10 @@ class InformationSpec(
     private var baseResponseSchema: String
 
     init {
-        summary = documentName
-        baseRequestSchema = "$documentName Request"
-        baseResponseSchema = "$documentName Response"
+        summary = ""
+        val randomSuffix = randomSuffix()
+        baseRequestSchema = "$documentName Request ($randomSuffix)"
+        baseResponseSchema = "$documentName Response ($randomSuffix)"
     }
 
     fun tag(tag: String) {
@@ -94,5 +95,9 @@ class InformationSpec(
         return buildList {
             fields.forEach { addAll(it.build()) }
         }
+    }
+
+    private fun randomSuffix(): String {
+        return (1..7).map { ('a'..'z').random() }.joinToString("")
     }
 }

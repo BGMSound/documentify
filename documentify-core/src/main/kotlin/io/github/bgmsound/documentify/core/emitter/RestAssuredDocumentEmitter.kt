@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc
 
 
 class RestAssuredDocumentEmitter(
-    private val document: DocumentSpec,
+    private val document: DocumentSpec
 ) : DocumentEmitter {
     override fun emit(mockMvc: MockMvc) {
         val snippets = document.build()
