@@ -6,8 +6,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.5"
 }
 
-group = "io.github.bgmsound"
-version = "0.0.2"
+group = extra["project.group"] as String
+version = extra["project.version.id"] as String
 
 repositories {
     mavenCentral()
@@ -35,7 +35,6 @@ subprojects {
             compilerOptions {
                 freeCompilerArgs.add("-Xjsr305=strict")
                 jvmTarget.set(JvmTarget.JVM_17)
-                version = "2.0.0"
             }
         }
     }

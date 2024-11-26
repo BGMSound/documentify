@@ -5,8 +5,5 @@ import org.gradle.api.Project
 
 class DocumentifyPlugin : Plugin<Project> {
     override fun apply(target: Project) {
-
-        target.pluginManager.apply("com.epages.restdocs-api-spec")
-        target.pluginManager.apply("org.asciidoctor.jvm.convert")
     }
 }

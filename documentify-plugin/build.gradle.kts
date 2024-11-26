@@ -1,7 +1,8 @@
 plugins {
     id("com.gradle.plugin-publish") version "1.2.0"
-    id("com.epages.restdocs-api-spec") version "0.18.2"
-    id("org.asciidoctor.jvm.convert") version "3.3.2"
+    `kotlin-dsl`
+    `java-gradle-plugin`
+    `maven-publish`
 }
 
 repositories {
@@ -22,5 +23,11 @@ gradlePlugin {
             displayName = "Documentify"
             description = "easy and powerful API documentation tool for spring restdocs"
         }
+    }
+}
+
+publishing {
+    repositories {
+        mavenLocal()
     }
 }

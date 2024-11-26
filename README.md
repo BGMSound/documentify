@@ -10,13 +10,14 @@ dependencies {
     implementation("io.github.bgmsound:documentify-core:${version}")
 }
 ```
+ > Last version : **0.0.2**
 
 ### Getting Started
 Add the following code to your test class:
 ```kotlin
 @Test
 fun documentationGetApi() {
-    `when`(testService.test()).thenReturn("test")
+    everyy { testService.test() } returns SampleResponse("path", "test")
     documentation("test-get-api") {
         information {
             summary("test get api")

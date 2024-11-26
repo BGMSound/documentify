@@ -15,10 +15,10 @@ fun property(key: String): String {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("io.rest-assured:spring-mock-mvc:5.5.0")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
     api("org.springframework.restdocs:spring-restdocs-mockmvc")
     api("org.springframework.restdocs:spring-restdocs-restassured")
-    api("io.rest-assured:spring-mock-mvc:5.5.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.17.1")
     api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
     api("com.epages:restdocs-api-spec-mockmvc:0.18.2")
@@ -36,7 +36,7 @@ mavenPublishing {
     coordinates(
         groupId = property("project.group"),
         artifactId = "${property("project.name")}-core",
-        version = property("project.version")
+        version = property("project.version.id")
     )
 
     pom {
@@ -77,7 +77,7 @@ tasks.named("publishAllPublicationsToMavenCentralRepository") {
 }
 
 fun checkVersion() {
-    val version = property("project.version")
+    val version = property("project.version.id")
     val group = property("project.group").replace(".", "/")
     val name = property("project.name")
 
