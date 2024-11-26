@@ -17,7 +17,7 @@ Add the following code to your test class:
 ```kotlin
 @Test
 fun documentationGetApi() {
-    everyy { testService.test() } returns SampleResponse("path", "test")
+    every { testService.test() } returns SampleResponse("path", "test")
     documentation("test-get-api") {
         information {
             summary("test get api")
