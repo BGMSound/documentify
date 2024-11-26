@@ -71,12 +71,12 @@ class StandaloneContext private constructor() {
         }
     }
 
-    fun build(context: RestDocumentationContextProvider): MockMvc {
+    fun build(provider: RestDocumentationContextProvider): MockMvc {
         return MockMvcBuilders
             .standaloneSetup(*controllers.toTypedArray())
             .setControllerAdvice(*controllerAdvices.toTypedArray())
             .setCustomArgumentResolvers(*argumentResolvers.toTypedArray())
-            .apply<StandaloneMockMvcBuilder>(documentationConfiguration(context))
+            .apply<StandaloneMockMvcBuilder>(documentationConfiguration(provider))
             .build()
     }
 }

@@ -1,12 +1,12 @@
 package io.github.bgmsound.documentify.core.documentation.specification.response
 
-import io.github.bgmsound.documentify.core.documentation.APISpec
+import io.github.bgmsound.documentify.core.documentation.DocumentableSpec
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.snippet.Snippet
 
 class ResponseLineSpec(
     private var statusCode: Int
-) : APISpec {
+) : DocumentableSpec {
     constructor(statusCode: HttpStatus) : this(statusCode.value())
 
     fun statusCode(): Int = statusCode

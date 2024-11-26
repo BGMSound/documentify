@@ -1,6 +1,6 @@
 package io.github.bgmsound.documentify.core.documentation.specification
 
-import io.github.bgmsound.documentify.core.documentation.APISpec
+import io.github.bgmsound.documentify.core.documentation.DocumentableSpec
 import io.github.bgmsound.documentify.core.documentation.FieldsSchemaSpec
 import io.github.bgmsound.documentify.core.documentation.element.SpecElement.Requirement
 import io.github.bgmsound.documentify.core.documentation.element.field.ARRAY
@@ -9,7 +9,7 @@ import io.github.bgmsound.documentify.core.documentation.element.field.OBJECT
 
 abstract class BodySpec(
     protected val fields: MutableList<Field> = mutableListOf()
-) : APISpec, FieldsSchemaSpec {
+) : DocumentableSpec, FieldsSchemaSpec {
     private var schemaName: String? = null
 
     fun schema(name: String) {

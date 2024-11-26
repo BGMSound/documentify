@@ -1,12 +1,12 @@
 package io.github.bgmsound.documentify.core.documentation.specification
 
-import io.github.bgmsound.documentify.core.documentation.APISpec
+import io.github.bgmsound.documentify.core.documentation.DocumentableSpec
 import io.github.bgmsound.documentify.core.documentation.element.SpecElement.Requirement
 import io.github.bgmsound.documentify.core.documentation.element.header.Header
 
 abstract class HeaderSpec(
     protected val headers: MutableList<Header> = mutableListOf(),
-) : APISpec {
+) : DocumentableSpec {
 
     fun headers(): List<Header> = headers
 

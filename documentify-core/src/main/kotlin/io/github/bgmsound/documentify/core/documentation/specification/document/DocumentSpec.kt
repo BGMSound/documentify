@@ -1,6 +1,6 @@
 package io.github.bgmsound.documentify.core.documentation.specification.document
 
-import io.github.bgmsound.documentify.core.documentation.APISpec
+import io.github.bgmsound.documentify.core.documentation.DocumentableSpec
 import io.github.bgmsound.documentify.core.documentation.InformationSpec
 import io.github.bgmsound.documentify.core.documentation.specification.request.RequestBodySpec
 import io.github.bgmsound.documentify.core.documentation.specification.request.RequestHeaderSpec
@@ -15,7 +15,7 @@ import org.springframework.restdocs.snippet.Snippet
 
 class DocumentSpec(
     val name: String
-) : APISpec {
+) : DocumentableSpec {
     val request: RequestSpec = RequestSpec()
     val response: ResponseSpec = ResponseSpec()
     private val information: InformationSpec = InformationSpec(name, request, response)

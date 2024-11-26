@@ -13,7 +13,7 @@ class InformationSpec(
     documentName: String,
     private val request: RequestSpec,
     private val response: ResponseSpec
-) : APISpec {
+) : DocumentableSpec {
     private val tags = mutableListOf<String>()
     private var summary: String
     private var description: String = ""

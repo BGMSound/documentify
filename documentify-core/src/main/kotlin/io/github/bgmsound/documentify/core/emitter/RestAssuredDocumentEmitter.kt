@@ -1,11 +1,11 @@
 package io.github.bgmsound.documentify.core.emitter
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
-import io.github.bgmsound.documentify.core.documentation.specification.document.DocumentSpec
-import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedSample
-import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedFieldSample
-import io.restassured.http.ContentType
 import io.github.bgmsound.documentify.core.documentation.specification.Method
+import io.github.bgmsound.documentify.core.documentation.specification.document.DocumentSpec
+import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedFieldSample
+import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedSample
+import io.restassured.http.ContentType
 import io.restassured.module.mockmvc.RestAssuredMockMvc.given
 import io.restassured.module.mockmvc.response.MockMvcResponse
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc
 
 
 class RestAssuredDocumentEmitter(
-    private val document: DocumentSpec
+    private val document: DocumentSpec,
 ) : DocumentEmitter {
     override fun emit(mockMvc: MockMvc) {
         val snippets = document.build()

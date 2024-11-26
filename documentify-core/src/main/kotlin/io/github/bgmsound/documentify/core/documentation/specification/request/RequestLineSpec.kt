@@ -1,6 +1,6 @@
 package io.github.bgmsound.documentify.core.documentation.specification.request
 
-import io.github.bgmsound.documentify.core.documentation.APISpec
+import io.github.bgmsound.documentify.core.documentation.DocumentableSpec
 import io.github.bgmsound.documentify.core.documentation.element.SpecElement.Requirement
 import io.github.bgmsound.documentify.core.documentation.element.parameter.PathVariable
 import io.github.bgmsound.documentify.core.documentation.element.parameter.QueryParameter
@@ -13,7 +13,7 @@ class RequestLineSpec(
     var method: Method,
     private val pathParameters: MutableList<PathVariable> = mutableListOf(),
     private val queryParameters: MutableList<QueryParameter> = mutableListOf(),
-) : APISpec {
+) : DocumentableSpec {
     fun pathVariables(): List<PathVariable> = pathParameters
 
     fun queryParameters(): List<QueryParameter> = queryParameters
