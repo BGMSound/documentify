@@ -13,11 +13,23 @@ dependencies {
  > Last version : **0.0.2**
 
 ### Getting Started
-Add the following code to your test class:
+First, extends `Documentify` and set up the test environment:
+```kotlin
+@BeforeEach
+fun setUp(provider: RestDocumentationContextProvider) {
+    testService = mockk()
+    standalone(provider) {
+        controllers(TestController(testService))
+    }
+}
+```
+
+And add the following code to your test class:
 ```kotlin
 @Test
 fun documentationGetApi() {
     every { testService.test() } returns SampleResponse("path", "test")
+    
     documentation("test-get-api") {
         information {
             summary("test get api")
