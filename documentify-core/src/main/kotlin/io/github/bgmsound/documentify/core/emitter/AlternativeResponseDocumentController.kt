@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/**")
-class OtherResponseDocumentController private constructor(
+class AlternativeResponseDocumentController private constructor(
     private val status: Int,
     private val response: Any
 ) {
@@ -45,8 +45,8 @@ class OtherResponseDocumentController private constructor(
         fun new(
             status: Int,
             response: Any,
-        ): OtherResponseDocumentController {
-            return OtherResponseDocumentController(status, response)
+        ): AlternativeResponseDocumentController {
+            return AlternativeResponseDocumentController(status, response)
         }
     }
 }

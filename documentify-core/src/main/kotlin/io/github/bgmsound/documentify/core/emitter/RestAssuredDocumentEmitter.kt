@@ -55,7 +55,7 @@ class RestAssuredDocumentEmitter(
 
     private fun documentOtherResponses(provider: RestDocumentationContextProvider) {
         documentSpec.otherResponses.forEachIndexed { index, response ->
-            val api = OtherResponseDocumentController.new(
+            val api = AlternativeResponseDocumentController.new(
                 response.statusCode,
                 response.fields.associatedFieldSample()
             )
@@ -70,7 +70,7 @@ class RestAssuredDocumentEmitter(
                 .then()
                 .apply(
                     document(
-                        "${documentSpec.name}-case-${index+1}",
+                        "${documentSpec.name}-case-${index + 1}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         response.buildResource(index)
@@ -87,7 +87,7 @@ class RestAssuredDocumentEmitter(
         }
         if (this.fields.isNotEmpty()) {
             if (this.schema == null) {
-                resourceBuilder.responseSchema(Schema.schema("${documentSpec.name}-Response-case${index+1}"))
+                resourceBuilder.responseSchema(Schema.schema("${documentSpec.name}-Response-case${index + 1}"))
             } else {
                 resourceBuilder.responseSchema(Schema.schema(this.schema!!))
             }
