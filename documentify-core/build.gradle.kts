@@ -4,9 +4,9 @@ import java.net.URL
 import java.time.Year
 
 plugins {
-    id("maven-publish")
     id("com.vanniktech.maven.publish") version "0.28.0"
-    id("signing")
+    signing
+    `maven-publish`
 }
 
 fun property(key: String): String {
@@ -14,15 +14,15 @@ fun property(key: String): String {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-test")
-    implementation("io.rest-assured:spring-mock-mvc:5.5.0")
-    compileOnly("org.springframework:spring-web")
-    api("org.springframework.restdocs:spring-restdocs-mockmvc")
-    api("org.springframework.restdocs:spring-restdocs-restassured")
-    api("com.fasterxml.jackson.core:jackson-databind:2.17.1")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
-    api("com.epages:restdocs-api-spec-mockmvc:0.18.2")
-    api("com.epages:restdocs-api-spec-restassured:0.18.2")
+    implementation(libs.spring.boot.starter.test)
+    compileOnly(libs.spring.boot.starter.web)
+    api(libs.spring.restdocs.mockmvc)
+    api(libs.spring.restdocs.restassured)
+    api(libs.restassured.mockmvc)
+    api(libs.jackson.databind)
+    api(libs.jackson.datatype.jsr310)
+    api(libs.restdocs.api.spec.mockmvc)
+    api(libs.restdocs.api.spec.restassured)
 }
 
 signing {

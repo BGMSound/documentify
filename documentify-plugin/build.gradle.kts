@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     implementation(gradleApi())
-    implementation(project(":documentify-core"))
+    implementation(projects.documentifyCore)
     testImplementation(kotlin("test"))
 }
 
