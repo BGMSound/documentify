@@ -11,7 +11,7 @@ plugins {
 }
 
 jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = property("jacoco.version")
 }
 
 fun property(key: String): String {
