@@ -31,5 +31,8 @@ subprojects {
                 jvmTarget.set(JvmTarget.JVM_17)
             }
         }
+        test {
+            useJUnitPlatform()
+        }
     }
 }

@@ -1,6 +1,6 @@
 package io.github.bgmsound.documentify.core.documentation.element.field
 
-import io.github.bgmsound.documentify.core.documentation.FieldsSchemaSpec
+import io.github.bgmsound.documentify.core.documentation.FieldSchema
 import io.github.bgmsound.documentify.core.documentation.element.SpecElement
 import org.springframework.restdocs.payload.FieldDescriptor
 import org.springframework.restdocs.payload.PayloadDocumentation
@@ -10,7 +10,7 @@ class Field(
     private val descriptor: FieldDescriptor,
     override val key: String,
     private val childFields: MutableList<Field> = mutableListOf()
-) : SpecElement(descriptor), FieldsSchemaSpec {
+) : SpecElement(descriptor), FieldSchema {
     val path: String get() = descriptor.path
 
     fun childFields(): List<Field> = childFields

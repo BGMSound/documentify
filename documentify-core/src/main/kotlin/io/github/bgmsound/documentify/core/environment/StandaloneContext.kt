@@ -71,7 +71,7 @@ class StandaloneContext private constructor() {
         }
     }
 
-    fun build(provider: RestDocumentationContextProvider): MockMvc {
+    fun buildMockMvc(provider: RestDocumentationContextProvider): MockMvc {
         return MockMvcBuilders
             .standaloneSetup(*controllers.toTypedArray())
             .setControllerAdvice(*controllerAdvices.toTypedArray())

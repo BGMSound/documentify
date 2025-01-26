@@ -14,7 +14,9 @@ import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 
 @ExtendWith(RestDocumentationExtension::class)
-abstract class Documentify {
+abstract class Documentify(
+    private var reactive: Boolean = false
+) {
     private lateinit var provider: RestDocumentationContextProvider
     private lateinit var mockMvc: MockMvc
 
@@ -33,6 +35,7 @@ abstract class Documentify {
     ) {
         this.provider = provider
         this.mockMvc = mockMvc
+        reactive = false
     }
 
     fun standalone(
@@ -47,7 +50,7 @@ abstract class Documentify {
         provider: RestDocumentationContextProvider,
         standaloneContext: StandaloneContext
     ) {
-        val mockMvc = standaloneContext.build(provider)
+        val mockMvc = standaloneContext.buildMockMvc(provider)
         this.mockMvc = mockMvc
         this.provider = provider
     }

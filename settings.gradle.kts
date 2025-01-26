@@ -14,6 +14,8 @@ plugins {
 
 include("documentify-core")
 include("documentify-sample")
+include("documentify-sample:reactive-sample")
+include("documentify-sample:mvc-sample")
 include("documentify-plugin")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

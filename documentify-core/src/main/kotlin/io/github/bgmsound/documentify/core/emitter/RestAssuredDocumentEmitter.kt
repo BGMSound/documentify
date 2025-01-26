@@ -59,7 +59,7 @@ class RestAssuredDocumentEmitter(
                 response.statusCode,
                 response.fields.associatedFieldSample()
             )
-            val mockMvc = controller(api).build(provider)
+            val mockMvc = controller(api).buildMockMvc(provider)
             val requestSpecification: MockMvcRequestSpecification = given().mockMvc(mockMvc)
 
             requestSpecification
