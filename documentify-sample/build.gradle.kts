@@ -11,6 +11,5 @@ subprojects {
     dependencies {
         implementation(rootProject.libs.spring.boot.starter.test)
         testImplementation(rootProject.libs.mockk)
-        testImplementation(rootProject.projects.documentifyCore)
     }
 }

@@ -20,14 +20,14 @@ fun property(key: String): String {
 
 dependencies {
     implementation(libs.spring.boot.starter.test)
+    implementation(libs.spring.restdocs.mockmvc)
+    implementation(libs.spring.restdocs.restassured)
+    implementation(libs.restdocs.api.spec.mockmvc)
+    implementation(libs.restdocs.api.spec.restassured)
+    implementation(libs.restassured.mockmvc)
     compileOnly(libs.spring.boot.starter.web)
-    api(libs.spring.restdocs.mockmvc)
-    api(libs.spring.restdocs.restassured)
-    api(libs.restassured.mockmvc)
     api(libs.jackson.databind)
     api(libs.jackson.datatype.jsr310)
-    api(libs.restdocs.api.spec.mockmvc)
-    api(libs.restdocs.api.spec.restassured)
 }
 
 signing {
