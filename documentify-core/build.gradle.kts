@@ -7,6 +7,11 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.28.0"
     signing
     `maven-publish`
+    jacoco
+}
+
+jacoco {
+    toolVersion = "0.8.12"
 }
 
 fun property(key: String): String {
