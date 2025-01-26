@@ -1,0 +1,47 @@
+name: 커버리지 측정 후 PR에 코멘트 달기
+on:
+  pull_request:
+    branches:
+      - main
+env:
+  COVERAGE_PERCENTAGE: 20
+jobs:
+  measure-and-comment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      checks: write
+      pull-requests: write
+    steps:
+      - name: GitHub 리포지토리 체크아웃
+        uses: actions/checkout@v4
+      - name: JDK 21 설치
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '21'
+      - name: Gradle 애드온 준비하기
+        uses: gradle/gradle-build-action@v2
+      - name: 커버리지 측정 및 리포트 생성
+        run: |
+          chmod +x gradlew
+          ./gradlew --stacktrace jacocoTestReport
+      - name: 테스트 결과 업로드
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: ${{ always() }}
+        with:
+          files: |
+            ./**/build/test-results/**/*.xml
+      - name: PR에 커버리지 리포트 코멘트 달기
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.7.1
+        if: ${{ always() }}
+        with:
+          paths: |
+            ./**/build/reports/jacoco/**/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: ${{ env.COVERAGE_PERCENTAGE }}
+          min-coverage-changed-files: ${{ env.COVERAGE_PERCENTAGE }}
+          title: Code Coverage Report
+          update-comment: true

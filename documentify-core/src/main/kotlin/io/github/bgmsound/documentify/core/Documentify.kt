@@ -1,11 +1,8 @@
 package io.github.bgmsound.documentify.core
 
+import io.github.bgmsound.documentify.core.documentation.specification.document.DocumentSpec
 import io.github.bgmsound.documentify.core.environment.StandaloneContext
-import io.github.bgmsound.documentify.core.specification.DocumentSpec
-import io.restassured.module.mockmvc.RestAssuredMockMvc.given
-import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
 import io.github.bgmsound.documentify.core.environment.StandaloneContext.Companion.controllers
-
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
@@ -18,19 +15,24 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver
 
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
-    private lateinit var spec: MockMvcRequestSpecification
+    private lateinit var provider: RestDocumentationContextProvider
+    private lateinit var mockMvc: MockMvc
 
     fun documentation(
         name: String,
         specCustomizer: DocumentSpec.() -> Unit
     ) {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = RestDocsEmitter(documentSpec)
-        emitter.emit(spec)
+        val emitter = EmitterFactory.emitterOf(documentSpec)
+        emitter.emit(provider, mockMvc)
     }
 
-    fun mockMvc(mock: MockMvc) {
-        spec = given().mockMvc(mock)
+    fun mockMvc(
+        provider: RestDocumentationContextProvider,
+        mockMvc: MockMvc
+    ) {
+        this.provider = provider
+        this.mockMvc = mockMvc
     }
 
     fun standalone(
@@ -46,7 +48,8 @@ abstract class Documentify {
         standaloneContext: StandaloneContext
     ) {
         val mockMvc = standaloneContext.build(provider)
-        spec = given().mockMvc(mockMvc)
+        this.mockMvc = mockMvc
+        this.provider = provider
     }
 
     fun standalone(
@@ -69,6 +72,7 @@ abstract class Documentify {
             .webAppContextSetup(context)
             .apply<DefaultMockMvcBuilder>(documentationConfiguration(provider))
             .build()
-        spec = given().mockMvc(mockMvc)
+        this.mockMvc = mockMvc
+        this.provider = provider
     }
 }

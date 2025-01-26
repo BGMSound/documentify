@@ -10,9 +10,26 @@ dependencies {
     implementation("io.github.bgmsound:documentify-core:${version}")
 }
 ```
+ > Latest version : **0.0.2**
 
 ### Getting Started
-Add the following code to your test class:
+First, make your test class extends `Documentify`. and set up the test environment like this:
+```kotlin
+@BeforeEach
+fun setUp(provider: RestDocumentationContextProvider) {
+    testService = mockk()
+    standalone(provider) {
+        controllers(TestController(testService))
+    }
+}
+```
+You can also set up the test environment with a web application context or an auto-configured MockMvc.
+```kotlin
+webApplicationContext(provider, context)
+mockMvc(provider, context)
+```
+
+And add the following code to your test class:
 ```kotlin
 @BeforeEach
 fun setUp(provider: RestDocumentationContextProvider) {
@@ -23,7 +40,8 @@ fun setUp(provider: RestDocumentationContextProvider) {
 
 @Test
 fun documentationGetApi() {
-    `when`(testService.test()).thenReturn("test")
+    every { testService.test() } returns SampleResponse("path", "test")
+    
     documentation("test-get-api") {
         information {
             summary("test get api")

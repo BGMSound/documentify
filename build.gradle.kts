@@ -1,40 +1,34 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.0.0"
-    kotlin("plugin.spring") version "2.0.0"
-    id("io.spring.dependency-management") version "1.1.5"
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.plugin.spring) apply false
+    java
 }
 
-group = "io.github.bgmsound"
-version = "0.0.2"
-
-repositories {
-    mavenCentral()
-}
+group = extra["project.group"] as String
+version = extra["project.version.id"] as String
 
 subprojects {
     group = rootProject.group
     version = rootProject.version
-    apply(plugin = "kotlin")
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "io.spring.dependency-management")
-
+    with(pluginManager) {
+        apply(rootProject.libs.plugins.kotlin.jvm.get().pluginId)
+        apply(rootProject.libs.plugins.kotlin.plugin.spring.get().pluginId)
+    }
     repositories {
         mavenCentral()
     }
-
-    dependencyManagement {
-        imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:3.3.1")
-        }
-    }
-
     tasks {
+        java {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }
         withType<KotlinCompile> {
-            kotlinOptions {
-                freeCompilerArgs += "-Xjsr305=strict"
-                jvmTarget = "17"
+            compilerOptions {
+                freeCompilerArgs.add("-Xjsr305=strict")
+                jvmTarget.set(JvmTarget.JVM_17)
             }
         }
     }

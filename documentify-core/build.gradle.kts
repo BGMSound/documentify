@@ -1,10 +1,17 @@
 import com.vanniktech.maven.publish.SonatypeHost
+import java.net.HttpURLConnection
+import java.net.URL
 import java.time.Year
 
 plugins {
-    id("maven-publish")
     id("com.vanniktech.maven.publish") version "0.28.0"
-    id("signing")
+    signing
+    `maven-publish`
+    jacoco
+}
+
+jacoco {
+    toolVersion = "0.8.12"
 }
 
 fun property(key: String): String {
@@ -12,14 +19,15 @@ fun property(key: String): String {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-test")
-    api("org.springframework.restdocs:spring-restdocs-mockmvc")
-    api("org.springframework.restdocs:spring-restdocs-restassured")
-    api("io.rest-assured:spring-mock-mvc:5.5.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.17.1")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
-    api("com.epages:restdocs-api-spec-mockmvc:0.18.2")
-    api("com.epages:restdocs-api-spec-restassured:0.18.2")
+    implementation(libs.spring.boot.starter.test)
+    compileOnly(libs.spring.boot.starter.web)
+    api(libs.spring.restdocs.mockmvc)
+    api(libs.spring.restdocs.restassured)
+    api(libs.restassured.mockmvc)
+    api(libs.jackson.databind)
+    api(libs.jackson.datatype.jsr310)
+    api(libs.restdocs.api.spec.mockmvc)
+    api(libs.restdocs.api.spec.restassured)
 }
 
 signing {
@@ -33,7 +41,7 @@ mavenPublishing {
     coordinates(
         groupId = property("project.group"),
         artifactId = "${property("project.name")}-core",
-        version = property("project.version")
+        version = property("project.version.id")
     )
 
     pom {
@@ -60,5 +68,30 @@ mavenPublishing {
             connection = "scm:git:git://github.com/${property("project.developer.id")}"
             developerConnection = "scm:git:ssh://git@github.com/${property("project.developer.id")}"
         }
+    }
+}
+
+tasks.register("checkVersionTask") {
+    doLast {
+        checkVersion()
+    }
+}
+
+tasks.named("publishAllPublicationsToMavenCentralRepository") {
+    dependsOn("checkVersionTask")
+}
+
+fun checkVersion() {
+    val version = property("project.version.id")
+    val group = property("project.group").replace(".", "/")
+    val name = property("project.name")
+
+    val mavenCentralUrl = "https://repo1.maven.org/maven2/${group}/${name}-core/${version}/"
+    val url = URL(mavenCentralUrl)
+    val connection = url.openConnection() as HttpURLConnection
+    connection.requestMethod = "GET"
+
+    if (connection.responseCode != 404) {
+        throw IllegalArgumentException("version $version already exists")
     }
 }
