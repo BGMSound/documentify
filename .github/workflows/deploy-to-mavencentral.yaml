@@ -31,6 +31,9 @@ jobs:
           chmod +x gradlew
           echo "export GPG_TTY=$(tty)" >> ~/.bashrc
           source ~/.bashrc
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg.conf
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
     
           echo mavenCentralUsername=$MAVEN_CENTRAL_USERNAME >>! gradle.properties
           echo mavenCentralPassword=$MAVEN_CENTRAL_PASSWORD >>! gradle.properties
