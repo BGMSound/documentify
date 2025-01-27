@@ -15,11 +15,9 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
       - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_SECRET }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          trust_level: 5
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "$GPG_PASSPHRASE" | gpg --batch --passphrase-fd 0 --pinentry-mode loopback --list-secret-keys
       - name: Gradle 애드온 준비하기
         uses: gradle/gradle-build-action@v2
       - name: 빌드 및 퍼블리싱
