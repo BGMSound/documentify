@@ -47,6 +47,13 @@ webTestClient(provider, context)
 
 And add the following code to your test class:
 ```kotlin
+@BeforeEach
+fun setUp(provider: RestDocumentationContextProvider) {
+    standalone(provider) {
+        controllers(TestController())
+    }
+}
+
 @Test
 fun documentationGetApi() {
     every { testService.test() } returns SampleResponse("path", "test")
@@ -98,3 +105,5 @@ you can also create Postman collection by running the following command:
 ```shell
 ./gradlew postman
 ```
+=======
+[more sample code](https://github.com/BGMSound/documentify/tree/main/documentify-sample) 
