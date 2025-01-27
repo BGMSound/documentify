@@ -4,12 +4,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.plugin.spring) apply false
+    alias(libs.plugins.kotlinx.kover)
     java
-    jacoco
-}
-
-jacoco {
-    toolVersion = "0.8.12"
 }
 
 group = extra["project.group"] as String
@@ -46,49 +42,19 @@ repositories {
     mavenCentral()
 }
 
-tasks {
-    jacocoTestReport {
-        val mvcSampleModulePath = rootProject.projects.documentifySample.mvcSample.identityPath.path
-        val reactiveSampleModulePath = rootProject.projects.documentifySample.reactiveSample.identityPath.path
-        dependsOn(
-            "${mvcSampleModulePath}:test",
-            "${reactiveSampleModulePath}:test"
+kover {
+    merge {
+        projects(
+            rootProject.projects.documentifyCore.identityPath.path,
+            rootProject.projects.documentifyStarters.documentifyMvc.identityPath.path,
+            rootProject.projects.documentifyStarters.documentifyReactive.identityPath.path,
+            rootProject.projects.documentifySample.mvcSample.identityPath.path,
+            rootProject.projects.documentifySample.reactiveSample.identityPath.path
         )
-
-        val coreModulePath = rootProject.projects.documentifyCore.identityPath.path
-        val coreModuleClasses = project(coreModulePath).sourceSets.getByName("main").output.classesDirs
-        val coreModuleSources = project(coreModulePath).sourceSets.getByName("main").allSource
-
-        additionalClassDirs.setFrom(files(coreModuleClasses))
-        sourceDirectories.setFrom(files(coreModuleSources))
-
-        executionData.setFrom(
-            project(mvcSampleModulePath).layout.buildDirectory.file("jacoco/test.exec"),
-            project(reactiveSampleModulePath).layout.buildDirectory.file("jacoco/test.exec")
-        )
-
-        reports {
-            html.required.set(true)
-            xml.required.set(true)
-            csv.required.set(false)
-        }
-        finalizedBy(
-            "${mvcSampleModulePath}:jacocoTestCoverageVerification",
-            "${reactiveSampleModulePath}:jacocoTestCoverageVerification"
-        )
-        classDirectories.setFrom(files(classDirectories.files.map {
-            fileTree(it) {
-                exclude("**/documentify/sample/**")
-            }
-        }))
     }
-    jacocoTestCoverageVerification {
-        dependsOn("jacocoTestReport")
-        violationRules {
-            rule {
-                element = "CLASS"
-                excludes = listOf("*.documentify.sample.*")
-            }
+    reports {
+        filters {
+            excludes.classes.add("**.sample.**")
         }
     }
 }

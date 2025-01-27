@@ -7,11 +7,6 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.28.0"
     signing
     `maven-publish`
-    jacoco
-}
-
-jacoco {
-    toolVersion = property("jacoco.version")
 }
 
 fun property(key: String): String {
@@ -20,14 +15,20 @@ fun property(key: String): String {
 
 dependencies {
     implementation(libs.spring.boot.starter.test)
+    compileOnly(libs.spring.boot.starter.web)
+    compileOnly(libs.spring.boot.starter.webflux)
+    api(libs.jackson.databind)
+    api(libs.jackson.datatype.jsr310)
+
+    // MVC Document Dependency
     implementation(libs.spring.restdocs.mockmvc)
     implementation(libs.spring.restdocs.restassured)
     implementation(libs.restdocs.api.spec.mockmvc)
     implementation(libs.restdocs.api.spec.restassured)
     implementation(libs.restassured.mockmvc)
-    compileOnly(libs.spring.boot.starter.web)
-    api(libs.jackson.databind)
-    api(libs.jackson.datatype.jsr310)
+
+    // Reactive Document Dependency
+    implementation(libs.spring.restdocs.webtestclient)
 }
 
 signing {

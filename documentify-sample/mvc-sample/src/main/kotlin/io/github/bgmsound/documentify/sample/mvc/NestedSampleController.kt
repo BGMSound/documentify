@@ -3,11 +3,7 @@ package io.github.bgmsound.documentify.sample.mvc
 import io.github.bgmsound.documentify.sample.mvc.dto.request.NestedSampleRequest
 import io.github.bgmsound.documentify.sample.mvc.dto.response.NestedSampleResponse
 import io.github.bgmsound.documentify.sample.mvc.dto.response.SampleResponse
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/nested-sample")

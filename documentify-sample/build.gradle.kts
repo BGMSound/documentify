@@ -1,15 +1,13 @@
 plugins {
-    alias(libs.plugins.restdocs.api.spec)
-    jacoco
+    alias(libs.plugins.restdocs.api.spec) apply false
 }
 
 subprojects {
-    apply(plugin = "jacoco")
-    jacoco {
-        toolVersion = property("jacoco.version").toString()
+    with(pluginManager) {
+        apply(rootProject.libs.plugins.restdocs.api.spec.get().pluginId)
     }
     dependencies {
-        implementation(rootProject.libs.spring.boot.starter.test)
+        testImplementation(rootProject.libs.spring.boot.starter.test)
         testImplementation(rootProject.libs.mockk)
     }
 }
