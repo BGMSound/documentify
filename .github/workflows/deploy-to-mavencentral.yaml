@@ -1,5 +1,6 @@
 name: maven central 퍼블리싱
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
