@@ -15,12 +15,11 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
       - name: Import GPG key
-        env:
-          GPG_SECRET: ${{ secrets.GPG_SECRET }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: |
-          echo "$GPG_SECRET" | gpg --batch --import
-          echo "$GPG_PASSPHRASE" | gpg --batch --passphrase-fd 0 --pinentry-mode loopback --list-secret-keys
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_SECRET }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          trust_level: 5
       - name: Gradle 애드온 준비하기
         uses: gradle/gradle-build-action@v2
       - name: 빌드 및 퍼블리싱
@@ -30,7 +29,12 @@ jobs:
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         run: |
           chmod +x gradlew
-          export GPG_TTY=$(tty)
+          echo "export GPG_TTY=$(tty)" >> ~/.bashrc
+          source ~/.bashrc
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg.conf
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+    
           echo mavenCentralUsername=$MAVEN_CENTRAL_USERNAME >>! gradle.properties
           echo mavenCentralPassword=$MAVEN_CENTRAL_PASSWORD >>! gradle.properties
           ./gradlew --stacktrace publish
