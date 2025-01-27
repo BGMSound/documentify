@@ -1,7 +1,7 @@
 package io.github.bgmsound.documentify.sample.mvc.documentation
 
-import io.github.bgmsound.documentify.core.Documentify
-import io.github.bgmsound.documentify.core.documentation.specification.Method
+import io.github.bgmsound.documentify.core.specification.schema.Method
+import io.github.bgmsound.documentify.mvc.Documentify
 import io.github.bgmsound.documentify.sample.mvc.NestedSampleController
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
