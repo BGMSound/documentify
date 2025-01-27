@@ -2,7 +2,6 @@ rootProject.name = extra["project.name"] as String
 
 pluginManagement {
     repositories {
-        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
     }
