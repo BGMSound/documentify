@@ -1,52 +1,13 @@
 plugins {
-    alias(libs.plugins.restdocs.api.spec)
-    jacoco
+    id("io.github.bgmsound.documentify") version "1.0.0" apply false
 }
 
-jacoco {
-    toolVersion = "0.8.12"
-}
-
-tasks {
-    jacocoTestReport {
-        dependsOn("test")
-
-        val coreModulePath = rootProject.projects.documentifyCore.identityPath.path
-        val coreModuleClasses = project(coreModulePath).sourceSets.getByName("main").output.classesDirs
-        val coreModuleSources = project(coreModulePath).sourceSets.getByName("main").allSource
-        additionalClassDirs.setFrom(files(coreModuleClasses))
-        sourceDirectories.setFrom(files(coreModuleSources))
-
-        reports {
-            html.required.set(true)
-            xml.required.set(true)
-            csv.required.set(false)
-        }
-        finalizedBy("jacocoTestCoverageVerification")
-        classDirectories.setFrom(files(classDirectories.files.map {
-            fileTree(it) {
-                exclude("**/documentify/sample/**")
-            }
-        }))
+subprojects {
+    with(pluginManager) {
+        apply("io.github.bgmsound.documentify")
     }
-    jacocoTestCoverageVerification {
-        dependsOn("jacocoTestReport")
-        violationRules {
-            rule {
-                element = "CLASS"
-                excludes = listOf("*.documentify.sample.*")
-            }
-        }
+    dependencies {
+        testImplementation(rootProject.libs.spring.boot.starter.test)
+        testImplementation(rootProject.libs.mockk)
     }
-}
-
-dependencies {
-    implementation(libs.spring.boot.starter.web)
-    implementation(libs.spring.boot.starter.test)
-    testImplementation(libs.mockk)
-    testImplementation(projects.documentifyCore)
-}
-
-tasks.test {
-    useJUnitPlatform()
 }

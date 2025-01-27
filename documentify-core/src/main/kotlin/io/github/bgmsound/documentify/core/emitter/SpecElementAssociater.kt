@@ -1,7 +1,7 @@
 package io.github.bgmsound.documentify.core.emitter
 
-import io.github.bgmsound.documentify.core.documentation.element.SpecElement
-import io.github.bgmsound.documentify.core.documentation.element.field.Field
+import io.github.bgmsound.documentify.core.specification.element.SpecElement
+import io.github.bgmsound.documentify.core.specification.element.field.Field
 
 object SpecElementAssociater {
     fun List<Field>.associatedFieldSample(): Map<String, Any> {

@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.plugin.spring) apply false
+    alias(libs.plugins.kotlinx.kover)
     java
 }
 
@@ -30,6 +31,30 @@ subprojects {
                 freeCompilerArgs.add("-Xjsr305=strict")
                 jvmTarget.set(JvmTarget.JVM_17)
             }
+        }
+        test {
+            useJUnitPlatform()
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+kover {
+    merge {
+        projects(
+            rootProject.projects.documentifyCore.identityPath.path,
+            rootProject.projects.documentifyStarters.documentifyMvc.identityPath.path,
+            rootProject.projects.documentifyStarters.documentifyReactive.identityPath.path,
+            rootProject.projects.documentifySample.mvcSample.identityPath.path,
+            rootProject.projects.documentifySample.reactiveSample.identityPath.path
+        )
+    }
+    reports {
+        filters {
+            excludes.classes.add("**.sample.**")
         }
     }
 }

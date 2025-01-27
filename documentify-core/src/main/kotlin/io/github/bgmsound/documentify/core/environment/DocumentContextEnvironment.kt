@@ -1,0 +1,3 @@
+package io.github.bgmsound.documentify.core.environment
+
+interface DocumentContextEnvironment

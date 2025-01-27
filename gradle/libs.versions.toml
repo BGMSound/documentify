@@ -1,15 +1,16 @@
 [versions]
-kotlin = "2.0.21"
+kotlin = "2.0.0"
 kotlinx-datetime = "0.6.1"
 kotlinx-serialization-json = "1.7.2"
 kotlinx-coroutines = "1.8.1"
+kotlinx-kover = "0.9.1"
 
 spring-boot = "3.4.1"
 spring-restdocs = "3.0.3"
 spring-dependency-management = "1.1.5"
 
 jackson = "2.17.2"
-restdocs-api-spec = "0.18.2"
+restdocs-api-spec = "0.19.4"
 restassured = "5.5.0"
 mockk = "1.13.13"
 
@@ -19,6 +20,8 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 
 spring-boot-starter = { group = "org.springframework.boot", name = "spring-boot-starter", version.ref = "spring-boot" }
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "spring-boot" }
@@ -27,13 +30,17 @@ spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-
 spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
 spring-restdocs-restassured = { group = "org.springframework.restdocs", name = "spring-restdocs-restassured", version.ref = "spring-restdocs" }
 spring-restdocs-mockmvc = { group = "org.springframework.restdocs", name = "spring-restdocs-mockmvc", version.ref = "spring-restdocs" }
+spring-restdocs-webtestclient = { group = "org.springframework.restdocs", name = "spring-restdocs-webtestclient", version.ref = "spring-restdocs" }
 
 jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
 jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jackson" }
 jackson-dataformat-yaml = { group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version.ref = "jackson" }
+restdocs-api-spec = { group = "com.epages", name = "restdocs-api-spec", version.ref = "restdocs-api-spec" }
 restdocs-api-spec-mockmvc = { group = "com.epages", name = "restdocs-api-spec-mockmvc", version.ref = "restdocs-api-spec" }
 restdocs-api-spec-restassured = { group = "com.epages", name = "restdocs-api-spec-restassured", version.ref = "restdocs-api-spec" }
+restdocs-api-spec-webtestclient = { group = "com.epages", name = "restdocs-api-spec-webtestclient", version.ref = "restdocs-api-spec" }
+restdocs-api-spec-gradlePlugin = { group = "com.epages.restdocs-api-spec", name = "com.epages.restdocs-api-spec.gradle.plugin", version.ref = "restdocs-api-spec" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 restassured-mockmvc = { group = "io.rest-assured", name = "spring-mock-mvc", version.ref = "restassured" }
 
@@ -43,6 +50,7 @@ kotlinx-ecosystem = ["kotlinx-datetime", "kotlinx-serialization", "kotlinx-corou
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinx-kover" }
 restdocs-api-spec = { id = "com.epages.restdocs-api-spec", version.ref = "restdocs-api-spec" }
 
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

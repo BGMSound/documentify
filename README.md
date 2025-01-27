@@ -5,12 +5,20 @@ It combines the advantages of both Swagger and RestDocs for efficient and intuit
 ## Installation and Getting Started
 ### Installation
 Add the following dependency to your `build.gradle.kts` file:
+<br><br>
+`MVC`
 ```kotlin
 dependencies {
-    implementation("io.github.bgmsound:documentify-core:${version}")
+    implementation("io.github.bgmsound:documentify-mvc:${version}")
 }
 ```
- > Latest version : **0.0.2**
+`WebFlux`
+```kotlin
+dependencies {
+    implementation("io.github.bgmsound:documentify-mvc:${version}")
+}
+```
+ > Latest version : **1.0.0**
 
 ### Getting Started
 First, make your test class extends `Documentify`. and set up the test environment like this:
@@ -23,10 +31,18 @@ fun setUp(provider: RestDocumentationContextProvider) {
     }
 }
 ```
-You can also set up the test environment with a web application context or an auto-configured MockMvc.
+You can also set up the test environment with an application context or an auto-configured MockMvc (or WebTestClient). 
+<br><br>
+`Mvc Example`
 ```kotlin
 webApplicationContext(provider, context)
 mockMvc(provider, context)
+```
+
+`Reactive Example`
+```kotlin
+applicationContext(provider, context)
+webTestClient(provider, context)
 ```
 
 And add the following code to your test class:
@@ -59,5 +75,35 @@ fun documentationGetApi() {
 }
 ```
 
-[more sample code](https://github.com/BGMSound/documentify/tree/main/documentify-sample) 
+### Generate OpenAPI Specification
+After setting up the test environment and writing the test code, run the test.
+The OpenAPI specification document will be generated in the `build/generated-snippets` directory.
 
+First, apply documentify plugin to your `build.gradle.kts` file:
+```kotlin
+plugins {
+    id("io.github.bgmsound.documentify") version "${version}"
+}
+```
+Then, write openapi configuration in your `build.gradle.kts` file:
+```kotlin
+openapi3 { 
+    title = "Sample API"
+    description = "This is a sample API documentation."
+    version = "0.0.1"
+    format = "yaml"
+}
+```
+
+Finally, run the following command:
+```shell
+./gradlew openapi3
+./gradlew openapi
+```
+
+you can also create Postman collection by running the following command:
+```shell
+./gradlew postman
+```
+=======
+[more sample code](https://github.com/BGMSound/documentify/tree/main/documentify-sample) 
