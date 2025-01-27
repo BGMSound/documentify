@@ -18,7 +18,10 @@ dependencies {
 }
 
 signing {
-    useGpgCmd()
+    val gpgSecret = System.getenv("GPG_SECRET")
+    val gpgPassphrase = System.getenv("GPG_PASSPHRASE")
+
+    useInMemoryPgpKeys(gpgSecret, gpgPassphrase)
     sign(publishing.publications)
 }
 
