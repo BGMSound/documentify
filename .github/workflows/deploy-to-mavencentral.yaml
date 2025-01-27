@@ -24,10 +24,12 @@ jobs:
         uses: gradle/gradle-build-action@v2
       - name: 빌드 및 퍼블리싱
         env:
+          GPG_PASSPHRASE: ${{ secrets.PASSPHRASE }}
           MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         run: |
           chmod +x gradlew
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$GPG_PASSPHRASE" --sign file.txt
           echo mavenCentralUsername=$MAVEN_CENTRAL_USERNAME >>! gradle.properties
           echo mavenCentralPassword=$MAVEN_CENTRAL_PASSWORD >>! gradle.properties
           ./gradlew --stacktrace publish
