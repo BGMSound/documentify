@@ -15,8 +15,11 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
       - name: Import GPG key
+        env:
+          GPG_SECRET: ${{ secrets.GPG_SECRET }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "$GPG_SECRET" | gpg --batch --import
           echo "$GPG_PASSPHRASE" | gpg --batch --passphrase-fd 0 --pinentry-mode loopback --list-secret-keys
       - name: Gradle 애드온 준비하기
         uses: gradle/gradle-build-action@v2
