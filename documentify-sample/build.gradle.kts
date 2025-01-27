@@ -1,10 +1,10 @@
 plugins {
-    alias(libs.plugins.restdocs.api.spec) apply false
+    id("io.github.bgmsound.documentify") version "0.0.2" apply false
 }
 
 subprojects {
     with(pluginManager) {
-        apply(rootProject.libs.plugins.restdocs.api.spec.get().pluginId)
+        apply("io.github.bgmsound.documentify")
     }
     dependencies {
         testImplementation(rootProject.libs.spring.boot.starter.test)

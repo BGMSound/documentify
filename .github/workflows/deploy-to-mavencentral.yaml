@@ -1,0 +1,27 @@
+name: maven central 퍼블리싱
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish-to-mavencentral:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub 리포지토리 체크아웃
+        uses: actions/checkout@v4
+      - name: JDK 17 설치
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+      - name: Gradle 애드온 준비하기
+        uses: gradle/gradle-build-action@v2
+      - name: 빌드 및 퍼블리싱
+        run: |
+          chmod +x gradlew
+          ./gradlew --stacktrace publish
+          echo mavenCentralUsername=$MAVEN_CENTRAL_USERNAME >>! gradle.properties
+          echo mavenCentralPassword=$MAVEN_CENTRAL_PASSWORD >>! gradle.properties
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}

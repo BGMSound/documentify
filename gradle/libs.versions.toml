@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.0.21"
+kotlin = "2.0.0"
 kotlinx-datetime = "0.6.1"
 kotlinx-serialization-json = "1.7.2"
 kotlinx-coroutines = "1.8.1"
@@ -10,7 +10,7 @@ spring-restdocs = "3.0.3"
 spring-dependency-management = "1.1.5"
 
 jackson = "2.17.2"
-restdocs-api-spec = "0.18.2"
+restdocs-api-spec = "0.19.4"
 restassured = "5.5.0"
 mockk = "1.13.13"
 
@@ -40,6 +40,7 @@ restdocs-api-spec = { group = "com.epages", name = "restdocs-api-spec", version.
 restdocs-api-spec-mockmvc = { group = "com.epages", name = "restdocs-api-spec-mockmvc", version.ref = "restdocs-api-spec" }
 restdocs-api-spec-restassured = { group = "com.epages", name = "restdocs-api-spec-restassured", version.ref = "restdocs-api-spec" }
 restdocs-api-spec-webtestclient = { group = "com.epages", name = "restdocs-api-spec-webtestclient", version.ref = "restdocs-api-spec" }
+restdocs-api-spec-gradlePlugin = { group = "com.epages.restdocs-api-spec", name = "com.epages.restdocs-api-spec.gradle.plugin", version.ref = "restdocs-api-spec" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 restassured-mockmvc = { group = "io.rest-assured", name = "spring-mock-mvc", version.ref = "restassured" }
 
