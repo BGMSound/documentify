@@ -14,15 +14,14 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-      - name: GPG 키 셋업
+      - name: GPG Import하기
         env:
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_SECRET: ${{ secrets.GPG_SECRET }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "$GPG_SECRET" | gpg --batch --import
           echo "$GPG_PASSPHRASE" | gpg --batch --passphrase-fd 0 --pinentry-mode loopback --list-secret-keys
-          gpg --list-secret-keys --keyid-format LONG
           gpg --batch --yes --edit-key $GPG_KEY_ID trust quit <<EOF
           5
           save
@@ -31,11 +30,11 @@ jobs:
       - name: Gradle 애드온 준비하기
         uses: gradle/gradle-build-action@v2
       - name: 빌드 및 퍼블리싱
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         run: |
           chmod +x gradlew
           echo mavenCentralUsername=$MAVEN_CENTRAL_USERNAME >>! gradle.properties
           echo mavenCentralPassword=$MAVEN_CENTRAL_PASSWORD >>! gradle.properties
           ./gradlew --stacktrace publish
-        env:
-          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
