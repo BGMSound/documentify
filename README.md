@@ -50,7 +50,7 @@ And add the following code to your test class:
 @BeforeEach
 fun setUp(provider: RestDocumentationContextProvider) {
     standalone(provider) {
-        controllers(TestController())
+        controllers(TestController(testService))
     }
 }
 
