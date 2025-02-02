@@ -32,7 +32,7 @@ class ComplexSampleDocs : Documentify() {
                         field("stringField", "this is nested field stringField", "nested sample")
                     }
                     arrayField("listedField", "this is listed field") {
-                        field("integerField", "this is listed field integerField", 1)
+                        field("integerField", "this is listed field integerField", 2)
                         field("stringField", "this is listed field stringField", "nested sample 2")
                     }
                 }
