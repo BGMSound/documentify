@@ -1,5 +1,5 @@
-import java.time.Year
 import com.vanniktech.maven.publish.SonatypeHost
+import java.time.Year
 
 plugins {
     signing

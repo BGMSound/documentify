@@ -1,10 +1,6 @@
 package io.github.bgmsound.documentify.core.emitter
 
 import io.github.bgmsound.documentify.core.specification.element.field.Field
-import org.hamcrest.Matcher
-import org.hamcrest.Matchers
-import org.springframework.test.web.servlet.result.JsonPathResultMatchers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 
 object FieldJsonMatcherAssociater {
     fun List<Field>.associatedMatchers(): List<Pair<String, Any>> {

@@ -15,7 +15,6 @@ import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec
 import org.springframework.test.web.reactive.server.WebTestClient.RequestBodySpec
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
