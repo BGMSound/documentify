@@ -1,8 +1,8 @@
 package io.github.bgmsound.documentify.reactive.emitter
 
 
-import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedFieldSample
-import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedSample
+import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedFieldSample
+import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedSample
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
 import org.springframework.http.HttpMethod
