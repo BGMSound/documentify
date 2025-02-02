@@ -1,17 +1,21 @@
 package io.github.bgmsound.documentify.reactive.emitter
 
 
+import io.github.bgmsound.documentify.core.emitter.FieldJsonMatcherAssociater.associatedMatchers
 import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedFieldSample
 import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedSample
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
+import org.hamcrest.Matchers
 import org.springframework.http.HttpMethod
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec
 import org.springframework.test.web.reactive.server.WebTestClient.RequestBodySpec
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
@@ -44,6 +48,7 @@ class WebTestClientReactiveDocumentEmitter(
                     *snippets.toTypedArray()
                 )
             )
+            .validateExpectPayload()
     }
 
     override suspend fun emitAlternativeResponseDocument() {
@@ -113,5 +118,16 @@ class WebTestClientReactiveDocumentEmitter(
                 })
             }
         }.toString()
+    }
+
+    private fun BodyContentSpec.validateExpectPayload() {
+        val matchers = documentSpec.response.fields.associatedMatchers()
+        for ((key, value) in matchers) {
+            if (key.contains("[*]")) {
+                jsonPath(key).value(Matchers.hasItem(value))
+            } else {
+                jsonPath(key).value(Matchers.equalToObject(value))
+            }
+        }
     }
 }

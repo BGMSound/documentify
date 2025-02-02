@@ -111,10 +111,4 @@ class RestAssuredMvcDocumentEmitter(
         }
         return this
     }
-
-    private fun String.isListItem(): Boolean {
-        val splitResult = this.split(".")
-        val lastIndex = splitResult.lastIndex
-        return (splitResult.size > 1 && splitResult[lastIndex - 1].endsWith("[]"))
-    }
 }
