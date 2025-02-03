@@ -103,7 +103,12 @@ class RestAssuredMvcDocumentEmitter(
     private fun ValidatableMockMvcResponse.validateExpectPayload(): ValidatableMockMvcResponse {
         val matchers = documentSpec.response.fields.associatedMatchers()
         for ((key, value) in matchers) {
-            if (key.contains("[*]")) {
+            if (key.endsWith("[*]")) {
+                if (value !is List<*>) {
+                    throw IllegalArgumentException("sample value type must be List")
+                }
+                expect(jsonPath(key.substringBeforeLast("[*]")).value(Matchers.containsInAnyOrder(*value.toTypedArray())))
+            } else if (key.contains("[*]") && !key.endsWith("[*]")) {
                 expect(jsonPath(key).value(Matchers.hasItem(value)))
             } else {
                 expect(jsonPath(key).value(value))

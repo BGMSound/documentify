@@ -20,11 +20,13 @@ object FieldJsonMatcherAssociater {
         }
         val matchers = mutableListOf<Pair<String, Any>>()
         if (hasSample()) {
-            matchers.add("$.${path.replace("[]", "[*]")}" to sample)
-        } else {
-            if (childFields().isEmpty()) {
-                throw IllegalStateException("Field $key must have child fields")
-            }
+            val jsonPath = StringBuilder("$.${path}").apply {
+                if (isArray()) {
+                    append("[*]")
+                }
+            }.toString().replace("[]", "[*]")
+            matchers.add(jsonPath to sample)
+        } else if (childFields().isNotEmpty())  {
             val childMatchers = childFields().associatedMatchers()
             matchers.addAll(childMatchers)
         }

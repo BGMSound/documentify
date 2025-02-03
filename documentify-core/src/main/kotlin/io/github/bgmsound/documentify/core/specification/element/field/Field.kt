@@ -48,7 +48,7 @@ class Field(
         return descriptor.type == ARRAY.type
     }
 
-    fun with(childFieldsCustomizer: Field.() -> Unit): Field {
+    infix fun with(childFieldsCustomizer: Field.() -> Unit): Field {
         childFieldsCustomizer.invoke(this)
         return this
     }

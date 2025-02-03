@@ -112,8 +112,8 @@ class WebTestClientReactiveDocumentEmitter(
             append(documentSpec.request.url)
             if (documentSpec.request.queryParameters.isNotEmpty()) {
                 append("?")
-                append(documentSpec.request.queryParameters.joinToString("&") { it ->
-                    "${it.key}=${it.sample}"
+                append(documentSpec.request.queryParameters.joinToString("&") { parameter ->
+                    "${parameter.key}=${parameter.sample}"
                 })
             }
         }.toString()
@@ -122,7 +122,12 @@ class WebTestClientReactiveDocumentEmitter(
     private fun BodyContentSpec.validateExpectPayload() {
         val matchers = documentSpec.response.fields.associatedMatchers()
         for ((key, value) in matchers) {
-            if (key.contains("[*]")) {
+            if (key.endsWith("[*]")) {
+                if (value !is List<*>) {
+                    throw IllegalArgumentException("sample value type must be List")
+                }
+                jsonPath(key.substringBeforeLast("[*]")).value(Matchers.containsInAnyOrder(*value.toTypedArray()))
+            } else if (key.contains("[*]") && !key.endsWith("[*]")) {
                 jsonPath(key).value(Matchers.hasItem(value))
             } else {
                 jsonPath(key).value(Matchers.equalToObject(value))
