@@ -27,8 +27,8 @@ class ErrorDocs : Documentify() {
                 queryParameter("throw", "boolean", "false")
             }
             responseBody {
-                field("integerField", "this is error code", 1)
-                field("stringField", "this is error message", "error message")
+                field("integerField", "this is error code", 200)
+                field("stringField", "this is error message", "ok")
             }
             alternativeResponse {
                 status(400)

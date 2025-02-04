@@ -3,7 +3,7 @@ package io.github.bgmsound.documentify.core.emitter
 import io.github.bgmsound.documentify.core.specification.element.SpecElement
 import io.github.bgmsound.documentify.core.specification.element.field.Field
 
-object SpecElementAssociater {
+object SpecElementSampleAssociater {
     fun List<Field>.associatedFieldSample(): Map<String, Any> {
         return filter {
             it.hasSample() || it.canHaveChild() || !it.isIgnored()

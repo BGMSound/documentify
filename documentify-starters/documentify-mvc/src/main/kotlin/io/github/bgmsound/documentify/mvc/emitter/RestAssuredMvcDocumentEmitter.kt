@@ -1,18 +1,22 @@
 package io.github.bgmsound.documentify.mvc.emitter
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
-import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedFieldSample
-import io.github.bgmsound.documentify.core.emitter.SpecElementAssociater.associatedSample
+import io.github.bgmsound.documentify.core.emitter.FieldJsonMatcherAssociater.associatedMatchers
+import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedFieldSample
+import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedSample
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
 import io.restassured.http.ContentType
 import io.restassured.module.mockmvc.RestAssuredMockMvc.given
 import io.restassured.module.mockmvc.response.MockMvcResponse
+import io.restassured.module.mockmvc.response.ValidatableMockMvcResponse
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
+import org.hamcrest.Matchers
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 
@@ -45,6 +49,7 @@ class RestAssuredMvcDocumentEmitter(
             .assertThat()
             .apply(documentResultHandler)
             .statusCode(documentSpec.response.statusCode)
+            .validateExpectPayload()
     }
 
     override fun emitAlternativeResponseDocument() {
@@ -93,5 +98,22 @@ class RestAssuredMvcDocumentEmitter(
             Method.PATCH -> patch(documentSpec.request.url)
             Method.DELETE -> delete(documentSpec.request.url)
         }
+    }
+
+    private fun ValidatableMockMvcResponse.validateExpectPayload(): ValidatableMockMvcResponse {
+        val matchers = documentSpec.response.fields.associatedMatchers()
+        for ((key, value) in matchers) {
+            if (key.endsWith("[*]")) {
+                if (value !is List<*>) {
+                    throw IllegalArgumentException("sample value type must be List")
+                }
+                expect(jsonPath(key.substringBeforeLast("[*]")).value(Matchers.containsInAnyOrder(*value.toTypedArray())))
+            } else if (key.contains("[*]") && !key.endsWith("[*]")) {
+                expect(jsonPath(key).value(Matchers.hasItem(value)))
+            } else {
+                expect(jsonPath(key).value(value))
+            }
+        }
+        return this
     }
 }

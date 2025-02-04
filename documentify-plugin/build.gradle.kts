@@ -1,5 +1,5 @@
-import java.time.Year
 import com.vanniktech.maven.publish.SonatypeHost
+import java.time.Year
 
 plugins {
     id("com.vanniktech.maven.publish") version "0.28.0"

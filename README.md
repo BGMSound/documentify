@@ -15,7 +15,7 @@ dependencies {
 `WebFlux`
 ```kotlin
 dependencies {
-    implementation("io.github.bgmsound:documentify-mvc:${version}")
+    implementation("io.github.bgmsound:documentify-reactive:${version}")
 }
 ```
  > Latest version : **1.0.0**
@@ -50,7 +50,7 @@ And add the following code to your test class:
 @BeforeEach
 fun setUp(provider: RestDocumentationContextProvider) {
     standalone(provider) {
-        controllers(TestController())
+        controllers(TestController(testService))
     }
 }
 
@@ -105,5 +105,5 @@ you can also create Postman collection by running the following command:
 ```shell
 ./gradlew postman
 ```
-=======
+=======<br>
 [more sample code](https://github.com/BGMSound/documentify/tree/main/documentify-sample) 
