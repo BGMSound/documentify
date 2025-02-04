@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - README.md
+concurrency:
+  group: publish
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub 리포지토리 체크아웃
+        uses: actions/checkout@v4
+  recognize-version:
+    runs-on: ubuntu-latest
+    outputs:
+      project-version: ${{ steps.recognize-project-version.outputs.project-version }}
+    needs: [ checkout ]
+    steps:
+      - name: Recognize version
+        id: recognize-project-version
+        run: |
+          PROJECT_VERSION=$(cat gradle.properties | grep -i project.version | cut -d'=' -f2)
+          echo "project-version=$PROJECT_VERSION" >> $GITHUB_OUTPUT
+          echo "project version is $PROJECT_VERSION"
+  publish-to-mavencentral:
+    uses: ./.github/workflows/deploy-to-mavencentral.yaml
+  push-tag-to-github:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Tag
+        uses: negz/create-tag@v1
+        with:
+          version: 'v${{ github.event.inputs.version }}'
+          message: 'release version ${{ github.event.inputs.message }}'
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,9 +1,5 @@
 name: maven central 퍼블리싱
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+on: [ workflow_call, workflow_dispatch ]
 jobs:
   publish-to-mavencentral:
     runs-on: ubuntu-latest
