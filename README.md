@@ -18,7 +18,7 @@ dependencies {
     implementation("io.github.bgmsound:documentify-reactive:${version}")
 }
 ```
- > Latest version : **1.0.0**
+ > Latest version : **1.1.0**
 
 ### Getting Started
 First, make your test class extends `Documentify`. and set up the test environment like this:
