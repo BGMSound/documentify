@@ -1,3 +1,4 @@
+name: 퍼블리시
 on:
   workflow_dispatch:
   push:
@@ -24,6 +25,11 @@ jobs:
   publish-to-mavencentral:
     needs: [ recognize-version ]
     uses: ./.github/workflows/deploy-to-mavencentral.yaml
+    secrets:
+      GPG_SECRET: ${{ secrets.GPG_SECRET }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+      MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
   push-tag-to-github:
     permissions:
       contents: write

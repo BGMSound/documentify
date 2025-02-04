@@ -1,4 +1,4 @@
-name: maven central 퍼블리싱
+name: maven central 배포
 on:
   workflow_call:
     secrets:
