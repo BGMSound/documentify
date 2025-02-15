@@ -2,7 +2,7 @@ import com.vanniktech.maven.publish.SonatypeHost
 import java.time.Year
 
 plugins {
-    id("com.vanniktech.maven.publish") version "0.28.0"
+    alias(libs.plugins.gradle.mavenCentral.publish)
     `java-gradle-plugin`
     `maven-publish`
     signing
