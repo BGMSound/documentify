@@ -7,6 +7,7 @@ import io.github.bgmsound.documentify.sample.reactive.SampleController
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpStatus
 import org.springframework.restdocs.RestDocumentationContextProvider
 
 class SampleDocs : Documentify() {
@@ -43,61 +44,61 @@ class SampleDocs : Documentify() {
             }
         }
     }
-//
-//    @Test
-//    fun samplePostApi() {
-//        documentation("Sample Post API") {
-//            information {
-//                summary("Custom Sample Post API")
-//                description("this is Sample API description")
-//                tag("flat")
-//            }
-//            requestLine(Method.POST, "/sample")
-//            requestBody("Sample Post Request") {
-//                field("integerField", "integerField", 1)
-//                field("stringField", "stringField", "string")
-//            }
-//            responseStatus(HttpStatus.OK)
-//            responseBody {
-//                field("integerField", "integerField", 1)
-//                field("stringField", "stringField", "string")
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun samplePatchApi() {
-//        documentation("Sample Patch API") {
-//            information {
-//                summary("Custom Sample Patch API")
-//                tag("flat")
-//            }
-//            request {
-//                line(Method.PATCH, "/sample")
-//                body("Sample Patch Request") {
-//                    field("integerField", "integerField", 1)
-//                    field("stringField", "stringField", "string")
-//                }
-//            }
-//            response {
-//                status(HttpStatus.OK)
-//                body("Sample Patch Response") {
-//                    field("integerField", "integerField", 1)
-//                    field("stringField", "stringField", "string")
-//                }
-//            }
-//        }
-//    }
-//
-//    @Test
-//    fun sampleDeleteApi() {
-//        documentation("Sample Delete API") {
-//            information {
-//                tag("flat")
-//            }
-//            requestLine(Method.DELETE, "/sample/{id}") {
-//                pathVariable("id", "id", "id")
-//            }
-//        }
-//    }
+
+    @Test
+    fun samplePostApi() = runTest {
+        documentation("Sample Post API") {
+            information {
+                summary("Custom Sample Post API")
+                description("this is Sample API description")
+                tag("flat")
+            }
+            requestLine(Method.POST, "/sample")
+            requestBody("Sample Post Request") {
+                field("integerField", "integerField", 1)
+                field("stringField", "stringField", "string")
+            }
+            responseStatus(HttpStatus.OK)
+            responseBody {
+                field("integerField", "integerField", 1)
+                field("stringField", "stringField", "string")
+            }
+        }
+    }
+
+    @Test
+    fun samplePatchApi() = runTest {
+        documentation("Sample Patch API") {
+            information {
+                summary("Custom Sample Patch API")
+                tag("flat")
+            }
+            request {
+                line(Method.PATCH, "/sample")
+                body("Sample Patch Request") {
+                    field("integerField", "integerField", 1)
+                    field("stringField", "stringField", "string")
+                }
+            }
+            response {
+                status(HttpStatus.OK)
+                body("Sample Patch Response") {
+                    field("integerField", "integerField", 1)
+                    field("stringField", "stringField", "string")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun sampleDeleteApi() = runTest {
+        documentation("Sample Delete API") {
+            information {
+                tag("flat")
+            }
+            requestLine(Method.DELETE, "/sample/{id}") {
+                pathVariable("id", "id", "id")
+            }
+        }
+    }
 }
