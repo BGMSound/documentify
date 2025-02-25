@@ -55,3 +55,5 @@ restdocs-api-spec = { id = "com.epages.restdocs-api-spec", version.ref = "restdo
 
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+
+gradle-mavenCentral-publish = { id = "com.vanniktech.maven.publish", version = "0.28.0" }

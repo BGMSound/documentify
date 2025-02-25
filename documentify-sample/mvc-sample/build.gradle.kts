@@ -1,6 +1,5 @@
 dependencies {
     implementation(rootProject.libs.spring.boot.starter.web)
-
     testImplementation(rootProject.projects.documentifyStarters.documentifyMvc)
 }
 

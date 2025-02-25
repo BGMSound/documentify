@@ -6,6 +6,7 @@ import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.a
 import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedSample
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
+import io.github.bgmsound.documentify.reactive.ReactiveDocumentContextEnvironment
 import org.hamcrest.Matchers
 import org.springframework.http.HttpMethod
 import org.springframework.restdocs.RestDocumentationContextProvider
@@ -21,11 +22,15 @@ import org.springframework.util.MultiValueMap
 class WebTestClientReactiveDocumentEmitter(
     provider: RestDocumentationContextProvider,
     documentSpec: DocumentSpec,
-    private val webTestClient: WebTestClient,
+    environment: ReactiveDocumentContextEnvironment
 ) : AbstractReactiveDocumentEmitter(provider, documentSpec) {
-    override suspend fun emitDocument() {
+    private val webTestClient: WebTestClient = environment.buildWebTestClient()
+    private val requestPreprocessors = environment.requestPreprocessors().toTypedArray()
+    private val responsePreprocessors = environment.responsePreprocessors().toTypedArray()
+
+    override suspend fun emitDocument(): BodyContentSpec {
         val snippets = documentSpec.build()
-        webTestClient
+        return webTestClient
             .method(method())
             .uri(uri(), documentSpec.request.pathVariables.associatedSample())
             .headers { headers ->
@@ -42,8 +47,8 @@ class WebTestClientReactiveDocumentEmitter(
             .consumeWith(
                 document(
                     documentSpec.name,
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
+                    preprocessRequest(prettyPrint(), *requestPreprocessors),
+                    preprocessResponse(prettyPrint(), *responsePreprocessors),
                     *snippets.toTypedArray()
                 )
             )
@@ -73,8 +78,8 @@ class WebTestClientReactiveDocumentEmitter(
                 .consumeWith(
                     document(
                         "${documentSpec.name}-case-${index + 1}",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        preprocessRequest(prettyPrint(), *requestPreprocessors),
+                        preprocessResponse(prettyPrint(), *responsePreprocessors),
                         response.buildResource(index)
                     )
                 )
@@ -119,7 +124,7 @@ class WebTestClientReactiveDocumentEmitter(
         }.toString()
     }
 
-    private fun BodyContentSpec.validateExpectPayload() {
+    private fun BodyContentSpec.validateExpectPayload(): BodyContentSpec {
         val matchers = documentSpec.response.fields.associatedMatchers()
         for ((key, value) in matchers) {
             if (key.endsWith("[*]")) {
@@ -133,5 +138,6 @@ class WebTestClientReactiveDocumentEmitter(
                 jsonPath(key).value(Matchers.equalToObject(value))
             }
         }
+        return this
     }
 }

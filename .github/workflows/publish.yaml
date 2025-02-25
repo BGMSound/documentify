@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: GitHub 리포지토리 체크아웃
         uses: actions/checkout@v4
-      - name: Recognize version
+      - name: 프로젝트 버전 인식
         id: recognize-project-version
         run: |
           PROJECT_VERSION=$(cat gradle.properties | grep -i project.version | cut -d'=' -f2)

@@ -1,4 +1,7 @@
 # 📝 Documentify
+![Latest Release](https://img.shields.io/github/v/release/BGMSound/documentify)
+[![Apache 2.0 license](https://img.shields.io/badge/License-APACHE%202.0-green.svg?logo=APACHE&style=flat)](https://opensource.org/licenses/Apache-2.0)
+<br>
 Documentify allows easy and convenient creation of OpenAPI specification documents through Kotlin DSL, making users from the complexity of traditional RestDocs. 
 It combines the advantages of both Swagger and RestDocs for efficient and intuitive document management.
 
@@ -18,7 +21,6 @@ dependencies {
     implementation("io.github.bgmsound:documentify-reactive:${version}")
 }
 ```
- > Latest version : **1.1.0**
 
 ### Getting Started
 First, make your test class extends `Documentify`. and set up the test environment like this:
@@ -36,13 +38,13 @@ You can also set up the test environment with an application context or an auto-
 `Mvc Example`
 ```kotlin
 webApplicationContext(provider, context)
-mockMvc(provider, context)
+mockMvc(provider, mockMvc)
 ```
 
 `Reactive Example`
 ```kotlin
 applicationContext(provider, context)
-webTestClient(provider, context)
+webTestClient(provider, webTestClient)
 ```
 
 And add the following code to your test class:
@@ -105,5 +107,5 @@ you can also create Postman collection by running the following command:
 ```shell
 ./gradlew postman
 ```
-=======<br>
-[more sample code](https://github.com/BGMSound/documentify/tree/main/documentify-sample) 
+---
+[[click to see more sample code]](https://github.com/BGMSound/documentify/tree/main/documentify-sample) 

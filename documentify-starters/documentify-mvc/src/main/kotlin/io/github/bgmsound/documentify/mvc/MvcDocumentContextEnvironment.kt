@@ -1,15 +1,10 @@
 package io.github.bgmsound.documentify.mvc
 
-import io.github.bgmsound.documentify.core.environment.DocumentContextEnvironment
-import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
-import io.github.bgmsound.documentify.mvc.emitter.MvcDocumentEmitter
-import org.springframework.restdocs.RestDocumentationContextProvider
+import io.github.bgmsound.documentify.core.environment.AbstractDocumentContextEnvironment
+import org.springframework.test.web.servlet.MockMvc
 
-interface MvcDocumentContextEnvironment : DocumentContextEnvironment {
+abstract class MvcDocumentContextEnvironment : AbstractDocumentContextEnvironment() {
 
-    fun buildEmitter(
-        provider: RestDocumentationContextProvider,
-        documentSpec: DocumentSpec
-    ): MvcDocumentEmitter
+    abstract fun buildMockMvc(): MockMvc
 
 }

@@ -1,18 +1,24 @@
 package io.github.bgmsound.documentify.mvc.environment
 
-import io.github.bgmsound.documentify.core.environment.AbstractStandaloneContextEnvironment
-import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
+import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentDelegate
+import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentSpec
 import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
-import io.github.bgmsound.documentify.mvc.emitter.EmitterFactory
-import io.github.bgmsound.documentify.mvc.emitter.MvcDocumentEmitter
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
+import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 
 class StandaloneMvcContextEnvironment private constructor(
-) : AbstractStandaloneContextEnvironment<StandaloneMvcContextEnvironment>(), MvcDocumentContextEnvironment {
+    private val provider: RestDocumentationContextProvider,
+    private val delegate: StandaloneContextEnvironmentDelegate<StandaloneMvcContextEnvironment> = StandaloneContextEnvironmentDelegate()
+) : StandaloneContextEnvironmentSpec<StandaloneMvcContextEnvironment> by delegate, MvcDocumentContextEnvironment() {
+    init {
+        delegate.environmentSpec = this
+    }
+
     private val argumentResolvers: MutableList<HandlerMethodArgumentResolver> = mutableListOf()
 
     fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneMvcContextEnvironment {
@@ -30,30 +36,22 @@ class StandaloneMvcContextEnvironment private constructor(
         return this
     }
 
-    override fun buildEmitter(
-        provider: RestDocumentationContextProvider,
-        documentSpec: DocumentSpec,
-    ): MvcDocumentEmitter {
-        val mockMvc = MockMvcBuilders
-            .standaloneSetup(*controllers.toTypedArray())
-            .setControllerAdvice(*controllerAdvices.toTypedArray())
+    override fun buildMockMvc(): MockMvc {
+        return MockMvcBuilders
+            .standaloneSetup(*delegate.controllers.toTypedArray())
+            .setControllerAdvice(*delegate.controllerAdvices.toTypedArray())
             .setCustomArgumentResolvers(*argumentResolvers.toTypedArray())
             .apply<StandaloneMockMvcBuilder>(documentationConfiguration(provider))
+            .apply { if (delegate.objectMapper != null) {
+                val objectMapper = delegate.objectMapper!!
+                setMessageConverters(MappingJackson2HttpMessageConverter(objectMapper))
+            }}
             .build()
-        return EmitterFactory.createMvcEmitter(provider, documentSpec, mockMvc)
     }
 
     companion object {
-        fun controller(controller: Any): StandaloneMvcContextEnvironment {
-            return StandaloneMvcContextEnvironment().controller(controller)
-        }
-
-        fun controllers(vararg controllers: Any): StandaloneMvcContextEnvironment {
-            return StandaloneMvcContextEnvironment().controllers(*controllers)
-        }
-
-        fun controllers(controllers: List<Any>): StandaloneMvcContextEnvironment {
-            return StandaloneMvcContextEnvironment().controllers(controllers)
+        fun standaloneEnvironment(provider: RestDocumentationContextProvider): StandaloneMvcContextEnvironment {
+            return StandaloneMvcContextEnvironment(provider)
         }
     }
 }

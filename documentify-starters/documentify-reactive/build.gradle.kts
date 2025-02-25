@@ -4,7 +4,6 @@ import java.time.Year
 plugins {
     signing
     `maven-publish`
-    id("com.vanniktech.maven.publish") version "0.28.0"
 }
 
 dependencies {
