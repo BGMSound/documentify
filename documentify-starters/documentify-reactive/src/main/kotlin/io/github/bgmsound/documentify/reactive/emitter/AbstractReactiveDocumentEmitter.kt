@@ -11,10 +11,10 @@ abstract class AbstractReactiveDocumentEmitter(
 ) : AbstractDocumentEmitter(provider, documentSpec), ReactiveDocumentEmitter {
 
     override suspend fun emit(): BodyContentSpec {
-        val validatableDocumentResult = emitDocument()
+        val validatableDocumentResponse = emitDocument()
         emitAlternativeResponseDocument()
 
-        return validatableDocumentResult
+        return validatableDocumentResponse
     }
 
     abstract suspend fun emitDocument(): BodyContentSpec

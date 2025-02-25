@@ -6,6 +6,7 @@ import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.a
 import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedSample
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
+import io.github.bgmsound.documentify.reactive.ReactiveDocumentContextEnvironment
 import org.hamcrest.Matchers
 import org.springframework.http.HttpMethod
 import org.springframework.restdocs.RestDocumentationContextProvider
@@ -21,8 +22,10 @@ import org.springframework.util.MultiValueMap
 class WebTestClientReactiveDocumentEmitter(
     provider: RestDocumentationContextProvider,
     documentSpec: DocumentSpec,
-    private val webTestClient: WebTestClient,
+    environment: ReactiveDocumentContextEnvironment
 ) : AbstractReactiveDocumentEmitter(provider, documentSpec) {
+    private val webTestClient: WebTestClient = environment.buildWebTestClient()
+
     override suspend fun emitDocument(): BodyContentSpec {
         val snippets = documentSpec.build()
         return webTestClient

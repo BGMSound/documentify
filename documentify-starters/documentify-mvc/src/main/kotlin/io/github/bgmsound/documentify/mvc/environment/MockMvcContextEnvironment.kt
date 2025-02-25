@@ -9,12 +9,9 @@ import org.springframework.test.web.servlet.MockMvc
 
 class MockMvcContextEnvironment private constructor(
     private val mockMvc: MockMvc
-): MvcDocumentContextEnvironment {
-    override fun buildEmitter(
-        provider: RestDocumentationContextProvider,
-        documentSpec: DocumentSpec
-    ): MvcDocumentEmitter {
-        return EmitterFactory.createMvcEmitter(provider, documentSpec, mockMvc)
+): MvcDocumentContextEnvironment() {
+    override fun buildMockMvc(): MockMvc {
+        return mockMvc
     }
 
     companion object {

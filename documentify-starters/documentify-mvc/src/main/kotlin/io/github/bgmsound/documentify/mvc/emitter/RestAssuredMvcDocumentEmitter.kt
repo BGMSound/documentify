@@ -6,6 +6,7 @@ import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.a
 import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedSample
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
+import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
 import io.restassured.http.ContentType
 import io.restassured.module.mockmvc.RestAssuredMockMvc.given
 import io.restassured.module.mockmvc.response.MockMvcResponse
@@ -15,7 +16,6 @@ import org.hamcrest.Matchers
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
@@ -23,8 +23,11 @@ import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 class RestAssuredMvcDocumentEmitter(
     provider: RestDocumentationContextProvider,
     documentSpec: DocumentSpec,
-    private val mockMvc: MockMvc
+    private val environment: MvcDocumentContextEnvironment
 ) : AbstractMvcDocumentEmitter(provider, documentSpec) {
+    private val mockMvc = environment.buildMockMvc()
+
+
     override fun emitDocument(): ValidatableMockMvcResponse {
         val snippets = documentSpec.build()
         val documentResultHandler = document(

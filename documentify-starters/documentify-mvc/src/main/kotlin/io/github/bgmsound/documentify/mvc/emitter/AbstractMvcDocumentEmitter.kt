@@ -10,10 +10,10 @@ abstract class AbstractMvcDocumentEmitter(
     documentSpec: DocumentSpec
 ) : AbstractDocumentEmitter(provider, documentSpec), MvcDocumentEmitter {
     override fun emit(): ValidatableMockMvcResponse {
-        val validatableDocumentResult = emitDocument()
+        val validatableDocumentResponse = emitDocument()
         emitAlternativeResponseDocument()
 
-        return validatableDocumentResult
+        return validatableDocumentResponse
     }
 
     abstract fun emitDocument(): ValidatableMockMvcResponse

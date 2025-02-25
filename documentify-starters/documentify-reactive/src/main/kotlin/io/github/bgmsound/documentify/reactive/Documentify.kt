@@ -1,9 +1,10 @@
 package io.github.bgmsound.documentify.reactive
 
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
+import io.github.bgmsound.documentify.reactive.emitter.EmitterFactory
 import io.github.bgmsound.documentify.reactive.environment.ApplicationContextEnvironment.Companion.applicationContextEnvironment
 import io.github.bgmsound.documentify.reactive.environment.StandaloneReactiveContextEnvironment
-import io.github.bgmsound.documentify.reactive.environment.StandaloneReactiveContextEnvironment.Companion.controllers
+import io.github.bgmsound.documentify.reactive.environment.StandaloneReactiveContextEnvironment.Companion.standaloneEnvironment
 import io.github.bgmsound.documentify.reactive.environment.WebTestClientContextEnvironment.Companion.webTestClientEnvironment
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.context.ApplicationContext
@@ -22,7 +23,7 @@ abstract class Documentify {
         specCustomizer: DocumentSpec.() -> Unit
     ) {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = documentContextEnvironment.buildEmitter(provider, documentSpec)
+        val emitter = EmitterFactory.createReactiveEmitter(provider, documentSpec, documentContextEnvironment)
 
         emitter.emit()
     }
@@ -32,7 +33,7 @@ abstract class Documentify {
         webTestClient: WebTestClient
     ) {
         this.provider = provider
-        documentContextEnvironment = webTestClientEnvironment(webTestClient)
+        documentContextEnvironment = webTestClientEnvironment(provider, webTestClient)
     }
 
     fun standalone(
@@ -47,7 +48,7 @@ abstract class Documentify {
         provider: RestDocumentationContextProvider,
         contextCustomizer: StandaloneReactiveContextEnvironment.() -> Unit
     ) {
-        val standaloneContext = controllers().also(contextCustomizer)
+        val standaloneContext = standaloneEnvironment(provider).also(contextCustomizer)
         standalone(provider, standaloneContext)
     }
 
@@ -57,7 +58,8 @@ abstract class Documentify {
         controllerAdvices: List<Any>,
         argumentResolvers: List<HandlerMethodArgumentResolver>
     ) {
-        val standaloneContext = controllers(controllers)
+        val standaloneContext = standaloneEnvironment(provider)
+            .controllers(controllers)
             .controllerAdvices(controllerAdvices)
             .argumentResolvers(argumentResolvers)
         standalone(provider, standaloneContext)
@@ -68,6 +70,6 @@ abstract class Documentify {
         applicationContext: ApplicationContext
     ) {
         this.provider = provider
-        documentContextEnvironment = applicationContextEnvironment(applicationContext)
+        documentContextEnvironment = applicationContextEnvironment(provider, applicationContext)
     }
 }

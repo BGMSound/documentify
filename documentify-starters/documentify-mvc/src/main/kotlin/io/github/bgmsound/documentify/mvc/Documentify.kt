@@ -1,6 +1,7 @@
 package io.github.bgmsound.documentify.mvc
 
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
+import io.github.bgmsound.documentify.mvc.emitter.EmitterFactory
 import io.github.bgmsound.documentify.mvc.environment.MockMvcContextEnvironment.Companion.mockMvcEnvironment
 import io.github.bgmsound.documentify.mvc.environment.StandaloneMvcContextEnvironment
 import io.github.bgmsound.documentify.mvc.environment.WebApplicationContextEnvironment.Companion.webApplicationContextEnvironment
@@ -21,7 +22,7 @@ abstract class Documentify {
         specCustomizer: DocumentSpec.() -> Unit
     ) {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = documentContextEnvironment.buildEmitter(provider, documentSpec)
+        val emitter = EmitterFactory.createMvcEmitter(provider, documentSpec, documentContextEnvironment)
 
         emitter.emit()
     }
@@ -46,7 +47,9 @@ abstract class Documentify {
         provider: RestDocumentationContextProvider,
         contextCustomizer: StandaloneMvcContextEnvironment.() -> Unit
     ) {
-        val standaloneContext = StandaloneMvcContextEnvironment.controllers().also(contextCustomizer)
+        val standaloneContext = StandaloneMvcContextEnvironment
+            .standaloneEnvironment(provider)
+            .also(contextCustomizer)
         standalone(provider, standaloneContext)
     }
 
@@ -56,7 +59,9 @@ abstract class Documentify {
         controllerAdvices: List<Any>,
         argumentResolvers: List<HandlerMethodArgumentResolver>
     ) {
-        val standaloneContext = StandaloneMvcContextEnvironment.controllers(controllers)
+        val standaloneContext = StandaloneMvcContextEnvironment
+            .standaloneEnvironment(provider)
+            .controllers(controllers)
             .controllerAdvices(controllerAdvices)
             .argumentResolvers(argumentResolvers)
         standalone(provider, standaloneContext)
