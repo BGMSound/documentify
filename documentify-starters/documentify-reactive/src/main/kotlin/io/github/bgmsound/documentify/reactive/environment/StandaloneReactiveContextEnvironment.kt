@@ -5,14 +5,16 @@ import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironm
 import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentSpec
 import io.github.bgmsound.documentify.reactive.ReactiveDocumentContextEnvironment
 import org.springframework.http.MediaType
-import org.springframework.http.codec.ClientCodecConfigurer
 import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.http.codec.json.Jackson2JsonEncoder
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.WebTestClient.MockServerSpec
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver
+import org.springframework.web.server.WebFilter
 
 
 class StandaloneReactiveContextEnvironment private constructor(
@@ -47,9 +49,14 @@ class StandaloneReactiveContextEnvironment private constructor(
             .argumentResolvers { configurer ->
                 configurer.addCustomResolver(*argumentResolvers.toTypedArray())
             }
+            .httpMessageCodecs { configurer -> if (delegate.objectMapper != null) {
+                val objectMapper = delegate.objectMapper!!
+                configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
+                configurer.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
+            }}
             .configureClient()
-            .filter(WebTestClientRestDocumentation.documentationConfiguration(provider))
             .include(delegate.objectMapper)
+            .filter(WebTestClientRestDocumentation.documentationConfiguration(provider))
             .build()
     }
 
@@ -61,12 +68,9 @@ class StandaloneReactiveContextEnvironment private constructor(
 
     private fun WebTestClient.Builder.include(objectMapper: ObjectMapper?): WebTestClient.Builder {
         if (objectMapper == null) return this
-        val strategies = ExchangeStrategies.builder()
-            .codecs { configurer: ClientCodecConfigurer ->
-                configurer.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
-                configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
-            }
-            .build()
-        return this.exchangeStrategies(strategies)
+        return exchangeStrategies(ExchangeStrategies.builder().codecs { configurer ->
+            configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
+            configurer.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
+        }.build())
     }
 }

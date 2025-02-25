@@ -1,6 +1,5 @@
 package io.github.bgmsound.documentify.mvc.environment
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentDelegate
 import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentSpec
 import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
