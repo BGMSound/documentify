@@ -25,7 +25,7 @@ class RestAssuredMvcDocumentEmitter(
     documentSpec: DocumentSpec,
     private val mockMvc: MockMvc
 ) : AbstractMvcDocumentEmitter(provider, documentSpec) {
-    override fun emitDocument() {
+    override fun emitDocument(): ValidatableMockMvcResponse {
         val snippets = documentSpec.build()
         val documentResultHandler = document(
             documentSpec.name,
@@ -43,7 +43,7 @@ class RestAssuredMvcDocumentEmitter(
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .request()
-        response
+        return response
             .then()
             .log().all()
             .assertThat()

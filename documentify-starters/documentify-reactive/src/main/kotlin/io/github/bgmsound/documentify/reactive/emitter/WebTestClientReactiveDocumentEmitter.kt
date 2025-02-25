@@ -23,9 +23,9 @@ class WebTestClientReactiveDocumentEmitter(
     documentSpec: DocumentSpec,
     private val webTestClient: WebTestClient,
 ) : AbstractReactiveDocumentEmitter(provider, documentSpec) {
-    override suspend fun emitDocument() {
+    override suspend fun emitDocument(): BodyContentSpec {
         val snippets = documentSpec.build()
-        webTestClient
+        return webTestClient
             .method(method())
             .uri(uri(), documentSpec.request.pathVariables.associatedSample())
             .headers { headers ->
@@ -119,7 +119,7 @@ class WebTestClientReactiveDocumentEmitter(
         }.toString()
     }
 
-    private fun BodyContentSpec.validateExpectPayload() {
+    private fun BodyContentSpec.validateExpectPayload(): BodyContentSpec {
         val matchers = documentSpec.response.fields.associatedMatchers()
         for ((key, value) in matchers) {
             if (key.endsWith("[*]")) {
@@ -133,5 +133,6 @@ class WebTestClientReactiveDocumentEmitter(
                 jsonPath(key).value(Matchers.equalToObject(value))
             }
         }
+        return this
     }
 }
