@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentDelegate
 import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentSpec
 import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
-import io.github.bgmsound.documentify.mvc.emitter.CustomRequestSerializer
-import io.github.bgmsound.documentify.mvc.emitter.CustomResponseSerializer
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
@@ -47,8 +45,7 @@ class StandaloneMvcContextEnvironment private constructor(
             .apply<StandaloneMockMvcBuilder>(documentationConfiguration(provider))
             .apply { if (delegate.objectMapper != null) {
                 val objectMapper = delegate.objectMapper!!
-                requestPreprocessors(CustomRequestSerializer(objectMapper))
-                responsePreprocessors(CustomResponseSerializer(objectMapper))
+                setMessageConverters(MappingJackson2HttpMessageConverter(objectMapper))
             }}
             .build()
     }
