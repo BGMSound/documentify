@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentDelegate
 import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentSpec
 import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
+import io.github.bgmsound.documentify.mvc.emitter.CustomRequestSerializer
+import io.github.bgmsound.documentify.mvc.emitter.CustomResponseSerializer
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
@@ -16,6 +18,10 @@ class StandaloneMvcContextEnvironment private constructor(
     private val provider: RestDocumentationContextProvider,
     private val delegate: StandaloneContextEnvironmentDelegate<StandaloneMvcContextEnvironment> = StandaloneContextEnvironmentDelegate()
 ) : StandaloneContextEnvironmentSpec<StandaloneMvcContextEnvironment> by delegate, MvcDocumentContextEnvironment() {
+    init {
+        delegate.environmentSpec = this
+    }
+
     private val argumentResolvers: MutableList<HandlerMethodArgumentResolver> = mutableListOf()
 
     fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneMvcContextEnvironment {
@@ -39,9 +45,11 @@ class StandaloneMvcContextEnvironment private constructor(
             .setControllerAdvice(*delegate.controllerAdvices.toTypedArray())
             .setCustomArgumentResolvers(*argumentResolvers.toTypedArray())
             .apply<StandaloneMockMvcBuilder>(documentationConfiguration(provider))
-            .apply { if (delegate.objectMapper != null)
-                this.setMessageConverters(MappingJackson2HttpMessageConverter(delegate.objectMapper!!))
-            }
+            .apply { if (delegate.objectMapper != null) {
+                val objectMapper = delegate.objectMapper!!
+                requestPreprocessors(CustomRequestSerializer(objectMapper))
+                responsePreprocessors(CustomResponseSerializer(objectMapper))
+            }}
             .build()
     }
 

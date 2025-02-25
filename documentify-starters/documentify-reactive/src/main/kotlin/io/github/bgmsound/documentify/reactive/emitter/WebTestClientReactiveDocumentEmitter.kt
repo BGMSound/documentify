@@ -25,6 +25,8 @@ class WebTestClientReactiveDocumentEmitter(
     environment: ReactiveDocumentContextEnvironment
 ) : AbstractReactiveDocumentEmitter(provider, documentSpec) {
     private val webTestClient: WebTestClient = environment.buildWebTestClient()
+    private val requestPreprocessors = environment.requestPreprocessors().toTypedArray()
+    private val responsePreprocessors = environment.responsePreprocessors().toTypedArray()
 
     override suspend fun emitDocument(): BodyContentSpec {
         val snippets = documentSpec.build()
@@ -45,8 +47,8 @@ class WebTestClientReactiveDocumentEmitter(
             .consumeWith(
                 document(
                     documentSpec.name,
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()),
+                    preprocessRequest(prettyPrint(), *requestPreprocessors),
+                    preprocessResponse(prettyPrint(), *responsePreprocessors),
                     *snippets.toTypedArray()
                 )
             )
@@ -76,8 +78,8 @@ class WebTestClientReactiveDocumentEmitter(
                 .consumeWith(
                     document(
                         "${documentSpec.name}-case-${index + 1}",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        preprocessRequest(prettyPrint(), *requestPreprocessors),
+                        preprocessResponse(prettyPrint(), *responsePreprocessors),
                         response.buildResource(index)
                     )
                 )

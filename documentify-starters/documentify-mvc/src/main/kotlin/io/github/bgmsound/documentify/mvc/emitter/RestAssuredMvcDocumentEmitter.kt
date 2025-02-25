@@ -23,17 +23,18 @@ import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 class RestAssuredMvcDocumentEmitter(
     provider: RestDocumentationContextProvider,
     documentSpec: DocumentSpec,
-    private val environment: MvcDocumentContextEnvironment
+    environment: MvcDocumentContextEnvironment
 ) : AbstractMvcDocumentEmitter(provider, documentSpec) {
     private val mockMvc = environment.buildMockMvc()
-
+    private val requestPreprocessors = environment.requestPreprocessors().toTypedArray()
+    private val responsePreprocessors = environment.responsePreprocessors().toTypedArray()
 
     override fun emitDocument(): ValidatableMockMvcResponse {
         val snippets = documentSpec.build()
         val documentResultHandler = document(
             documentSpec.name,
-            preprocessRequest(prettyPrint()),
-            preprocessResponse(prettyPrint()),
+            preprocessRequest(prettyPrint(), *requestPreprocessors),
+            preprocessResponse(prettyPrint(), *responsePreprocessors),
             *snippets.toTypedArray()
         )
         val requestSpecification: MockMvcRequestSpecification = given().mockMvc(mockMvc)
@@ -76,8 +77,8 @@ class RestAssuredMvcDocumentEmitter(
                 .apply(
                     document(
                         "${documentSpec.name}-case-${index + 1}",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        preprocessRequest(prettyPrint(), *requestPreprocessors),
+                        preprocessResponse(prettyPrint(), *responsePreprocessors),
                         response.buildResource(index)
                     )
                 )

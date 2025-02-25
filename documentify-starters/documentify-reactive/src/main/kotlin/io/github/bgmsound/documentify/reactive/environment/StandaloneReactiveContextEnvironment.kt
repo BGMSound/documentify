@@ -19,6 +19,10 @@ class StandaloneReactiveContextEnvironment private constructor(
     private val provider: RestDocumentationContextProvider,
     private val delegate: StandaloneContextEnvironmentDelegate<StandaloneReactiveContextEnvironment> = StandaloneContextEnvironmentDelegate()
 ) : StandaloneContextEnvironmentSpec<StandaloneReactiveContextEnvironment> by delegate, ReactiveDocumentContextEnvironment() {
+    init {
+        delegate.environmentSpec = this
+    }
+
     private val argumentResolvers = mutableListOf<HandlerMethodArgumentResolver>()
 
     fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneReactiveContextEnvironment {
