@@ -9,7 +9,14 @@ import org.springframework.test.web.reactive.server.WebTestClient
 class ApplicationContextEnvironment private constructor(
     private val provider: RestDocumentationContextProvider,
     private val applicationContext: ApplicationContext
-) : ReactiveDocumentContextEnvironment {
+) : ReactiveDocumentContextEnvironment() {
+    override fun buildWebTestClient(): WebTestClient {
+        return WebTestClient
+            .bindToApplicationContext(applicationContext)
+            .configureClient()
+            .filter(WebTestClientRestDocumentation.documentationConfiguration(provider))
+            .build()
+    }
 
     companion object {
         fun applicationContextEnvironment(
@@ -18,13 +25,5 @@ class ApplicationContextEnvironment private constructor(
         ): ApplicationContextEnvironment {
             return ApplicationContextEnvironment(provider, context)
         }
-    }
-
-    override fun buildWebTestClient(): WebTestClient {
-        return WebTestClient
-            .bindToApplicationContext(applicationContext)
-            .configureClient()
-            .filter(WebTestClientRestDocumentation.documentationConfiguration(provider))
-            .build()
     }
 }

@@ -71,7 +71,7 @@ abstract class Documentify {
         provider: RestDocumentationContextProvider,
         context: WebApplicationContext
     ) {
-        documentContextEnvironment = webApplicationContextEnvironment(context)
+        documentContextEnvironment = webApplicationContextEnvironment(provider, context)
         this.provider = provider
     }
 }

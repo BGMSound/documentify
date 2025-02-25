@@ -8,7 +8,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 class WebTestClientContextEnvironment private constructor(
     private val provider: RestDocumentationContextProvider,
     private val webTestClient: WebTestClient
-) : ReactiveDocumentContextEnvironment {
+) : ReactiveDocumentContextEnvironment() {
     override fun buildWebTestClient(): WebTestClient {
         return webTestClient
                 .mutate()
