@@ -10,6 +10,9 @@ class CustomRequestSerializer(
     private val objectMapper: ObjectMapper
 ): OperationPreprocessor {
     override fun preprocess(request: OperationRequest): OperationRequest {
+        if (request.content.isEmpty()) {
+            return request
+        }
         val content = objectMapper.readValue(request.content, Any::class.java)
         return OperationRequestFactory()
             .createFrom(request, objectMapper.writeValueAsBytes(content))

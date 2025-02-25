@@ -15,6 +15,9 @@ class CustomResponseSerializer(
     }
 
     override fun preprocess(response: OperationResponse): OperationResponse {
+        if (response.content.isEmpty()) {
+            return response
+        }
         val content = objectMapper.readValue(response.content, Any::class.java)
         return OperationResponseFactory()
             .createFrom(response, objectMapper.writeValueAsBytes(content))
