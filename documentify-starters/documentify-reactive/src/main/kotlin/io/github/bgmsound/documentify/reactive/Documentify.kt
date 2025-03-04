@@ -21,11 +21,11 @@ abstract class Documentify {
     suspend fun documentation(
         name: String,
         specCustomizer: DocumentSpec.() -> Unit
-    ) {
+    ): WebTestClient.BodyContentSpec {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
         val emitter = EmitterFactory.createReactiveEmitter(provider, documentSpec, documentContextEnvironment)
 
-        emitter.emit()
+        return emitter.emit()
     }
 
     fun webTestClient(

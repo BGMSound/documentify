@@ -20,11 +20,11 @@ abstract class Documentify {
     fun documentation(
         name: String,
         specCustomizer: DocumentSpec.() -> Unit
-    ) {
+    ): ValidatableMockResponse {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
         val emitter = EmitterFactory.createMvcEmitter(provider, documentSpec, documentContextEnvironment)
 
-        emitter.emit()
+        return emitter.emit()
     }
 
     fun mockMvc(
