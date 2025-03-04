@@ -1,9 +1,9 @@
 package io.github.bgmsound.documentify.mvc.emitter
 
-import io.restassured.module.mockmvc.response.ValidatableMockMvcResponse
+import io.github.bgmsound.documentify.mvc.ValidatableMockResponse
 
 interface MvcDocumentEmitter {
 
-    fun emit(): ValidatableMockMvcResponse
+    fun emit(): ValidatableMockResponse
 
 }
