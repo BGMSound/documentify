@@ -11,7 +11,7 @@ on:
       MAVEN_CENTRAL_PASSWORD:
         required: true
 jobs:
-  publish-to-mavencentral:
+  publish-to-maven-central:
     runs-on: ubuntu-latest
     steps:
       - name: GitHub 리포지토리 체크아웃

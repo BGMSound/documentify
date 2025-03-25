@@ -1,10 +1,10 @@
 package io.github.bgmsound.documentify.reactive
 
-import io.github.bgmsound.documentify.core.environment.AbstractDocumentContextEnvironment
+import io.github.bgmsound.documentify.core.environment.DocumentContextEnvironment
 import org.springframework.test.web.reactive.server.WebTestClient
 
-abstract class ReactiveDocumentContextEnvironment : AbstractDocumentContextEnvironment() {
+interface ReactiveDocumentContextEnvironment : DocumentContextEnvironment {
 
-    abstract fun buildWebTestClient(): WebTestClient
+    fun buildWebTestClient(): WebTestClient
 
 }

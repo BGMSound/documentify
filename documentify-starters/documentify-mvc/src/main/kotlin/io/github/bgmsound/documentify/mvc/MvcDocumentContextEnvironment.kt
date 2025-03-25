@@ -1,10 +1,10 @@
 package io.github.bgmsound.documentify.mvc
 
-import io.github.bgmsound.documentify.core.environment.AbstractDocumentContextEnvironment
+import io.github.bgmsound.documentify.core.environment.DocumentContextEnvironment
 import org.springframework.test.web.servlet.MockMvc
 
-abstract class MvcDocumentContextEnvironment : AbstractDocumentContextEnvironment() {
+interface MvcDocumentContextEnvironment : DocumentContextEnvironment {
 
-    abstract fun buildMockMvc(): MockMvc
+    fun buildMockMvc(): MockMvc
 
 }

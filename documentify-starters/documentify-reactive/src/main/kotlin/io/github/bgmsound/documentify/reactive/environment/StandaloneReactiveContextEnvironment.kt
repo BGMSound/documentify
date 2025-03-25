@@ -1,8 +1,7 @@
 package io.github.bgmsound.documentify.reactive.environment
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentDelegate
-import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironmentSpec
+import io.github.bgmsound.documentify.core.environment.AbstractStandaloneContextEnvironment
 import io.github.bgmsound.documentify.reactive.ReactiveDocumentContextEnvironment
 import org.springframework.http.MediaType
 import org.springframework.http.codec.json.Jackson2JsonDecoder
@@ -15,13 +14,8 @@ import org.springframework.web.reactive.result.method.HandlerMethodArgumentResol
 
 
 class StandaloneReactiveContextEnvironment private constructor(
-    private val provider: RestDocumentationContextProvider,
-    private val delegate: StandaloneContextEnvironmentDelegate<StandaloneReactiveContextEnvironment> = StandaloneContextEnvironmentDelegate()
-) : StandaloneContextEnvironmentSpec<StandaloneReactiveContextEnvironment> by delegate, ReactiveDocumentContextEnvironment() {
-    init {
-        delegate.environmentSpec = this
-    }
-
+    private val provider: RestDocumentationContextProvider
+) : AbstractStandaloneContextEnvironment<StandaloneReactiveContextEnvironment>(), ReactiveDocumentContextEnvironment {
     private val argumentResolvers = mutableListOf<HandlerMethodArgumentResolver>()
 
     fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneReactiveContextEnvironment {
@@ -41,18 +35,18 @@ class StandaloneReactiveContextEnvironment private constructor(
 
     override fun buildWebTestClient(): WebTestClient {
         return WebTestClient
-            .bindToController(*delegate.controllers.toTypedArray())
-            .controllerAdvice(*delegate.controllerAdvices.toTypedArray())
+            .bindToController(*controllers.toTypedArray())
+            .controllerAdvice(*controllerAdvices.toTypedArray())
             .argumentResolvers { configurer ->
                 configurer.addCustomResolver(*argumentResolvers.toTypedArray())
             }
-            .httpMessageCodecs { configurer -> if (delegate.objectMapper != null) {
-                val objectMapper = delegate.objectMapper!!
+            .httpMessageCodecs { configurer -> if (objectMapper != null) {
+                val objectMapper = objectMapper!!
                 configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
                 configurer.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
             }}
             .configureClient()
-            .include(delegate.objectMapper)
+            .include(objectMapper)
             .filter(WebTestClientRestDocumentation.documentationConfiguration(provider))
             .build()
     }
