@@ -4,7 +4,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.coroutines.reactor)
 
-    testImplementation(rootProject.projects.documentifyStarters.documentifyReactive)
+    testImplementation(rootProject.projects.documentifyStarters.documentifyStarterReactive)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(kotlin("test"))
 }

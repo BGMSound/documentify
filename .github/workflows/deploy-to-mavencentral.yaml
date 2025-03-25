@@ -41,5 +41,7 @@ jobs:
           echo "mavenCentralPassword=$MAVEN_CENTRAL_PASSWORD" >> gradle.properties
           ./gradlew --stacktrace documentify-core:publish
           ./gradlew --stacktrace documentify-plugin:publish
-          ./gradlew --stacktrace documentify-starters:documentify-mvc:publish
-          ./gradlew --stacktrace documentify-starters:documentify-reactive:publish
+          ./gradlew --stacktrace documentify-project:documentify-mvc:publish
+          ./gradlew --stacktrace documentify-project:documentify-reactive:publish
+          ./gradlew --stacktrace documentify-starters:documentify-starter-mvc:publish
+          ./gradlew --stacktrace documentify-starters:documentify-starter-reactive:publish
