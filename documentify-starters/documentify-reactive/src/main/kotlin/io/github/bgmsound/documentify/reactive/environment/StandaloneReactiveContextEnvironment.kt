@@ -2,7 +2,6 @@ package io.github.bgmsound.documentify.reactive.environment
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.bgmsound.documentify.core.environment.AbstractStandaloneContextEnvironment
-import io.github.bgmsound.documentify.core.environment.StandaloneContextEnvironment
 import io.github.bgmsound.documentify.reactive.ReactiveDocumentContextEnvironment
 import org.springframework.http.MediaType
 import org.springframework.http.codec.json.Jackson2JsonDecoder
