@@ -1,0 +1,5 @@
+package io.github.bgmsound.documentify.reactive
+
+import io.github.bgmsound.documentify.core.environment.AbstractDocumentContextEnvironment
+
+abstract class AbstractReactiveDocumentContextEnvironment : AbstractDocumentContextEnvironment(), ReactiveDocumentContextEnvironment

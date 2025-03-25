@@ -1,6 +1,6 @@
 package io.github.bgmsound.documentify.mvc.environment
 
-import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
+import io.github.bgmsound.documentify.mvc.AbstractMvcDocumentContextEnvironment
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.test.web.servlet.MockMvc
@@ -11,7 +11,7 @@ import org.springframework.web.context.WebApplicationContext
 class WebApplicationContextEnvironment private constructor(
     private val provider: RestDocumentationContextProvider,
     private val applicationContext: WebApplicationContext
-) : MvcDocumentContextEnvironment() {
+) : AbstractMvcDocumentContextEnvironment() {
 
     companion object {
         fun webApplicationContextEnvironment(

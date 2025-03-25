@@ -2,7 +2,7 @@ package io.github.bgmsound.documentify.core.environment
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
-interface StandaloneContextEnvironmentSpec<T> {
+interface StandaloneContextEnvironment<T : StandaloneContextEnvironment<T>> : DocumentContextEnvironment {
 
     fun objectMapper(objectMapper: ObjectMapper): T
 

@@ -7,7 +7,7 @@ import org.springframework.test.web.servlet.ResultMatcher
 
 class ValidatableMockMvcResponseAdapter private constructor(
     private val restAssuredMockResponse: ValidatableMockMvcResponse
-): ValidatableMockResponse {
+) : ValidatableMockResponse {
 
     override fun expect(matcher: ResultMatcher): ValidatableMockResponse {
         restAssuredMockResponse.expect(matcher)
@@ -29,9 +29,9 @@ class ValidatableMockMvcResponseAdapter private constructor(
         return this
     }
 
-     companion object {
+    companion object {
         fun of(restAssuredMockResponse: ValidatableMockMvcResponse): ValidatableMockResponse {
             return ValidatableMockMvcResponseAdapter(restAssuredMockResponse)
         }
-     }
+    }
 }
