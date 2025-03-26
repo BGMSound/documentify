@@ -108,4 +108,7 @@ you can also create Postman collection by running the following command:
 ./gradlew postman
 ```
 ---
-[[click to see more sample code]](https://github.com/BGMSound/documentify/tree/main/documentify-sample) 
+[[click to see more sample code]](https://github.com/BGMSound/documentify/tree/main/documentify-sample)
+
+## Documentify Development Story
+If you want to check out the development story of Documentify, please refer to the [blog post](https://bgmsound.medium.com/documentify-선언형-rest-docs-dsl-제작기-0a09f651be2c).
