@@ -12,13 +12,13 @@ Add the following dependency to your `build.gradle.kts` file:
 `MVC`
 ```kotlin
 dependencies {
-    implementation("io.github.bgmsound:documentify-mvc:${version}")
+    implementation("io.github.bgmsound:documentify-starter-mvc:${version}")
 }
 ```
 `WebFlux`
 ```kotlin
 dependencies {
-    implementation("io.github.bgmsound:documentify-reactive:${version}")
+    implementation("io.github.bgmsound:documentify-starter-reactive:${version}")
 }
 ```
 
