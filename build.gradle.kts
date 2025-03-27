@@ -18,8 +18,8 @@ group = extra["project.group"] as String
 version = extra["project.version.id"] as String
 
 val publicModulePathSet = setOf(
-    rootProject.projects.documentifyCore.identityPath.path,
-    rootProject.projects.documentifyPlugin.identityPath.path,
+    rootProject.projects.documentifyProject.documentifyCore.identityPath.path,
+    rootProject.projects.documentifyProject.documentifyPlugin.identityPath.path,
     rootProject.projects.documentifyProject.documentifyMvc.identityPath.path,
     rootProject.projects.documentifyProject.documentifyReactive.identityPath.path,
     rootProject.projects.documentifyStarters.documentifyStarterMvc.identityPath.path,
@@ -124,7 +124,7 @@ repositories {
 kover {
     merge {
         projects(
-            rootProject.projects.documentifyCore.identityPath.path,
+            rootProject.projects.documentifyProject.documentifyCore.identityPath.path,
             rootProject.projects.documentifyProject.documentifyMvc.identityPath.path,
             rootProject.projects.documentifyProject.documentifyReactive.identityPath.path,
             rootProject.projects.documentifySample.mvcSample.identityPath.path,
