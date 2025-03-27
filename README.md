@@ -112,3 +112,6 @@ you can also create Postman collection by running the following command:
 
 ## Documentify Development Story
 If you want to check out the development story of Documentify, please refer to the [blog post](https://bgmsound.medium.com/documentify-선언형-rest-docs-dsl-제작기-0a09f651be2c).
+
+## License
+documentify is Open Source software released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
