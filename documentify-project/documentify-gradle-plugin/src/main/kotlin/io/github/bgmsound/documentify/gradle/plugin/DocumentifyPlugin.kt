@@ -1,4 +1,4 @@
-package io.github.bgmsound.documentify.plugin
+package io.github.bgmsound.documentify.gradle.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

@@ -13,7 +13,7 @@ plugins {
 
 include("documentify-project")
 include("documentify-project:documentify-core")
-include("documentify-project:documentify-plugin")
+include("documentify-project:documentify-gradle-plugin")
 include("documentify-project:documentify-mvc")
 include("documentify-project:documentify-reactive")
 include("documentify-sample")
