@@ -4,6 +4,8 @@ subprojects {
     }
     dependencies {
         compileOnly(rootProject.libs.spring.boot.starter.test)
-        api(rootProject.projects.documentifyCore)
+        if (project.path != rootProject.projects.documentifyProject.documentifyCore.identityPath.path) {
+            api(rootProject.projects.documentifyProject.documentifyCore)
+        }
     }
 }

@@ -11,9 +11,9 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-include("documentify-core")
-include("documentify-plugin")
 include("documentify-project")
+include("documentify-project:documentify-core")
+include("documentify-project:documentify-plugin")
 include("documentify-project:documentify-mvc")
 include("documentify-project:documentify-reactive")
 include("documentify-sample")
