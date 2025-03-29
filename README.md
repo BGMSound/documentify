@@ -35,7 +35,7 @@ fun setUp(provider: RestDocumentationContextProvider) {
 ```
 You can also set up the test environment with an application context or an auto-configured MockMvc (or WebTestClient). 
 <br><br>
-`Mvc Example`
+`MVC Example`
 ```kotlin
 webApplicationContext(provider, context)
 mockMvc(provider, mockMvc)
@@ -81,7 +81,7 @@ fun documentationGetApi() {
 After setting up the test environment and writing the test code, run the test.
 The OpenAPI specification document will be generated in the `build/generated-snippets` directory.
 
-First, apply documentify plugin to your `build.gradle.kts` file:
+First, apply documentify plugin to your `build.gradle.kts` file *(need gradle plugin portal)*:
 ```kotlin
 plugins {
     id("io.github.bgmsound.documentify") version "${version}"

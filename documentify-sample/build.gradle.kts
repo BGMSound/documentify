@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.bgmsound.documentify") version "1.2.4" apply false
+    id("io.github.bgmsound.documentify") version "1.2.5" apply false
 }
 
 subprojects {
