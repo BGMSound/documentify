@@ -14,6 +14,7 @@ class SampleController {
         @PathVariable("integerField") integerField: Int,
         @RequestParam("stringField") stringField: String
     ): SampleResponse {
+        "asfd"
         return Mono.just(SampleResponse(integerField, stringField)).awaitFirst()
     }
 

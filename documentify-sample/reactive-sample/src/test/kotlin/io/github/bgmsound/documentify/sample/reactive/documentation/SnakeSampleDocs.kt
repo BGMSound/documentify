@@ -24,7 +24,7 @@ class SnakeSampleDocs : Documentify() {
     fun setUp(provider: RestDocumentationContextProvider) {
         standalone(provider) {
             controller(api)
-            objectMapper(objectMapper)
+            codec(objectMapper)
         }
     }
 
