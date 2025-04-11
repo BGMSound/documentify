@@ -78,6 +78,24 @@ fun documentationGetApi() {
 }
 ```
 
+Additional validation of the mock response generated during the tests for document creation is also possible.
+```kotlin
+@Test
+fun documentationGetApi() {
+    documentation("test-get-api") {
+        information {
+            summary("test get api")
+            description("this is test get api")
+            tag("test")
+        }
+        requestLine(Method.GET, "/api/test/{path}")
+        responseBody {
+            field("testField", "test", "test")
+        }
+    }.expect(jsonPath("$testField").value("test"))
+}
+```
+
 ### Generate OpenAPI Specification
 After setting up the test environment and writing the test code, run the test.
 The OpenAPI specification document will be generated in the `build/generated-snippets` directory.
