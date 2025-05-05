@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.mvc.Documentify
-import io.github.bgmsound.documentify.sample.mvc.SampleController
+import io.github.bgmsound.documentify.sample.mvc.controller.SampleController
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus

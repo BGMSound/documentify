@@ -2,8 +2,8 @@ package io.github.bgmsound.documentify.sample.mvc.documentation
 
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.mvc.Documentify
-import io.github.bgmsound.documentify.sample.mvc.UseCase
-import io.github.bgmsound.documentify.sample.mvc.UseCaseBindingController
+import io.github.bgmsound.documentify.sample.mvc.controller.UseCase
+import io.github.bgmsound.documentify.sample.mvc.controller.UseCaseBindingController
 import io.github.bgmsound.documentify.sample.mvc.dto.response.SampleResponse
 import io.mockk.every
 import io.mockk.mockk

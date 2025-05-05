@@ -3,7 +3,7 @@ package io.github.bgmsound.documentify.sample.reactive.documentation
 
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.reactive.Documentify
-import io.github.bgmsound.documentify.sample.reactive.SampleController
+import io.github.bgmsound.documentify.sample.reactive.controller.SampleController
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
