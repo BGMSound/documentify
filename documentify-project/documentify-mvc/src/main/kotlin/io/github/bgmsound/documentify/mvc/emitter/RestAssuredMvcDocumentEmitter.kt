@@ -2,8 +2,6 @@ package io.github.bgmsound.documentify.mvc.emitter
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import io.github.bgmsound.documentify.core.emitter.FieldJsonMatcherAssociater.associatedMatchers
-import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedFieldSample
-import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedSample
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
 import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
@@ -58,7 +56,6 @@ class RestAssuredMvcDocumentEmitter(
             .assertThat()
             .apply(documentResultHandler)
             .statusCode(documentSpec.response.statusCode)
-            .validateExpectPayload()
     }
 
     override fun emitAlternativeResponseDocument() {
@@ -108,22 +105,5 @@ class RestAssuredMvcDocumentEmitter(
             Method.PATCH -> patch(documentSpec.request.url)
             Method.DELETE -> delete(documentSpec.request.url)
         }
-    }
-
-    private fun ValidatableMockMvcResponse.validateExpectPayload(): ValidatableMockMvcResponse {
-        val matchers = documentSpec.response.fields.associatedMatchers()
-        for ((key, value) in matchers) {
-            if (key.endsWith("[*]")) {
-                if (value !is List<*>) {
-                    throw IllegalArgumentException("sample value type must be List")
-                }
-                expect(jsonPath(key.substringBeforeLast("[*]")).value(Matchers.containsInAnyOrder(*value.toTypedArray())))
-            } else if (key.contains("[*]") && !key.endsWith("[*]")) {
-                expect(jsonPath(key).value(Matchers.hasItem(value)))
-            } else {
-                expect(jsonPath(key).value(value))
-            }
-        }
-        return this
     }
 }

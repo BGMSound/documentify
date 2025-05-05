@@ -2,8 +2,6 @@ package io.github.bgmsound.documentify.reactive.emitter
 
 
 import io.github.bgmsound.documentify.core.emitter.FieldJsonMatcherAssociater.associatedMatchers
-import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedFieldSample
-import io.github.bgmsound.documentify.core.emitter.SpecElementSampleAssociater.associatedSample
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
 import io.github.bgmsound.documentify.reactive.ReactiveDocumentContextEnvironment
@@ -36,7 +34,7 @@ class WebTestClientReactiveDocumentEmitter(
 
         return webTestClient
             .method(method())
-            .uri(uri(), samplePathVariables)
+            .uri(requestUri, samplePathVariables)
             .headers { headers ->
                 headers.addAll(sampleHeaders.toMultiValueMap())
             }
@@ -56,7 +54,6 @@ class WebTestClientReactiveDocumentEmitter(
                     *snippets.toTypedArray()
                 )
             )
-            .validateExpectPayload()
     }
 
     override suspend fun emitAlternativeResponseDocument() {
@@ -75,7 +72,7 @@ class WebTestClientReactiveDocumentEmitter(
             val samplePathVariables = sampleAggregator.aggregate(documentSpec.request.pathVariables)
             webTestClient
                 .method(method())
-                .uri(uri(), samplePathVariables)
+                .uri(requestUri, samplePathVariables)
                 .exchange()
                 .expectStatus()
                 .isEqualTo(response.statusCode)
@@ -90,6 +87,18 @@ class WebTestClientReactiveDocumentEmitter(
                     )
                 )
         }
+    }
+
+    private val requestUri get(): String {
+        return StringBuilder().apply {
+            append(documentSpec.request.url)
+            if (documentSpec.request.queryParameters.isNotEmpty()) {
+                append("?")
+                append(documentSpec.request.queryParameters.joinToString("&") { parameter ->
+                    "${parameter.key}=${parameter.sample}"
+                })
+            }
+        }.toString()
     }
 
     private fun RequestBodySpec.bodyIfExist(
@@ -116,34 +125,5 @@ class WebTestClientReactiveDocumentEmitter(
             linkedMultiValueMap.add(key, value.toString())
         }
         return linkedMultiValueMap
-    }
-
-    private fun uri(): String {
-        return StringBuilder().apply {
-            append(documentSpec.request.url)
-            if (documentSpec.request.queryParameters.isNotEmpty()) {
-                append("?")
-                append(documentSpec.request.queryParameters.joinToString("&") { parameter ->
-                    "${parameter.key}=${parameter.sample}"
-                })
-            }
-        }.toString()
-    }
-
-    private fun BodyContentSpec.validateExpectPayload(): BodyContentSpec {
-        val matchers = documentSpec.response.fields.associatedMatchers()
-        for ((key, value) in matchers) {
-            if (key.endsWith("[*]")) {
-                if (value !is List<*>) {
-                    throw IllegalArgumentException("sample value type must be List")
-                }
-                jsonPath(key.substringBeforeLast("[*]")).value(Matchers.containsInAnyOrder(*value.toTypedArray()))
-            } else if (key.contains("[*]") && !key.endsWith("[*]")) {
-                jsonPath(key).value(Matchers.hasItem(value))
-            } else {
-                jsonPath(key).value(Matchers.equalToObject(value))
-            }
-        }
-        return this
     }
 }

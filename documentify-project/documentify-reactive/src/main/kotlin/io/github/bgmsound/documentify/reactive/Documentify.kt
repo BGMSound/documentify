@@ -2,6 +2,7 @@ package io.github.bgmsound.documentify.reactive
 
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
 import io.github.bgmsound.documentify.reactive.emitter.EmitterFactory
+import io.github.bgmsound.documentify.reactive.emitter.ReactiveDocumentEmitter
 import io.github.bgmsound.documentify.reactive.environment.ApplicationContextEnvironment.Companion.applicationContextEnvironment
 import io.github.bgmsound.documentify.reactive.environment.StandaloneReactiveContextEnvironment
 import io.github.bgmsound.documentify.reactive.environment.StandaloneReactiveContextEnvironment.Companion.standaloneEnvironment
@@ -17,15 +18,22 @@ import org.springframework.web.reactive.result.method.HandlerMethodArgumentResol
 abstract class Documentify {
     private lateinit var provider: RestDocumentationContextProvider
     private lateinit var environment: ReactiveDocumentContextEnvironment
+    private var customEmitter: ReactiveDocumentEmitter? = null
 
     suspend fun documentation(
         name: String,
         specCustomizer: DocumentSpec.() -> Unit
     ): WebTestClient.BodyContentSpec {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = EmitterFactory.of(provider, documentSpec, environment)
+        val emitter = customEmitter ?: EmitterFactory.of(provider, documentSpec, environment)
 
         return emitter.emit()
+    }
+
+    fun emitter(
+        customEmitter: ReactiveDocumentEmitter
+    ) {
+        this.customEmitter = customEmitter
     }
 
     fun webTestClient(

@@ -2,6 +2,7 @@ package io.github.bgmsound.documentify.mvc
 
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
 import io.github.bgmsound.documentify.mvc.emitter.EmitterFactory
+import io.github.bgmsound.documentify.mvc.emitter.MvcDocumentEmitter
 import io.github.bgmsound.documentify.mvc.environment.MockMvcContextEnvironment.Companion.mockMvcEnvironment
 import io.github.bgmsound.documentify.mvc.environment.StandaloneMvcContextEnvironment
 import io.github.bgmsound.documentify.mvc.environment.WebApplicationContextEnvironment.Companion.webApplicationContextEnvironment
@@ -16,15 +17,22 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver
 abstract class Documentify {
     private lateinit var provider: RestDocumentationContextProvider
     private lateinit var environment: MvcDocumentContextEnvironment
+    private var customEmitter: MvcDocumentEmitter? = null
 
     fun documentation(
         name: String,
         specCustomizer: DocumentSpec.() -> Unit
     ): ValidatableMockResponse {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = EmitterFactory.of(provider, documentSpec, environment)
+        val emitter = customEmitter ?: EmitterFactory.of(provider, documentSpec, environment)
 
         return emitter.emit()
+    }
+
+    fun emitter(
+        customEmitter: MvcDocumentEmitter
+    ) {
+        this.customEmitter = customEmitter
     }
 
     fun mockMvc(
