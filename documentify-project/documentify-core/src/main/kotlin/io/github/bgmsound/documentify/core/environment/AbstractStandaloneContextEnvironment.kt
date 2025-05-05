@@ -6,10 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 abstract class AbstractStandaloneContextEnvironment<T : StandaloneContextEnvironment<T>> : StandaloneContextEnvironment<T>, AbstractDocumentContextEnvironment() {
     protected val controllers: MutableList<Any> = mutableListOf()
     protected val controllerAdvices: MutableList<Any> = mutableListOf()
-    protected var objectMapper: ObjectMapper? = null
+    protected var codec: ObjectMapper? = null
 
-    override fun objectMapper(objectMapper: ObjectMapper): T {
-        this.objectMapper = objectMapper
+    override fun codec(codec: ObjectMapper): T {
+        this.codec = codec
         return this as T
     }
 

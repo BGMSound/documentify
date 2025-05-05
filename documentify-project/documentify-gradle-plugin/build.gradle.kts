@@ -10,7 +10,7 @@ gradlePlugin {
     plugins {
         register("documentify") {
             id = "io.github.bgmsound.documentify"
-            implementationClass = "io.github.bgmsound.documentify.plugin.DocumentifyPlugin"
+            implementationClass = "io.github.bgmsound.documentify.gradle.plugin.DocumentifyPlugin"
             displayName = "Documentify"
             description = "easy and powerful API documentation tool for spring restdocs"
         }

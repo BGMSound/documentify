@@ -19,7 +19,7 @@ version = extra["project.version.id"] as String
 
 val publicModulePathSet = setOf(
     rootProject.projects.documentifyProject.documentifyCore.identityPath.path,
-    rootProject.projects.documentifyProject.documentifyPlugin.identityPath.path,
+    rootProject.projects.documentifyProject.documentifyGradlePlugin.identityPath.path,
     rootProject.projects.documentifyProject.documentifyMvc.identityPath.path,
     rootProject.projects.documentifyProject.documentifyReactive.identityPath.path,
     rootProject.projects.documentifyStarters.documentifyStarterMvc.identityPath.path,
@@ -67,7 +67,7 @@ subprojects {
         configure<MavenPublishBaseExtension> {
             publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
-            val artifactId = name.replace("-plugin", ".gradle.plugin")
+            val artifactId = name.replace("-gradle-plugin", ".gradle.plugin")
             val projectGroup = property("project.group").toString()
             val projectName = property("project.name").toString()
             val projectVersion = property("project.version.id").toString()

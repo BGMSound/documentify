@@ -10,8 +10,9 @@ import org.springframework.restdocs.snippet.Snippet
 
 abstract class AbstractDocumentEmitter(
     protected val provider: RestDocumentationContextProvider,
-    protected val documentSpec: DocumentSpec
-) {
+    protected val documentSpec: DocumentSpec,
+    protected val sampleAggregator: DocumentSpecSampleAggregator = DefaultDocumentSpecSampleAggregator
+) : DocumentEmitter {
     protected fun ResponseSpec.buildResource(index: Int): Snippet {
         val resourceBuilder = ResourceSnippetParameters.builder()
         if (documentSpec.tags.isNotEmpty()) {

@@ -36,8 +36,8 @@ class StandaloneMvcContextEnvironment private constructor(
             .setControllerAdvice(*controllerAdvices.toTypedArray())
             .setCustomArgumentResolvers(*argumentResolvers.toTypedArray())
             .apply<StandaloneMockMvcBuilder>(documentationConfiguration(provider))
-            .apply { if (objectMapper != null) {
-                val objectMapper = objectMapper!!
+            .apply { if (codec != null) {
+                val objectMapper = codec!!
                 setMessageConverters(MappingJackson2HttpMessageConverter(objectMapper))
             }}
             .build()

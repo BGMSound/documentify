@@ -2,6 +2,7 @@ package io.github.bgmsound.documentify.reactive
 
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
 import io.github.bgmsound.documentify.reactive.emitter.EmitterFactory
+import io.github.bgmsound.documentify.reactive.emitter.ReactiveDocumentEmitter
 import io.github.bgmsound.documentify.reactive.environment.ApplicationContextEnvironment.Companion.applicationContextEnvironment
 import io.github.bgmsound.documentify.reactive.environment.StandaloneReactiveContextEnvironment
 import io.github.bgmsound.documentify.reactive.environment.StandaloneReactiveContextEnvironment.Companion.standaloneEnvironment
@@ -16,16 +17,23 @@ import org.springframework.web.reactive.result.method.HandlerMethodArgumentResol
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
     private lateinit var provider: RestDocumentationContextProvider
-    private lateinit var documentContextEnvironment: ReactiveDocumentContextEnvironment
+    private lateinit var environment: ReactiveDocumentContextEnvironment
+    private var customEmitter: ReactiveDocumentEmitter? = null
 
     suspend fun documentation(
         name: String,
         specCustomizer: DocumentSpec.() -> Unit
     ): WebTestClient.BodyContentSpec {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = EmitterFactory.createReactiveEmitter(provider, documentSpec, documentContextEnvironment)
+        val emitter = customEmitter ?: EmitterFactory.of(provider, documentSpec, environment)
 
         return emitter.emit()
+    }
+
+    fun emitter(
+        customEmitter: ReactiveDocumentEmitter
+    ) {
+        this.customEmitter = customEmitter
     }
 
     fun webTestClient(
@@ -33,7 +41,7 @@ abstract class Documentify {
         webTestClient: WebTestClient
     ) {
         this.provider = provider
-        documentContextEnvironment = webTestClientEnvironment(provider, webTestClient)
+        environment = webTestClientEnvironment(provider, webTestClient)
     }
 
     fun standalone(
@@ -41,7 +49,7 @@ abstract class Documentify {
         standaloneContext: StandaloneReactiveContextEnvironment
     ) {
         this.provider = provider
-        documentContextEnvironment = standaloneContext
+        environment = standaloneContext
     }
 
     fun standalone(
@@ -70,6 +78,6 @@ abstract class Documentify {
         applicationContext: ApplicationContext
     ) {
         this.provider = provider
-        documentContextEnvironment = applicationContextEnvironment(provider, applicationContext)
+        environment = applicationContextEnvironment(provider, applicationContext)
     }
 }

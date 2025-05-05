@@ -14,17 +14,17 @@ class ValidatableMockMvcResponseAdapter private constructor(
         return this
     }
 
-    fun status(status: HttpStatus): ValidatableMockResponse {
+    override fun status(status: HttpStatus): ValidatableMockResponse {
         restAssuredMockResponse.statusCode(status.value())
         return this
     }
 
-    fun apply(handler: ResultHandler, vararg additionalHandlers: ResultHandler): ValidatableMockResponse {
+    override fun apply(handler: ResultHandler, vararg additionalHandlers: ResultHandler): ValidatableMockResponse {
         restAssuredMockResponse.apply(handler, *additionalHandlers)
         return this
     }
 
-    fun assertThat(matcher: ResultMatcher): ValidatableMockResponse {
+    override fun assertThat(matcher: ResultMatcher): ValidatableMockResponse {
         restAssuredMockResponse.assertThat(matcher)
         return this
     }

@@ -6,39 +6,34 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/**")
 class AlternativeMvcResponseDocumentController private constructor(
-    private val status: Int,
-    private val response: Any
+    status: Int,
+    response: Any
 ) {
+    private val response = response as? ResponseEntity<*> ?: ResponseEntity.status(status).body(response)
+
     @GetMapping
     fun get(): Any {
-        return response()
+        return response
     }
 
     @PostMapping
     fun post(): Any {
-        return response()
+        return response
     }
 
     @PutMapping
     fun put(): Any {
-        return response()
+        return response
     }
 
     @DeleteMapping
     fun delete(): Any {
-        return response()
+        return response
     }
 
     @PatchMapping
     fun patch(): Any {
-        return response()
-    }
-
-    private fun response(): Any {
-        if (response is ResponseEntity<*>) {
-            return response
-        }
-        return ResponseEntity.status(status).body(response)
+        return response
     }
 
     companion object {

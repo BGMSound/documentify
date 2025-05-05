@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 interface StandaloneContextEnvironment<T : StandaloneContextEnvironment<T>> : DocumentContextEnvironment {
 
-    fun objectMapper(objectMapper: ObjectMapper): T
+    fun codec(codec: ObjectMapper): T
 
     fun controller(controller: Any): T
 

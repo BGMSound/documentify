@@ -40,13 +40,13 @@ class StandaloneReactiveContextEnvironment private constructor(
             .argumentResolvers { configurer ->
                 configurer.addCustomResolver(*argumentResolvers.toTypedArray())
             }
-            .httpMessageCodecs { configurer -> if (objectMapper != null) {
-                val objectMapper = objectMapper!!
+            .httpMessageCodecs { configurer -> if (codec != null) {
+                val objectMapper = codec!!
                 configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
                 configurer.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
             }}
             .configureClient()
-            .include(objectMapper)
+            .include(codec)
             .filter(WebTestClientRestDocumentation.documentationConfiguration(provider))
             .build()
     }
