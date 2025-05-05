@@ -1,7 +1,6 @@
 package io.github.bgmsound.documentify.mvc.emitter
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
-import io.github.bgmsound.documentify.core.emitter.FieldJsonMatcherAssociater.associatedMatchers
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
 import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
@@ -10,11 +9,9 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc.given
 import io.restassured.module.mockmvc.response.MockMvcResponse
 import io.restassured.module.mockmvc.response.ValidatableMockMvcResponse
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification
-import org.hamcrest.Matchers
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 
