@@ -5,7 +5,7 @@ import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
 import org.springframework.restdocs.RestDocumentationContextProvider
 
 object EmitterFactory {
-    fun createMvcEmitter(
+    fun of(
         provider: RestDocumentationContextProvider,
         documentSpec: DocumentSpec,
         environment: MvcDocumentContextEnvironment

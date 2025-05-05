@@ -30,13 +30,17 @@ class WebTestClientReactiveDocumentEmitter(
 
     override suspend fun emitDocument(): BodyContentSpec {
         val snippets = documentSpec.build()
+        val samplePathVariables = sampleAggregator.aggregate(documentSpec.request.pathVariables)
+        val sampleHeaders = sampleAggregator.aggregate(documentSpec.request.headers)
+        val sampleFields = sampleAggregator.aggregate(documentSpec.request.fields)
+
         return webTestClient
             .method(method())
-            .uri(uri(), documentSpec.request.pathVariables.associatedSample())
+            .uri(uri(), samplePathVariables)
             .headers { headers ->
-                headers.addAll(documentSpec.request.headers.associatedSample().toMultiValueMap())
+                headers.addAll(sampleHeaders.toMultiValueMap())
             }
-            .bodyIfExist(documentSpec.request.fields.associatedSample())
+            .bodyIfExist(sampleFields)
             .exchange()
             .expectStatus()
             .isEqualTo(documentSpec.response.statusCode)
@@ -57,19 +61,21 @@ class WebTestClientReactiveDocumentEmitter(
 
     override suspend fun emitAlternativeResponseDocument() {
         documentSpec.otherResponses.forEachIndexed { index, response ->
+            val sampleResponseFields = sampleAggregator.aggregate(response.fields)
             val api = AlternativeReactiveResponseDocumentController.new(
                 response.statusCode,
-                response.fields.associatedFieldSample()
+                sampleResponseFields
             )
             val webTestClient = WebTestClient
                 .bindToController(api)
                 .configureClient()
                 .filter(WebTestClientRestDocumentation.documentationConfiguration(provider))
                 .build()
+
+            val samplePathVariables = sampleAggregator.aggregate(documentSpec.request.pathVariables)
             webTestClient
                 .method(method())
-                .uri(uri(), documentSpec.request.pathVariables.associatedSample())
-                .bodyIfExist(documentSpec.request.fields.associatedSample())
+                .uri(uri(), samplePathVariables)
                 .exchange()
                 .expectStatus()
                 .isEqualTo(response.statusCode)

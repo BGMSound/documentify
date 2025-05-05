@@ -5,7 +5,7 @@ import io.github.bgmsound.documentify.reactive.ReactiveDocumentContextEnvironmen
 import org.springframework.restdocs.RestDocumentationContextProvider
 
 object EmitterFactory {
-    fun createReactiveEmitter(
+    fun of(
         provider: RestDocumentationContextProvider,
         documentSpec: DocumentSpec,
         environment: ReactiveDocumentContextEnvironment

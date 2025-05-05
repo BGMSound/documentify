@@ -16,14 +16,14 @@ import org.springframework.web.reactive.result.method.HandlerMethodArgumentResol
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
     private lateinit var provider: RestDocumentationContextProvider
-    private lateinit var documentContextEnvironment: ReactiveDocumentContextEnvironment
+    private lateinit var environment: ReactiveDocumentContextEnvironment
 
     suspend fun documentation(
         name: String,
         specCustomizer: DocumentSpec.() -> Unit
     ): WebTestClient.BodyContentSpec {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = EmitterFactory.createReactiveEmitter(provider, documentSpec, documentContextEnvironment)
+        val emitter = EmitterFactory.of(provider, documentSpec, environment)
 
         return emitter.emit()
     }
@@ -33,7 +33,7 @@ abstract class Documentify {
         webTestClient: WebTestClient
     ) {
         this.provider = provider
-        documentContextEnvironment = webTestClientEnvironment(provider, webTestClient)
+        environment = webTestClientEnvironment(provider, webTestClient)
     }
 
     fun standalone(
@@ -41,7 +41,7 @@ abstract class Documentify {
         standaloneContext: StandaloneReactiveContextEnvironment
     ) {
         this.provider = provider
-        documentContextEnvironment = standaloneContext
+        environment = standaloneContext
     }
 
     fun standalone(
@@ -70,6 +70,6 @@ abstract class Documentify {
         applicationContext: ApplicationContext
     ) {
         this.provider = provider
-        documentContextEnvironment = applicationContextEnvironment(provider, applicationContext)
+        environment = applicationContextEnvironment(provider, applicationContext)
     }
 }

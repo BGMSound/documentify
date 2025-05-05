@@ -9,9 +9,7 @@ class AlternativeMvcResponseDocumentController private constructor(
     status: Int,
     response: Any
 ) {
-    private val response = if (response is ResponseEntity<*>) {
-        response
-    } else ResponseEntity.status(status).body(response)
+    private val response = response as? ResponseEntity<*> ?: ResponseEntity.status(status).body(response)
 
     @GetMapping
     fun get(): Any {

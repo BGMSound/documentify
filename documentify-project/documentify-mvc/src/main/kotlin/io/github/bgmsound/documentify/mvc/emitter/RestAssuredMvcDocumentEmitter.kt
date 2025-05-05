@@ -31,6 +31,11 @@ class RestAssuredMvcDocumentEmitter(
 
     override fun emitDocument(): ValidatableMockMvcResponse {
         val snippets = documentSpec.build()
+        val samplePathVariables = sampleAggregator.aggregate(documentSpec.request.pathVariables)
+        val sampleQueryParameters = sampleAggregator.aggregate(documentSpec.request.queryParameters)
+        val sampleHeaders = sampleAggregator.aggregate(documentSpec.request.headers)
+        val sampleFields = sampleAggregator.aggregate(documentSpec.request.fields)
+
         val documentResultHandler = document(
             documentSpec.name,
             preprocessRequest(prettyPrint(), *requestPreprocessors),
@@ -40,10 +45,10 @@ class RestAssuredMvcDocumentEmitter(
         val requestSpecification: MockMvcRequestSpecification = given().mockMvc(mockMvc)
         val response = requestSpecification
             .log().all()
-            .pathParams(documentSpec.request.pathVariables.associatedSample())
-            .queryParams(documentSpec.request.queryParameters.associatedSample())
-            .headers(documentSpec.request.headers.associatedSample())
-            .bodyIfExists(documentSpec.request.fields.associatedFieldSample())
+            .pathParams(samplePathVariables)
+            .queryParams(sampleQueryParameters)
+            .headers(sampleHeaders)
+            .bodyIfExists(sampleFields)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
             .request()
@@ -58,18 +63,19 @@ class RestAssuredMvcDocumentEmitter(
 
     override fun emitAlternativeResponseDocument() {
         documentSpec.otherResponses.forEachIndexed { index, response ->
+            val sampleResponseFields = sampleAggregator.aggregate(response.fields)
             val api = AlternativeMvcResponseDocumentController.new(
                 response.statusCode,
-                response.fields.associatedFieldSample()
+                sampleResponseFields
             )
             val mockMvc = MockMvcBuilders
                 .standaloneSetup(api)
                 .apply<StandaloneMockMvcBuilder>(documentationConfiguration(provider))
                 .build()
             val requestSpecification: MockMvcRequestSpecification = given().mockMvc(mockMvc)
-
+            val samplePathVariables = sampleAggregator.aggregate(documentSpec.request.pathVariables)
             requestSpecification
-                .pathParams(documentSpec.request.pathVariables.associatedSample())
+                .pathParams(samplePathVariables)
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .request()
