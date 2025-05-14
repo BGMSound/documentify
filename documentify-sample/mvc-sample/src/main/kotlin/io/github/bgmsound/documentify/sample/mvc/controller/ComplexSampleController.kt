@@ -1,4 +1,4 @@
-package io.github.bgmsound.documentify.sample.mvc
+package io.github.bgmsound.documentify.sample.mvc.controller
 
 import io.github.bgmsound.documentify.sample.mvc.dto.response.ComplexSampleResponse
 import io.github.bgmsound.documentify.sample.mvc.dto.response.NestedSampleResponse

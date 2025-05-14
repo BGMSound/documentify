@@ -2,7 +2,7 @@ package io.github.bgmsound.documentify.sample.mvc.documentation
 
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.mvc.Documentify
-import io.github.bgmsound.documentify.sample.mvc.UnnestedSampleController
+import io.github.bgmsound.documentify.sample.mvc.controller.UnnestedSampleController
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.restdocs.RestDocumentationContextProvider

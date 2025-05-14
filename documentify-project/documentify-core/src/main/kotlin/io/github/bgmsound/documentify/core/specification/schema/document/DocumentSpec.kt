@@ -1,7 +1,7 @@
 package io.github.bgmsound.documentify.core.specification.schema.document
 
 import io.github.bgmsound.documentify.core.specification.DocumentableSpec
-import io.github.bgmsound.documentify.core.specification.ResourceSpec
+import io.github.bgmsound.documentify.core.specification.schema.ResourceSpec
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.request.RequestBodySpec
 import io.github.bgmsound.documentify.core.specification.schema.request.RequestHeaderSpec
