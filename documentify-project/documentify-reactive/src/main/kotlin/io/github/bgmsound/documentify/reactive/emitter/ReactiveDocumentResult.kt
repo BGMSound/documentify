@@ -1,7 +1,6 @@
 package io.github.bgmsound.documentify.reactive.emitter
 
 import io.github.bgmsound.documentify.core.emitter.AbstractDocumentResult
-import io.github.bgmsound.documentify.core.emitter.JsonResultMatcher
 import io.github.bgmsound.documentify.core.specification.schema.response.ResponseSpec
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers

@@ -31,7 +31,7 @@ abstract class AbstractDocumentResult : DocumentResult {
         }
     }
 
-    private fun aggregateMatchers(fields: List<Field>): List<JsonResultMatcher> {
+    private fun aggregateMatchers(fields: List<Field>): List<ExpectedJsonValue> {
         return fields.filter {
             it.hasSample() || it.canHaveChild() || !it.isIgnored()
         }.flatMap {
@@ -39,21 +39,21 @@ abstract class AbstractDocumentResult : DocumentResult {
         }
     }
 
-    private fun Field.aggregateMatchers(): List<JsonResultMatcher> {
+    private fun Field.aggregateMatchers(): List<ExpectedJsonValue> {
         if (isIgnored()) {
             return emptyList()
         }
         if (!hasSample() && !canHaveChild()) {
             return emptyList()
         }
-        val matchers = mutableListOf<JsonResultMatcher>()
+        val matchers = mutableListOf<ExpectedJsonValue>()
         if (hasSample()) {
             val jsonPath = StringBuilder("$.${path}").apply {
                 if (isArray()) {
                     append("[*]")
                 }
             }.toString().replace("[]", "[*]")
-            matchers.add(JsonResultMatcher.of(jsonPath, sample))
+            matchers.add(ExpectedJsonValue.of(jsonPath, sample))
         } else if (childFields().isNotEmpty())  {
             val childMatchers = aggregateMatchers(childFields())
             matchers.addAll(childMatchers)
