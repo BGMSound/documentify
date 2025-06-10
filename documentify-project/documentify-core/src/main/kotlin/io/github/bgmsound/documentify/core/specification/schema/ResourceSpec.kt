@@ -29,17 +29,17 @@ class ResourceSpec(
     }
 
     fun link(rel: String): Link {
-        val link = Link.Companion.newLink(rel)
+        val link = Link.newLink(rel)
         this.links.add(link)
         return link
     }
 
     fun links(vararg links: String) {
-        this.links.addAll(links.map { Link.Companion.newLink(it) })
+        this.links.addAll(links.map { Link.newLink(it) })
     }
 
     fun links(links: Collection<String>) {
-        this.links.addAll(links.map { Link.Companion.newLink(it) })
+        this.links.addAll(links.map { Link.newLink(it) })
     }
 
     fun tag(tag: String) {
@@ -94,13 +94,13 @@ class ResourceSpec(
         }
         if (request.fields.isNotEmpty()) {
             if (request.schema != null) {
-                resourceBuilder.requestSchema(Schema.Companion.schema(request.schema!!))
+                resourceBuilder.requestSchema(Schema.schema(request.schema!!))
             }
             resourceBuilder.requestFields(buildFields(request.fields))
         }
         if (response.fields.isNotEmpty()) {
             if (response.schema != null) {
-                resourceBuilder.responseSchema(Schema.Companion.schema(response.schema!!))
+                resourceBuilder.responseSchema(Schema.schema(response.schema!!))
             }
             resourceBuilder.responseFields(buildFields(response.fields))
         }
