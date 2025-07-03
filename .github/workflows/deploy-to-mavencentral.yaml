@@ -37,6 +37,8 @@ jobs:
           export GPG_TTY=$(tty)
           echo "gpg.secret=$GPG_SECRET" >> gradle.properties
           echo "gpg.passphrase=$GPG_PASSPHRASE" >> gradle.properties
+          echo "mavenCentralUsername=$MAVEN_CENTRAL_USERNAME" >> gradle.properties
+          echo "mavenCentralPassword=$MAVEN_CENTRAL_PASSWORD" >> gradle.properties
           ./gradlew --stacktrace documentify-project:documentify-core:publish
           ./gradlew --stacktrace documentify-project:documentify-gradle-plugin:publish
           ./gradlew --stacktrace documentify-project:documentify-mvc:publish
