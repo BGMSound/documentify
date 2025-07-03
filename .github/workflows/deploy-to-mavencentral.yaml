@@ -12,7 +12,7 @@ on:
         required: true
 jobs:
   publish-to-mavencentral:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, ubuntu-latest]
     steps:
       - name: GitHub 리포지토리 체크아웃
         uses: actions/checkout@v4
