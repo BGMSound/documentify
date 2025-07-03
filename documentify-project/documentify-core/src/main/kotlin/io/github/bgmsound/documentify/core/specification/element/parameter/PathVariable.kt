@@ -5,7 +5,7 @@ import org.springframework.restdocs.request.RequestDocumentation
 import org.springframework.restdocs.snippet.Attributes
 
 class PathVariable(
-    descriptor: ParameterDescriptor,
+    descriptor: ParameterDescriptor
 ) : Parameter(descriptor) {
     companion object {
         fun newPathVariable(

@@ -6,7 +6,7 @@ import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.snippet.Attributes
 
 class Header(
-    private val descriptor: HeaderDescriptor,
+    private val descriptor: HeaderDescriptor
 ) : SpecElement(descriptor) {
     override val key: String get() = descriptor.name
 

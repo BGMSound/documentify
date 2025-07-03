@@ -26,6 +26,10 @@ val publicModulePathSet = setOf(
     rootProject.projects.documentifyStarters.documentifyStarterReactive.identityPath.path
 )
 
+repositories {
+    mavenCentral()
+}
+
 subprojects {
     group = rootProject.group
     version = rootProject.version
@@ -51,6 +55,7 @@ subprojects {
             useJUnitPlatform()
         }
     }
+
     if (publicModulePathSet.contains(project.path)) {
         with(pluginManager) {
             apply(rootProject.libs.plugins.gradle.mavenCentral.publish.get().pluginId)
@@ -64,61 +69,76 @@ subprojects {
             useInMemoryPgpKeys(gpgSecret, gpgPassphrase)
             sign(publishing.publications)
         }
-        configure<MavenPublishBaseExtension> {
-            publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-
-            val artifactId = name.replace("-gradle-plugin", ".gradle.plugin")
-            val projectGroup = property("project.group").toString()
-            val projectName = property("project.name").toString()
-            val projectVersion = property("project.version.id").toString()
-            val projectDescription = property("project.description").toString()
-            val projectUrl = property("project.url").toString()
-            val projectUrlScm = property("project.url.scm").toString()
-            val projectLicense = property("project.license").toString()
-            val projectLicenseUrl = property("project.license.url").toString()
-            val projectDeveloperId = property("project.developer.id").toString()
-            val projectDeveloperName = property("project.developer.name").toString()
-            val projectDeveloperEmail = property("project.developer.email").toString()
-            val projectDeveloperUrl = property("project.developer.url").toString()
-
-            coordinates(
-                groupId = projectGroup,
-                artifactId = artifactId,
-                version = projectVersion
-            )
-
-            pom {
-                name = projectName
-                description = projectDescription
-                inceptionYear = "${Year.now().value}"
-                url = projectUrl
-                licenses {
-                    license {
-                        name = projectLicense
-                        url = projectLicenseUrl
-                        distribution = projectUrl
+        tasks.withType<Jar> {
+            archiveClassifier.set("")
+        }
+        tasks.withType(PublishToMavenRepository::class.java) {
+            dependsOn(tasks.withType<Sign>())
+        }
+        extensions.getByType<JavaPluginExtension>().apply {
+            withSourcesJar()
+            withJavadocJar()
+        }
+        publishing {
+            repositories {
+                maven {
+                    name = "sonatype"
+                    url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    credentials {
+                        username = System.getenv("MAVEN_CENTRAL_USERNAME")
+                        password = System.getenv("MAVEN_CENTRAL_PASSWORD")
                     }
                 }
-                developers {
-                    developer {
-                        id = projectDeveloperId
-                        name = projectDeveloperName
-                        email = projectDeveloperEmail
-                        url = projectDeveloperUrl
+            }
+            publications {
+                create<MavenPublication>("mavenCentral") {
+                    from(components["java"])
+                    groupId = property("project.group").toString()
+                    artifactId = name.replace("-gradle-plugin", ".gradle.plugin")
+                    version = property("project.version.id").toString()
+
+                    pom {
+                        val projectName = property("project.name").toString()
+                        val projectDescription = property("project.description").toString()
+                        val projectUrl = property("project.url").toString()
+                        val projectUrlScm = property("project.url.scm").toString()
+                        val projectLicense = property("project.license").toString()
+                        val projectLicenseUrl = property("project.license.url").toString()
+                        val projectDeveloperId = property("project.developer.id").toString()
+                        val projectDeveloperName = property("project.developer.name").toString()
+                        val projectDeveloperEmail = property("project.developer.email").toString()
+                        val projectDeveloperUrl = property("project.developer.url").toString()
+
+                        name = projectName
+                        description = projectDescription
+                        inceptionYear = "${Year.now().value}"
+                        url = projectUrl
+                        licenses {
+                            license {
+                                name = projectLicense
+                                url = projectLicenseUrl
+                                distribution = projectUrl
+                            }
+                        }
+                        developers {
+                            developer {
+                                id = projectDeveloperId
+                                name = projectDeveloperName
+                                email = projectDeveloperEmail
+                                url = projectDeveloperUrl
+                            }
+                        }
+                        scm {
+                            url = projectUrlScm
+                            connection = "scm:git:git://github.com/${projectDeveloperId}"
+                            developerConnection = "scm:git:ssh://git@github.com/${projectDeveloperId}"
+                        }
                     }
-                }
-                scm {
-                    url = projectUrlScm
-                    connection = "scm:git:git://github.com/${projectDeveloperId}"
-                    developerConnection = "scm:git:ssh://git@github.com/${projectDeveloperId}"
+                    signing.sign(this@publications)
                 }
             }
         }
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 kover {
