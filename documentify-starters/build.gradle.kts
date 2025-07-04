@@ -1,7 +1,3 @@
-plugins {
-    alias(libs.plugins.gradle.mavenCentral.publish) apply false
-}
-
 subprojects {
     with(pluginManager) {
         apply(rootProject.libs.plugins.gradle.mavenCentral.publish.get().pluginId)
