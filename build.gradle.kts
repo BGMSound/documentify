@@ -69,7 +69,7 @@ subprojects {
             sign(publishing.publications)
         }
         configure<MavenPublishBaseExtension> {
-            publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+            publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
 
             val projectGroup = property("project.group").toString()
             val projectArtifactId = name.replace("-gradle-plugin", ".gradle.plugin")

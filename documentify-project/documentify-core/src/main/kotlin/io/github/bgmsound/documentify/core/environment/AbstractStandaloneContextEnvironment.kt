@@ -1,11 +1,13 @@
 package io.github.bgmsound.documentify.core.environment
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.core.convert.converter.Converter
 
 @Suppress("UNCHECKED_CAST")
 abstract class AbstractStandaloneContextEnvironment<T : StandaloneContextEnvironment<T>> : StandaloneContextEnvironment<T>, AbstractDocumentContextEnvironment() {
     protected val controllers: MutableList<Any> = mutableListOf()
     protected val controllerAdvices: MutableList<Any> = mutableListOf()
+    protected val converters: MutableList<Converter<*, *>> = mutableListOf()
     protected var codec: ObjectMapper? = null
 
     override fun codec(codec: ObjectMapper): T {
@@ -40,6 +42,21 @@ abstract class AbstractStandaloneContextEnvironment<T : StandaloneContextEnviron
 
     override fun controllerAdvices(controllerAdvices: List<Any>): T {
         this.controllerAdvices.addAll(controllerAdvices)
+        return this as T
+    }
+
+    override fun converter(converter: Converter<*, *>): T {
+        this.converters.add(converter)
+        return this as T
+    }
+
+    override fun converters(vararg converters: Converter<*, *>): T {
+        this.converters.addAll(converters)
+        return this as T
+    }
+
+    override fun converters(converters: List<Converter<*, *>>): T {
+        this.converters.addAll(converters)
         return this as T
     }
 }

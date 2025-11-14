@@ -2,6 +2,7 @@ package io.github.bgmsound.documentify.mvc.environment
 
 import io.github.bgmsound.documentify.core.environment.AbstractStandaloneContextEnvironment
 import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
+import org.springframework.format.support.FormattingConversionService
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
@@ -35,6 +36,11 @@ class StandaloneMvcContextEnvironment private constructor(
             .standaloneSetup(*controllers.toTypedArray())
             .setControllerAdvice(*controllerAdvices.toTypedArray())
             .setCustomArgumentResolvers(*argumentResolvers.toTypedArray())
+            .setConversionService(FormattingConversionService().apply {
+                converters.forEach { converter ->
+                    addConverter(converter)
+                }
+            })
             .apply<StandaloneMockMvcBuilder>(documentationConfiguration(provider))
             .apply { if (codec != null) {
                 val objectMapper = codec!!

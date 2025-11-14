@@ -40,6 +40,11 @@ class StandaloneReactiveContextEnvironment private constructor(
             .argumentResolvers { configurer ->
                 configurer.addCustomResolver(*argumentResolvers.toTypedArray())
             }
+            .formatters { registry ->
+                converters.forEach { converter ->
+                    registry.addConverter(converter)
+                }
+            }
             .httpMessageCodecs { configurer -> if (codec != null) {
                 val objectMapper = codec!!
                 configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
