@@ -15,7 +15,7 @@ jobs:
       project-version: ${{ steps.recognize-project-version.outputs.project-version }}
     steps:
       - name: GitHub 리포지토리 체크아웃
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: 프로젝트 버전 인식
         id: recognize-project-version
         run: |

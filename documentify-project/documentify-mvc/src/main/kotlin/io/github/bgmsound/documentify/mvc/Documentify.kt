@@ -11,7 +11,6 @@ import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.web.context.WebApplicationContext
-import org.springframework.web.method.support.HandlerMethodArgumentResolver
 
 @ExtendWith(RestDocumentationExtension::class)
 abstract class Documentify {
@@ -58,20 +57,6 @@ abstract class Documentify {
         val standaloneContext = StandaloneMvcContextEnvironment
             .standaloneEnvironment(provider)
             .also(contextCustomizer)
-        standalone(provider, standaloneContext)
-    }
-
-    fun standalone(
-        provider: RestDocumentationContextProvider,
-        controllers: List<Any>,
-        controllerAdvices: List<Any>,
-        argumentResolvers: List<HandlerMethodArgumentResolver>
-    ) {
-        val standaloneContext = StandaloneMvcContextEnvironment
-            .standaloneEnvironment(provider)
-            .controllers(controllers)
-            .controllerAdvices(controllerAdvices)
-            .argumentResolvers(argumentResolvers)
         standalone(provider, standaloneContext)
     }
 

@@ -60,19 +60,6 @@ abstract class Documentify {
         standalone(provider, standaloneContext)
     }
 
-    fun standalone(
-        provider: RestDocumentationContextProvider,
-        controllers: List<Any>,
-        controllerAdvices: List<Any>,
-        argumentResolvers: List<HandlerMethodArgumentResolver>
-    ) {
-        val standaloneContext = standaloneEnvironment(provider)
-            .controllers(controllers)
-            .controllerAdvices(controllerAdvices)
-            .argumentResolvers(argumentResolvers)
-        standalone(provider, standaloneContext)
-    }
-
     fun applicationContext(
         provider: RestDocumentationContextProvider,
         applicationContext: ApplicationContext

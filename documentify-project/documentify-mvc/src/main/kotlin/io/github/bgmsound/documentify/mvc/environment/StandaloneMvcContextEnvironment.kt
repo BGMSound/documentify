@@ -2,7 +2,7 @@ package io.github.bgmsound.documentify.mvc.environment
 
 import io.github.bgmsound.documentify.core.environment.AbstractStandaloneContextEnvironment
 import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
-import org.springframework.format.support.FormattingConversionService
+import org.springframework.boot.convert.ApplicationConversionService
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
@@ -36,7 +36,7 @@ class StandaloneMvcContextEnvironment private constructor(
             .standaloneSetup(*controllers.toTypedArray())
             .setControllerAdvice(*controllerAdvices.toTypedArray())
             .setCustomArgumentResolvers(*argumentResolvers.toTypedArray())
-            .setConversionService(FormattingConversionService().apply {
+            .setConversionService(ApplicationConversionService().apply {
                 converters.forEach { converter ->
                     addConverter(converter)
                 }
