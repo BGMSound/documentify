@@ -14,7 +14,7 @@ interface DocumentContextEnvironment {
     }
 
     fun responsePreprocessors(preprocessors: List<OperationPreprocessor>) {
-        requestPreprocessors(*preprocessors.toTypedArray())
+        responsePreprocessors(*preprocessors.toTypedArray())
     }
 
     fun requestPreprocessors(): List<OperationPreprocessor>
