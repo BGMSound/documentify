@@ -1,19 +1,18 @@
 package io.github.bgmsound.documentify.mvc.environment
 
 import io.github.bgmsound.documentify.core.environment.AbstractStandaloneContextEnvironment
-import io.github.bgmsound.documentify.mvc.MvcDocumentContextEnvironment
 import org.springframework.boot.convert.ApplicationConversionService
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
-import org.springframework.test.web.servlet.MockMvc
+import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration
+import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.servlet.client.MockMvcWebTestClient
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 
 class StandaloneMvcContextEnvironment private constructor(
     private val provider: RestDocumentationContextProvider
-) : AbstractStandaloneContextEnvironment<StandaloneMvcContextEnvironment>(), MvcDocumentContextEnvironment {
+) : AbstractStandaloneContextEnvironment<StandaloneMvcContextEnvironment>() {
     private val argumentResolvers: MutableList<HandlerMethodArgumentResolver> = mutableListOf()
 
     fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneMvcContextEnvironment {
@@ -31,8 +30,8 @@ class StandaloneMvcContextEnvironment private constructor(
         return this
     }
 
-    override fun buildMockMvc(): MockMvc {
-        return MockMvcBuilders
+    override fun buildTestClient(): WebTestClient {
+        val mockMvc = MockMvcBuilders
             .standaloneSetup(*controllers.toTypedArray())
             .setControllerAdvice(*controllerAdvices.toTypedArray())
             .setCustomArgumentResolvers(*argumentResolvers.toTypedArray())
@@ -41,11 +40,14 @@ class StandaloneMvcContextEnvironment private constructor(
                     addConverter(converter)
                 }
             })
-            .apply<StandaloneMockMvcBuilder>(documentationConfiguration(provider))
             .apply { if (codec != null) {
                 val objectMapper = codec!!
                 setMessageConverters(MappingJackson2HttpMessageConverter(objectMapper))
             }}
+            .build()
+        return MockMvcWebTestClient
+            .bindTo(mockMvc)
+            .filter(documentationConfiguration(provider))
             .build()
     }
 

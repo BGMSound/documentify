@@ -1,9 +1,9 @@
-package io.github.bgmsound.documentify.reactive.emitter
+package io.github.bgmsound.documentify.core.emitter
 
 
+import io.github.bgmsound.documentify.core.environment.DocumentContextEnvironment
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
-import io.github.bgmsound.documentify.reactive.ReactiveDocumentContextEnvironment
 import org.springframework.http.HttpMethod
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
@@ -15,16 +15,16 @@ import org.springframework.test.web.reactive.server.WebTestClient.RequestBodySpe
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
-class WebTestClientReactiveDocumentEmitter(
+class WebTestClientDocumentEmitter(
     provider: RestDocumentationContextProvider,
     documentSpec: DocumentSpec,
-    environment: ReactiveDocumentContextEnvironment
-) : AbstractReactiveDocumentEmitter(provider, documentSpec) {
-    private val webTestClient: WebTestClient = environment.buildWebTestClient()
+    environment: DocumentContextEnvironment
+) : AbstractDocumentEmitter(provider, documentSpec) {
+    private val webTestClient: WebTestClient = environment.buildTestClient()
     private val requestPreprocessors = environment.requestPreprocessors().toTypedArray()
     private val responsePreprocessors = environment.responsePreprocessors().toTypedArray()
 
-    override suspend fun emitDocument(): BodyContentSpec {
+    override fun emitDocument(): BodyContentSpec {
         val snippets = documentSpec.build()
         val samplePathVariables = sampleAggregator.aggregate(documentSpec.request.pathVariables)
         val sampleHeaders = sampleAggregator.aggregate(documentSpec.request.headers)
@@ -54,10 +54,10 @@ class WebTestClientReactiveDocumentEmitter(
             )
     }
 
-    override suspend fun emitAlternativeResponseDocument() {
+    override fun emitAlternativeResponseDocument() {
         documentSpec.otherResponses.forEachIndexed { index, response ->
             val sampleResponseFields = sampleAggregator.aggregate(response.fields)
-            val api = AlternativeReactiveResponseDocumentController.new(
+            val api = AlternativeResponseDocumentController.new(
                 response.statusCode,
                 sampleResponseFields
             )

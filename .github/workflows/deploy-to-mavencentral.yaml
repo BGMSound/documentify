@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'adopt'
-          java-version: '17'
+          java-version: '21'
       - name: Gradle 애드온 준비하기
         uses: gradle/gradle-build-action@v3
       - name: 프로젝트 빌드

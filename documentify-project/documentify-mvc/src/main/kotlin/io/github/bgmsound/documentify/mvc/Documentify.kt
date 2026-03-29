@@ -1,45 +1,21 @@
 package io.github.bgmsound.documentify.mvc
 
-import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
-import io.github.bgmsound.documentify.mvc.emitter.EmitterFactory
-import io.github.bgmsound.documentify.mvc.emitter.MvcDocumentEmitter
+import io.github.bgmsound.documentify.core.AbstractDocumentify
 import io.github.bgmsound.documentify.mvc.environment.MockMvcContextEnvironment.Companion.mockMvcEnvironment
 import io.github.bgmsound.documentify.mvc.environment.StandaloneMvcContextEnvironment
-import io.github.bgmsound.documentify.mvc.environment.WebApplicationContextEnvironment.Companion.webApplicationContextEnvironment
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.web.context.WebApplicationContext
 
 @ExtendWith(RestDocumentationExtension::class)
-abstract class Documentify {
-    private lateinit var provider: RestDocumentationContextProvider
-    private lateinit var environment: MvcDocumentContextEnvironment
-    private var customEmitter: MvcDocumentEmitter? = null
-
-    fun documentation(
-        name: String,
-        specCustomizer: DocumentSpec.() -> Unit
-    ): ValidatableMockResponse {
-        val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = customEmitter ?: EmitterFactory.of(provider, documentSpec, environment)
-
-        return emitter.emit()
-    }
-
-    fun emitter(
-        customEmitter: MvcDocumentEmitter
-    ) {
-        this.customEmitter = customEmitter
-    }
-
+abstract class Documentify : AbstractDocumentify() {
     fun mockMvc(
         provider: RestDocumentationContextProvider,
         mockMvc: MockMvc
     ) {
         this.provider = provider
-        environment = mockMvcEnvironment(mockMvc)
+        environment = mockMvcEnvironment(provider, mockMvc)
     }
 
     fun standalone(
@@ -58,13 +34,5 @@ abstract class Documentify {
             .standaloneEnvironment(provider)
             .also(contextCustomizer)
         standalone(provider, standaloneContext)
-    }
-
-    fun webApplicationContext(
-        provider: RestDocumentationContextProvider,
-        context: WebApplicationContext
-    ) {
-        environment = webApplicationContextEnvironment(provider, context)
-        this.provider = provider
     }
 }
