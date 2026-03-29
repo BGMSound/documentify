@@ -102,7 +102,7 @@ fun documentationGetApi() {
         responseBody {
             field("testField", "test", "test")
         }
-    }.expect(jsonPath("$testField").value("test"))
+    }.jsonPath("$testField").value("test")
 }
 ```
 
