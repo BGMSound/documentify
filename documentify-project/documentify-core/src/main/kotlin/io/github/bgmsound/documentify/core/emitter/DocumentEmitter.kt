@@ -1,3 +1,9 @@
 package io.github.bgmsound.documentify.core.emitter
 
-interface DocumentEmitter
+import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec
+
+interface DocumentEmitter {
+
+    fun emit(): BodyContentSpec
+
+}

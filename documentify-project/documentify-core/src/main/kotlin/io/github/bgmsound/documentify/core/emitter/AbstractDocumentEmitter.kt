@@ -3,10 +3,12 @@ package io.github.bgmsound.documentify.core.emitter
 import com.epages.restdocs.apispec.ResourceDocumentation
 import com.epages.restdocs.apispec.ResourceSnippetParameters
 import com.epages.restdocs.apispec.Schema
+import io.github.bgmsound.documentify.core.emitter.WebTestClientDocumentResult.Companion.validateWith
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
 import io.github.bgmsound.documentify.core.specification.schema.response.ResponseSpec
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.snippet.Snippet
+import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec
 
 abstract class AbstractDocumentEmitter(
     protected val provider: RestDocumentationContextProvider,
@@ -27,4 +29,16 @@ abstract class AbstractDocumentEmitter(
         }
         return ResourceDocumentation.resource(resourceBuilder.build())
     }
+
+    override fun emit(): BodyContentSpec {
+        val validatableDocumentResponse = emitDocument()
+        emitAlternativeResponseDocument()
+        validatableDocumentResponse.validateWith(documentSpec.response)
+
+        return validatableDocumentResponse
+    }
+
+    abstract fun emitDocument(): BodyContentSpec
+
+    abstract fun emitAlternativeResponseDocument()
 }

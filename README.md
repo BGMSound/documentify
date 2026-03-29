@@ -8,6 +8,16 @@ It combines the advantages of both Swagger and RestDocs for efficient and intuit
 
 ## Installation and Getting Started
 ### Installation
+
+This library requires `spring-restdocs-webtestclient` to be declared explicitly
+in your project, as it is no longer transitively provided.
+
+```kotlin
+dependencies {
+    testImplementation("org.springframework.restdocs:spring-restdocs-webtestclient")
+}
+```
+
 Add the following dependency to your `build.gradle.kts` file:
 <br><br>
 `MVC`
@@ -92,7 +102,7 @@ fun documentationGetApi() {
         responseBody {
             field("testField", "test", "test")
         }
-    }.expect(jsonPath("$testField").value("test"))
+    }.jsonPath("$testField").value("test")
 }
 ```
 

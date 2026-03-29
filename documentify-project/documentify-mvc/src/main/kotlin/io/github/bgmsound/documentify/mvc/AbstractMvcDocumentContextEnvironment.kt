@@ -1,5 +1,0 @@
-package io.github.bgmsound.documentify.mvc
-
-import io.github.bgmsound.documentify.core.environment.AbstractDocumentContextEnvironment
-
-abstract class AbstractMvcDocumentContextEnvironment : AbstractDocumentContextEnvironment(), MvcDocumentContextEnvironment

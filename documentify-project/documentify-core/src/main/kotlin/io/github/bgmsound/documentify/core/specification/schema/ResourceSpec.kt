@@ -114,7 +114,7 @@ class ResourceSpec(
     }
 
     private fun randomSuffix(): String {
-        return (1..7).map {
+        return (1..5).map {
             val char = ('0'..'9').random()
             val number = ('a'..'z').random()
             (0..1).random().let { if (it == 0) char else number }

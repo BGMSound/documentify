@@ -1,6 +1,7 @@
 package io.github.bgmsound.documentify.core.environment
 
 import org.springframework.restdocs.operation.preprocess.OperationPreprocessor
+import org.springframework.test.web.reactive.server.WebTestClient
 
 interface DocumentContextEnvironment {
 
@@ -13,11 +14,13 @@ interface DocumentContextEnvironment {
     }
 
     fun responsePreprocessors(preprocessors: List<OperationPreprocessor>) {
-        requestPreprocessors(*preprocessors.toTypedArray())
+        responsePreprocessors(*preprocessors.toTypedArray())
     }
 
     fun requestPreprocessors(): List<OperationPreprocessor>
 
     fun responsePreprocessors(): List<OperationPreprocessor>
+
+    fun buildTestClient(): WebTestClient
 
 }

@@ -2,7 +2,6 @@ package io.github.bgmsound.documentify.reactive.environment
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.bgmsound.documentify.core.environment.AbstractStandaloneContextEnvironment
-import io.github.bgmsound.documentify.reactive.ReactiveDocumentContextEnvironment
 import org.springframework.http.MediaType
 import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.http.codec.json.Jackson2JsonEncoder
@@ -15,7 +14,7 @@ import org.springframework.web.reactive.result.method.HandlerMethodArgumentResol
 
 class StandaloneReactiveContextEnvironment private constructor(
     private val provider: RestDocumentationContextProvider
-) : AbstractStandaloneContextEnvironment<StandaloneReactiveContextEnvironment>(), ReactiveDocumentContextEnvironment {
+) : AbstractStandaloneContextEnvironment<StandaloneReactiveContextEnvironment>() {
     private val argumentResolvers = mutableListOf<HandlerMethodArgumentResolver>()
 
     fun argumentResolver(argumentResolver: HandlerMethodArgumentResolver): StandaloneReactiveContextEnvironment {
@@ -33,7 +32,7 @@ class StandaloneReactiveContextEnvironment private constructor(
         return this
     }
 
-    override fun buildWebTestClient(): WebTestClient {
+    override fun buildTestClient(): WebTestClient {
         return WebTestClient
             .bindToController(*controllers.toTypedArray())
             .controllerAdvice(*controllerAdvices.toTypedArray())
@@ -56,17 +55,17 @@ class StandaloneReactiveContextEnvironment private constructor(
             .build()
     }
 
-    companion object {
-        fun standaloneEnvironment(provider: RestDocumentationContextProvider): StandaloneReactiveContextEnvironment {
-            return StandaloneReactiveContextEnvironment(provider)
-        }
-    }
-
     private fun WebTestClient.Builder.include(objectMapper: ObjectMapper?): WebTestClient.Builder {
         if (objectMapper == null) return this
         return exchangeStrategies(ExchangeStrategies.builder().codecs { configurer ->
             configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
             configurer.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
         }.build())
+    }
+
+    companion object {
+        fun standaloneEnvironment(provider: RestDocumentationContextProvider): StandaloneReactiveContextEnvironment {
+            return StandaloneReactiveContextEnvironment(provider)
+        }
     }
 }
