@@ -17,13 +17,17 @@ class Field(
 ) : SpecElement(descriptor), FieldSchema {
     val path: String get() = descriptor.path
 
+    var docsType: DocsFieldType? = null
+        private set
+
     fun childFields(): List<Field> = childFields
 
     infix fun type(type: DocsFieldType): Field {
         check(type == OBJECT || type == ARRAY || childFields.isEmpty()) {
             "Field '$key' has child fields and cannot change to a non-container type"
         }
-        descriptor.type(type.type)
+        descriptor.type(type.jsonType)
+        docsType = type
         return this
     }
 
@@ -44,15 +48,15 @@ class Field(
     }
 
     fun canHaveChild(): Boolean {
-        return descriptor.type == OBJECT.type || descriptor.type == ARRAY.type
+        return descriptor.type == OBJECT.jsonType || descriptor.type == ARRAY.jsonType
     }
 
     fun isObject(): Boolean {
-        return descriptor.type == OBJECT.type
+        return descriptor.type == OBJECT.jsonType
     }
 
     fun isArray(): Boolean {
-        return descriptor.type == ARRAY.type
+        return descriptor.type == ARRAY.jsonType
     }
 
     private fun requireContainer() {
@@ -157,7 +161,7 @@ class Field(
 
     fun buildPath(path: String): String {
         var parent = this.path
-        parent = if (descriptor.type == ARRAY.type) {
+        parent = if (descriptor.type == ARRAY.jsonType) {
             "$parent[]."
         } else if (parent.isNotEmpty() && parent.isNotBlank()) {
             "$parent."
@@ -186,17 +190,21 @@ class Field(
                 Requirement.OPTIONAL -> descriptor.optional()
                 Requirement.IGNORED -> descriptor.ignored()
             }
-            when {
-                sample is Collection<*> || clazz.isArray -> descriptor.type(ARRAY.type)
-                sample is Map<*, *> -> descriptor.type(OBJECT.type)
-                sample is String -> descriptor.type(STRING.type)
-                sample is Enum<*> -> descriptor.type(STRING.type)
-                sample is Boolean -> descriptor.type(BOOLEAN.type)
-                sample is Number -> descriptor.type(NUMBER.type)
-                sample is LocalDate -> descriptor.type(DATE.type)
-                sample is LocalDateTime -> descriptor.type(DATETIME.type)
-            }
-            return Field(descriptor, extractKeyFromPath(path))
+            val field = Field(descriptor, extractKeyFromPath(path))
+            detectType(sample, clazz)?.let { field.type(it) }
+            return field
+        }
+
+        private fun detectType(sample: Any, clazz: Class<*>): DocsFieldType? = when {
+            sample is Collection<*> || clazz.isArray -> ARRAY
+            sample is Map<*, *> -> OBJECT
+            sample is String -> STRING
+            sample is Enum<*> -> STRING
+            sample is Boolean -> BOOLEAN
+            sample is Number -> NUMBER
+            sample is LocalDate -> DATE
+            sample is LocalDateTime -> DATETIME
+            else -> null
         }
 
         fun newField(path: String, description: String, requirement: Requirement): Field {
