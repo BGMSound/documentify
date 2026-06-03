@@ -34,7 +34,7 @@ dependencies {
 ```
 
 ### Getting Started
-First, make your test class extends `Documentify`. and set up the test environment like this:
+First, make your test class implements `Documentify` by `Documentify.new()`. and set up the test environment like this:
 ```kotlin
 @BeforeEach
 fun setUp(provider: RestDocumentationContextProvider) {

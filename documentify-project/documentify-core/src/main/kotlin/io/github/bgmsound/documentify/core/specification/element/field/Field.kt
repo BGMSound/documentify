@@ -6,6 +6,8 @@ import io.github.bgmsound.documentify.core.specification.element.SpecElement
 import org.springframework.restdocs.payload.FieldDescriptor
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.snippet.Attributes
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @DocumentifyDsl
 class Field(
@@ -18,6 +20,9 @@ class Field(
     fun childFields(): List<Field> = childFields
 
     infix fun type(type: DocsFieldType): Field {
+        check(type == OBJECT || type == ARRAY || childFields.isEmpty()) {
+            "Field '$key' has child fields and cannot change to a non-container type"
+        }
         descriptor.type(type.type)
         return this
     }
@@ -50,6 +55,10 @@ class Field(
         return descriptor.type == ARRAY.type
     }
 
+    private fun requireContainer() {
+        check(canHaveChild()) { "Field '$key' must be an object or array to have child fields" }
+    }
+
     infix fun with(childFieldsCustomizer: Field.() -> Unit): Field {
         childFieldsCustomizer.invoke(this)
         return this
@@ -57,16 +66,12 @@ class Field(
 
     fun type(type: DocsFieldType, childFieldsCustomizer: Field.() -> Unit): Field {
         type(type)
-        if (!canHaveChild()) {
-            throw IllegalArgumentException("Field $key can't have child fields")
-        }
+        requireContainer()
         return with(childFieldsCustomizer)
     }
 
-    fun childField(field: Field): Field {
-        if (!canHaveChild()) {
-            throw IllegalArgumentException("Field $key can't have child fields")
-        }
+    private fun childField(field: Field): Field {
+        requireContainer()
         childFields.add(field)
         return field
     }
@@ -76,7 +81,7 @@ class Field(
     }
 
     override fun field(path: String, description: String, sample: Any, childFields: Field.() -> Unit): Field {
-        val field = newField(path.javaClass, buildPath(path), description, sample, Requirement.REQUIRED)
+        val field = newField(sample.javaClass, buildPath(path), description, sample, Requirement.REQUIRED)
         return childField(field).with(childFields)
     }
 
@@ -144,9 +149,6 @@ class Field(
     }
 
     fun build(): List<FieldDescriptor> {
-        if (!canHaveChild() && childFields.isNotEmpty()) {
-            throw IllegalStateException("Field $key can't have child fields")
-        }
         return buildList {
             add(descriptor)
             childFields.forEach { addAll(it.build()) }
@@ -184,12 +186,15 @@ class Field(
                 Requirement.OPTIONAL -> descriptor.optional()
                 Requirement.IGNORED -> descriptor.ignored()
             }
-            if (sample is Collection<*> || clazz.isArray) {
-                descriptor.type(ARRAY.type)
-            } else if (sample is Map<*, *>) {
-                descriptor.type(OBJECT.type)
-            } else if (sample is String) {
-                descriptor.type(STRING.type)
+            when {
+                sample is Collection<*> || clazz.isArray -> descriptor.type(ARRAY.type)
+                sample is Map<*, *> -> descriptor.type(OBJECT.type)
+                sample is String -> descriptor.type(STRING.type)
+                sample is Enum<*> -> descriptor.type(STRING.type)
+                sample is Boolean -> descriptor.type(BOOLEAN.type)
+                sample is Number -> descriptor.type(NUMBER.type)
+                sample is LocalDate -> descriptor.type(DATE.type)
+                sample is LocalDateTime -> descriptor.type(DATETIME.type)
             }
             return Field(descriptor, extractKeyFromPath(path))
         }
@@ -206,15 +211,11 @@ class Field(
             return Field(descriptor, extractKeyFromPath(path))
         }
 
+        private val BRACKET_KEY = Regex("""\['([^']*)']$""")
+
         private fun extractKeyFromPath(path: String): String {
-            val lastKey = path.substringAfterLast(".")
-            val parentKey = path.substringBeforeLast(".")
-            return if (lastKey.contains("'")) {
-                val parentKeyLast = parentKey.substringAfterLast(".")
-                "$parentKeyLast.$lastKey"
-            } else {
-                lastKey
-            }
+            BRACKET_KEY.find(path)?.let { return it.groupValues[1] }
+            return path.substringAfterLast(".").substringBefore("[")
         }
     }
 }
