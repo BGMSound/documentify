@@ -12,7 +12,13 @@ import org.springframework.web.context.WebApplicationContext
 @ExtendWith(RestDocumentationExtension::class)
 interface DocumentifySupport {
 
-    fun documentation(name: String, specCustomizer: DocumentSpec.() -> Unit): WebTestClient.BodyContentSpec
+    fun documentation(name: String, specCustomizer: DocumentSpec.() -> Unit): WebTestClient.BodyContentSpec = documentation(name, PrintOption.ON, specCustomizer)
+
+    fun documentation(
+        name: String,
+        printOption: PrintOption,
+        specCustomizer: DocumentSpec.() -> Unit
+    ): WebTestClient.BodyContentSpec
 
     fun emitter(customEmitter: DocumentEmitter)
 

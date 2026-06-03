@@ -18,10 +18,11 @@ abstract class AbstractDocumentifySupport : DocumentifySupport {
 
     override fun documentation(
         name: String,
+        printOption: PrintOption,
         specCustomizer: DocumentSpec.() -> Unit
     ): WebTestClient.BodyContentSpec {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = customEmitter ?: EmitterFactory.of(provider, documentSpec, environment)
+        val emitter = customEmitter ?: EmitterFactory.of(provider, documentSpec, environment, printOption)
 
         return emitter.emit()
     }

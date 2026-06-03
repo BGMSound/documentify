@@ -1,9 +1,11 @@
 package io.github.bgmsound.documentify.core.emitter
 
 
+import io.github.bgmsound.documentify.core.PrintOption
 import io.github.bgmsound.documentify.core.environment.DocumentContextEnvironment
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.core.specification.schema.document.DocumentSpec
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
@@ -18,11 +20,13 @@ import org.springframework.util.MultiValueMap
 class WebTestClientDocumentEmitter(
     provider: RestDocumentationContextProvider,
     documentSpec: DocumentSpec,
-    environment: DocumentContextEnvironment
+    environment: DocumentContextEnvironment,
+    private val printOption: PrintOption
 ) : AbstractDocumentEmitter(provider, documentSpec) {
     private val webTestClient: WebTestClient = environment.buildTestClient()
     private val requestPreprocessors = environment.requestPreprocessors().toTypedArray()
     private val responsePreprocessors = environment.responsePreprocessors().toTypedArray()
+    private val log = LoggerFactory.getLogger(WebTestClientDocumentEmitter::class.java)
 
     override fun emitDocument(): BodyContentSpec {
         val snippets = documentSpec.build()
@@ -42,7 +46,9 @@ class WebTestClientDocumentEmitter(
             .isEqualTo(documentSpec.response.statusCode)
             .expectBody()
             .consumeWith {
-                println(it)
+                if (printOption == PrintOption.ON) {
+                    log.info("\n{}", it)
+                }
             }
             .consumeWith(
                 document(
@@ -75,7 +81,9 @@ class WebTestClientDocumentEmitter(
                 .expectStatus()
                 .isEqualTo(response.statusCode)
                 .expectBody()
-                .consumeWith { println(it)}
+                .consumeWith {
+                    if (printOption == PrintOption.ON) log.info("\n{}", it)
+                }
                 .consumeWith(
                     document(
                         "${documentSpec.name}-case-${index + 1}",
