@@ -1,11 +1,13 @@
 package io.github.bgmsound.documentify.core.specification.element.field
 
+import io.github.bgmsound.documentify.core.specification.DocumentifyDsl
 import io.github.bgmsound.documentify.core.specification.FieldSchema
 import io.github.bgmsound.documentify.core.specification.element.SpecElement
 import org.springframework.restdocs.payload.FieldDescriptor
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.snippet.Attributes
 
+@DocumentifyDsl
 class Field(
     private val descriptor: FieldDescriptor,
     override val key: String,

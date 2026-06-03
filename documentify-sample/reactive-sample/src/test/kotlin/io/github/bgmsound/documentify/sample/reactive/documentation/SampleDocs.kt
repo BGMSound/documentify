@@ -1,6 +1,5 @@
 package io.github.bgmsound.documentify.sample.reactive.documentation
 
-
 import io.github.bgmsound.documentify.core.specification.schema.Method
 import io.github.bgmsound.documentify.reactive.Documentify
 import io.github.bgmsound.documentify.sample.reactive.controller.SampleController
@@ -10,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.RestDocumentationContextProvider
 
-class SampleDocs : Documentify() {
+class SampleDocs : Documentify by Documentify.new() {
     private val api = SampleController()
 
     @BeforeEach

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.restdocs.RestDocumentationContextProvider
 
-class DateParseSampleDocs : Documentify() {
+class DateParseSampleDocs : Documentify by Documentify.new() {
     private val api = DateParseSampleController()
 
     @BeforeEach
