@@ -33,10 +33,11 @@ class WebTestClientDocumentEmitter(
         val samplePathVariables = sampleAggregator.aggregate(documentSpec.request.pathVariables)
         val sampleHeaders = sampleAggregator.aggregate(documentSpec.request.headers)
         val sampleFields = sampleAggregator.aggregate(documentSpec.request.fields)
+        val (uriTemplate, queryVariables) = requestUri()
 
         return webTestClient
             .method(method())
-            .uri(requestUri, samplePathVariables)
+            .uri(uriTemplate, samplePathVariables + queryVariables)
             .headers { headers ->
                 headers.addAll(sampleHeaders.toMultiValueMap())
             }
@@ -61,6 +62,8 @@ class WebTestClientDocumentEmitter(
     }
 
     override fun emitAlternativeResponseDocument() {
+        val samplePathVariables = sampleAggregator.aggregate(documentSpec.request.pathVariables)
+        val (uriTemplate, queryVariables) = requestUri()
         documentSpec.otherResponses.forEachIndexed { index, response ->
             val sampleResponseFields = sampleAggregator.aggregate(response.fields)
             val api = AlternativeResponseDocumentController.new(
@@ -73,10 +76,9 @@ class WebTestClientDocumentEmitter(
                 .filter(WebTestClientRestDocumentation.documentationConfiguration(provider))
                 .build()
 
-            val samplePathVariables = sampleAggregator.aggregate(documentSpec.request.pathVariables)
             webTestClient
                 .method(method())
-                .uri(requestUri, samplePathVariables)
+                .uri(uriTemplate, samplePathVariables + queryVariables)
                 .exchange()
                 .expectStatus()
                 .isEqualTo(response.statusCode)
@@ -95,16 +97,16 @@ class WebTestClientDocumentEmitter(
         }
     }
 
-    private val requestUri get(): String {
-        return StringBuilder().apply {
-            append(documentSpec.request.url)
-            if (documentSpec.request.queryParameters.isNotEmpty()) {
-                append("?")
-                append(documentSpec.request.queryParameters.joinToString("&") { parameter ->
-                    "${parameter.key}=${parameter.sample}"
-                })
-            }
-        }.toString()
+    private fun requestUri(): Pair<String, Map<String, Any>> {
+        val queryVariables = mutableMapOf<String, Any>()
+        val template = StringBuilder(documentSpec.request.url)
+        documentSpec.request.queryParameters.forEachIndexed { index, parameter ->
+            val placeholder = "documentifyQuery$index"
+            template.append(if (index == 0) "?" else "&")
+            template.append("${parameter.key}={$placeholder}")
+            queryVariables[placeholder] = parameter.sample
+        }
+        return template.toString() to queryVariables
     }
 
     private fun RequestBodySpec.bodyIfExist(
