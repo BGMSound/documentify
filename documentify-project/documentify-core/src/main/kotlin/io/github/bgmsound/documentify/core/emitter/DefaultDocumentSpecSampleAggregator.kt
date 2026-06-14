@@ -19,7 +19,12 @@ object DefaultDocumentSpecSampleAggregator : DocumentSpecSampleAggregator {
         val entries = leaves.map { (path, sample) ->
             Entry(parsePath(path), sample)
         }
-        return assemble(entries) as Map<String, Any>
+        val assembled = assemble(entries)
+        return if (assembled is Map<*, *>) {
+            assembled as Map<String, Any>
+        } else {
+            mapOf("" to assembled)
+        }
     }
 
     private fun collectLeaves(fields: List<Field>): List<Pair<String, Any>> {
