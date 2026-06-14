@@ -20,8 +20,8 @@ interface FieldSchema {
 
     fun optionalField(path: String, description: String): Field
 
-    fun optionalField(description: String) {
-        optionalField("", description)
+    fun optionalField(description: String): Field {
+        return optionalField("", description)
     }
 
     fun optionalField(path: String, description: String, sample: Any): Field
