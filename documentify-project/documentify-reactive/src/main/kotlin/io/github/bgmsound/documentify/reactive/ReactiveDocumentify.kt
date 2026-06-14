@@ -5,7 +5,7 @@ import io.github.bgmsound.documentify.reactive.environment.StandaloneReactiveCon
 import io.github.bgmsound.documentify.reactive.environment.StandaloneReactiveContextEnvironment.Companion.standaloneEnvironment
 import org.springframework.restdocs.RestDocumentationContextProvider
 
-class ReactiveDocumentify : AbstractDocumentifySupport(), Documentify {
+internal class ReactiveDocumentify : AbstractDocumentifySupport(), Documentify {
     override fun standalone(
         provider: RestDocumentationContextProvider,
         standaloneContext: StandaloneReactiveContextEnvironment
