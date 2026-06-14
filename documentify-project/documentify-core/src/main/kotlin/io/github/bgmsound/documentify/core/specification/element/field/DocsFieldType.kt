@@ -3,7 +3,7 @@ package io.github.bgmsound.documentify.core.specification.element.field
 import org.springframework.restdocs.payload.JsonFieldType
 import kotlin.reflect.KClass
 
-sealed class DocsFieldType(val type: JsonFieldType)
+sealed class DocsFieldType(val jsonType: JsonFieldType)
 
 data object ARRAY : DocsFieldType(JsonFieldType.ARRAY)
 data object BOOLEAN : DocsFieldType(JsonFieldType.BOOLEAN)

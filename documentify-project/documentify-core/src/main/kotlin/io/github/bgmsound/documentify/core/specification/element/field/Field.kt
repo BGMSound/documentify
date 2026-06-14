@@ -1,11 +1,15 @@
 package io.github.bgmsound.documentify.core.specification.element.field
 
+import io.github.bgmsound.documentify.core.specification.DocumentifyDsl
 import io.github.bgmsound.documentify.core.specification.FieldSchema
 import io.github.bgmsound.documentify.core.specification.element.SpecElement
 import org.springframework.restdocs.payload.FieldDescriptor
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.snippet.Attributes
+import java.time.LocalDate
+import java.time.LocalDateTime
 
+@DocumentifyDsl
 class Field(
     private val descriptor: FieldDescriptor,
     override val key: String,
@@ -13,10 +17,17 @@ class Field(
 ) : SpecElement(descriptor), FieldSchema {
     val path: String get() = descriptor.path
 
+    var docsType: DocsFieldType? = null
+        private set
+
     fun childFields(): List<Field> = childFields
 
     infix fun type(type: DocsFieldType): Field {
-        descriptor.type(type.type)
+        check(type == OBJECT || type == ARRAY || childFields.isEmpty()) {
+            "Field '$key' has child fields and cannot change to a non-container type"
+        }
+        descriptor.type(type.jsonType)
+        docsType = type
         return this
     }
 
@@ -37,15 +48,19 @@ class Field(
     }
 
     fun canHaveChild(): Boolean {
-        return descriptor.type == OBJECT.type || descriptor.type == ARRAY.type
+        return descriptor.type == OBJECT.jsonType || descriptor.type == ARRAY.jsonType
     }
 
     fun isObject(): Boolean {
-        return descriptor.type == OBJECT.type
+        return descriptor.type == OBJECT.jsonType
     }
 
     fun isArray(): Boolean {
-        return descriptor.type == ARRAY.type
+        return descriptor.type == ARRAY.jsonType
+    }
+
+    private fun requireContainer() {
+        check(canHaveChild()) { "Field '$key' must be an object or array to have child fields" }
     }
 
     infix fun with(childFieldsCustomizer: Field.() -> Unit): Field {
@@ -55,16 +70,12 @@ class Field(
 
     fun type(type: DocsFieldType, childFieldsCustomizer: Field.() -> Unit): Field {
         type(type)
-        if (!canHaveChild()) {
-            throw IllegalArgumentException("Field $key can't have child fields")
-        }
+        requireContainer()
         return with(childFieldsCustomizer)
     }
 
-    fun childField(field: Field): Field {
-        if (!canHaveChild()) {
-            throw IllegalArgumentException("Field $key can't have child fields")
-        }
+    private fun childField(field: Field): Field {
+        requireContainer()
         childFields.add(field)
         return field
     }
@@ -74,7 +85,7 @@ class Field(
     }
 
     override fun field(path: String, description: String, sample: Any, childFields: Field.() -> Unit): Field {
-        val field = newField(path.javaClass, buildPath(path), description, sample, Requirement.REQUIRED)
+        val field = newField(sample.javaClass, buildPath(path), description, sample, Requirement.REQUIRED)
         return childField(field).with(childFields)
     }
 
@@ -142,9 +153,6 @@ class Field(
     }
 
     fun build(): List<FieldDescriptor> {
-        if (!canHaveChild() && childFields.isNotEmpty()) {
-            throw IllegalStateException("Field $key can't have child fields")
-        }
         return buildList {
             add(descriptor)
             childFields.forEach { addAll(it.build()) }
@@ -153,7 +161,7 @@ class Field(
 
     fun buildPath(path: String): String {
         var parent = this.path
-        parent = if (descriptor.type == ARRAY.type) {
+        parent = if (descriptor.type == ARRAY.jsonType) {
             "$parent[]."
         } else if (parent.isNotEmpty() && parent.isNotBlank()) {
             "$parent."
@@ -182,14 +190,21 @@ class Field(
                 Requirement.OPTIONAL -> descriptor.optional()
                 Requirement.IGNORED -> descriptor.ignored()
             }
-            if (sample is Collection<*> || clazz.isArray) {
-                descriptor.type(ARRAY.type)
-            } else if (sample is Map<*, *>) {
-                descriptor.type(OBJECT.type)
-            } else if (sample is String) {
-                descriptor.type(STRING.type)
-            }
-            return Field(descriptor, extractKeyFromPath(path))
+            val field = Field(descriptor, extractKeyFromPath(path))
+            detectType(sample, clazz)?.let { field.type(it) }
+            return field
+        }
+
+        private fun detectType(sample: Any, clazz: Class<*>): DocsFieldType? = when {
+            sample is Collection<*> || clazz.isArray -> ARRAY
+            sample is Map<*, *> -> OBJECT
+            sample is String -> STRING
+            sample is Enum<*> -> STRING
+            sample is Boolean -> BOOLEAN
+            sample is Number -> NUMBER
+            sample is LocalDate -> DATE
+            sample is LocalDateTime -> DATETIME
+            else -> null
         }
 
         fun newField(path: String, description: String, requirement: Requirement): Field {
@@ -204,15 +219,11 @@ class Field(
             return Field(descriptor, extractKeyFromPath(path))
         }
 
+        private val BRACKET_KEY = Regex("""\['([^']*)']$""")
+
         private fun extractKeyFromPath(path: String): String {
-            val lastKey = path.substringAfterLast(".")
-            val parentKey = path.substringBeforeLast(".")
-            return if (lastKey.contains("'")) {
-                val parentKeyLast = parentKey.substringAfterLast(".")
-                "$parentKeyLast.$lastKey"
-            } else {
-                lastKey
-            }
+            BRACKET_KEY.find(path)?.let { return it.groupValues[1] }
+            return path.substringAfterLast(".").substringBefore("[")
         }
     }
 }

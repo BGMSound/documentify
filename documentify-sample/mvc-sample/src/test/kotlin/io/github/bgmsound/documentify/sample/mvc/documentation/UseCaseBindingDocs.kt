@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.restdocs.RestDocumentationContextProvider
 
-class UseCaseBindingDocs : Documentify() {
+class UseCaseBindingDocs : Documentify by Documentify.new() {
     private val useCase = mockk<UseCase>()
     private val api = UseCaseBindingController(useCase)
 

@@ -1,8 +1,10 @@
 package io.github.bgmsound.documentify.core.environment
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.bgmsound.documentify.core.specification.DocumentifyDsl
 import org.springframework.core.convert.converter.Converter
 
+@DocumentifyDsl
 @Suppress("UNCHECKED_CAST")
 abstract class AbstractStandaloneContextEnvironment<T : StandaloneContextEnvironment<T>> : StandaloneContextEnvironment<T>, AbstractDocumentContextEnvironment() {
     protected val controllers: MutableList<Any> = mutableListOf()

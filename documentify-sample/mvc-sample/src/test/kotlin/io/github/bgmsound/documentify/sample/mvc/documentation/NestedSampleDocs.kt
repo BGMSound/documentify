@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.restdocs.RestDocumentationContextProvider
 
-class NestedSampleDocs : Documentify() {
+class NestedSampleDocs : Documentify by Documentify.new() {
     private val api = NestedSampleController()
 
     @BeforeEach

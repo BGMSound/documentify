@@ -7,14 +7,15 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.restdocs.RestDocumentationContextProvider
 
-class ErrorDocs : Documentify() {
+class ErrorDocs : Documentify by Documentify.new() {
+    private val api = ErrorController()
+
     @BeforeEach
     fun setUp(provider: RestDocumentationContextProvider) {
         standalone(provider) {
-            controller(ErrorController())
+            controller(api)
         }
     }
-
 
     @Test
     fun sampleGetApi() {

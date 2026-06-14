@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.RestDocumentationContextProvider
 
-class SnakeSampleDocs : Documentify() {
+class SnakeSampleDocs : Documentify by Documentify.new() {
     private val api = SampleController()
     private val objectMapper = ObjectMapper().apply {
         propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE

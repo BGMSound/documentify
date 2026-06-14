@@ -11,28 +11,29 @@ import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.context.WebApplicationContext
 
-abstract class AbstractDocumentify {
+abstract class AbstractDocumentifySupport : DocumentifySupport {
     protected lateinit var provider: RestDocumentationContextProvider
     protected lateinit var environment: DocumentContextEnvironment
     protected var customEmitter: DocumentEmitter? = null
 
-    fun documentation(
+    override fun documentation(
         name: String,
+        printOption: PrintOption,
         specCustomizer: DocumentSpec.() -> Unit
     ): WebTestClient.BodyContentSpec {
         val documentSpec = DocumentSpec(name).also { specCustomizer(it) }
-        val emitter = customEmitter ?: EmitterFactory.of(provider, documentSpec, environment)
+        val emitter = customEmitter ?: EmitterFactory.of(provider, documentSpec, environment, printOption)
 
         return emitter.emit()
     }
 
-    fun emitter(
+    override fun emitter(
         customEmitter: DocumentEmitter
     ) {
         this.customEmitter = customEmitter
     }
 
-    fun webTestClient(
+    override fun webTestClient(
         provider: RestDocumentationContextProvider,
         webTestClient: WebTestClient
     ) {
@@ -40,7 +41,7 @@ abstract class AbstractDocumentify {
         environment = webTestClientEnvironment(provider, webTestClient)
     }
 
-    fun applicationContext(
+    override fun applicationContext(
         provider: RestDocumentationContextProvider,
         applicationContext: ApplicationContext
     ) {
@@ -48,11 +49,13 @@ abstract class AbstractDocumentify {
         environment = applicationContextEnvironment(provider, applicationContext)
     }
 
-    fun webApplicationContext(
+    override fun webApplicationContext(
         provider: RestDocumentationContextProvider,
         context: WebApplicationContext
     ) {
         environment = applicationContextEnvironment(provider, context)
         this.provider = provider
     }
+
+    companion object
 }
