@@ -56,6 +56,4 @@ abstract class AbstractDocumentifySupport : DocumentifySupport {
         environment = applicationContextEnvironment(provider, context)
         this.provider = provider
     }
-
-    companion object
 }
