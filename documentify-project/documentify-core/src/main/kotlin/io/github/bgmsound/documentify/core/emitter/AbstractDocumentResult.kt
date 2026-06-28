@@ -2,13 +2,14 @@ package io.github.bgmsound.documentify.core.emitter
 
 import io.github.bgmsound.documentify.core.specification.element.field.Field
 import io.github.bgmsound.documentify.core.specification.schema.response.ResponseSpec
+import org.hamcrest.BaseMatcher
+import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
+import java.math.BigDecimal
 
 abstract class AbstractDocumentResult : DocumentResult {
     abstract fun expect(jsonPath: String, matcher: Matcher<*>)
-
-    abstract fun expectValue(jsonPath: String, value: Any)
 
     override fun validateWith(responseSpec: ResponseSpec) {
         val matchers = aggregateMatchers(responseSpec.fields)
@@ -18,15 +19,47 @@ abstract class AbstractDocumentResult : DocumentResult {
         matchers.forEach { matcher ->
             val jsonPath = matcher.jsonPath
             val value = matcher.expectedValue
-            if (jsonPath.endsWith("[*]")) {
-                if (value !is List<*>) {
-                    throw IllegalArgumentException("sample value type must be List")
+            when {
+                jsonPath.endsWith("[*]") -> {
+                    if (value !is List<*>) {
+                        throw IllegalArgumentException("sample value type must be List")
+                    }
+                    expect(
+                        jsonPath.substringBeforeLast("[*]"),
+                        Matchers.containsInAnyOrder(value.map { equalityMatcher(it) })
+                    )
                 }
-                expect(jsonPath.substringBeforeLast("[*]"), Matchers.containsInAnyOrder(*value.toTypedArray()))
-            } else if (jsonPath.contains("[*]") && !jsonPath.endsWith("[*]")) {
-                expect(jsonPath, Matchers.hasItem(value))
-            } else {
-                expectValue(jsonPath, value)
+                jsonPath.contains("[*]") -> {
+                    expect(jsonPath, Matchers.hasItem(equalityMatcher(value)))
+                }
+                else -> {
+                    expect(jsonPath, equalityMatcher(value))
+                }
+            }
+        }
+    }
+
+    private fun equalityMatcher(expected: Any?): Matcher<Any?> {
+        if (expected is Number) {
+            val expectedDecimal = BigDecimal(expected.toString())
+            return object : BaseMatcher<Any?>() {
+                override fun matches(actual: Any?): Boolean {
+                    val number = actual as? Number ?: return false
+                    return runCatching {
+                        BigDecimal(number.toString()).compareTo(expectedDecimal) == 0
+                    }.getOrDefault(false)
+                }
+
+                override fun describeTo(description: Description) {
+                    description.appendText("a number numerically equal to ").appendValue(expected)
+                }
+            }
+        }
+        return object : BaseMatcher<Any?>() {
+            override fun matches(actual: Any?): Boolean = actual == expected
+
+            override fun describeTo(description: Description) {
+                description.appendValue(expected)
             }
         }
     }
