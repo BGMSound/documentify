@@ -1,6 +1,7 @@
 package io.github.bgmsound.documentify.core.specification.element
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import org.springframework.restdocs.snippet.AbstractDescriptor
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -8,15 +9,14 @@ import java.time.LocalDateTime
 abstract class SpecElement(
     private val descriptor: AbstractDescriptor<*>
 ) {
-    private val objectMapper = ObjectMapper()
-
     abstract val key: String
     val description get() = descriptor.description as String
     val sample: Any get() {
-        return if (descriptor.sample() is LocalDate || descriptor.sample() is LocalDateTime) {
-            objectMapper.writeValueAsString(descriptor.sample())
+        val raw = descriptor.sample()
+        return if (raw is LocalDate || raw is LocalDateTime) {
+            OBJECT_MAPPER.writeValueAsString(raw).removeSurrounding("\"")
         } else {
-            descriptor.sample()
+            raw
         }
     }
 
@@ -30,6 +30,10 @@ abstract class SpecElement(
 
     companion object {
         const val SAMPLE_KEY = "sample"
+
+        private val OBJECT_MAPPER: ObjectMapper = ObjectMapper()
+            .findAndRegisterModules()
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     }
 
     enum class Requirement {

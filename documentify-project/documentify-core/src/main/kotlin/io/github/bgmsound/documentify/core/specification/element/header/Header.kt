@@ -15,8 +15,8 @@ class Header(
     companion object {
         fun newHeader(
             key: String,
-            sample: String,
             description: String,
+            sample: String,
             requirement: Requirement
         ): Header {
             val descriptor = HeaderDocumentation.headerWithName(key)

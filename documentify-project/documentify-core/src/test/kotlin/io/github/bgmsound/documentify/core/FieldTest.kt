@@ -78,6 +78,20 @@ class FieldTest {
     }
 
     @Test
+    fun `local date sample serializes to iso string without quotes`() {
+        val field = ResponseBodySpec().field("date", "date", LocalDate.of(2024, 1, 1))
+
+        assertThat(field.sample).isEqualTo("2024-01-01")
+    }
+
+    @Test
+    fun `local date time sample serializes to iso string without quotes`() {
+        val field = ResponseBodySpec().field("dateTime", "dateTime", LocalDateTime.of(2024, 1, 1, 12, 30, 45))
+
+        assertThat(field.sample).isEqualTo("2024-01-01T12:30:45")
+    }
+
+    @Test
     fun `adding a child to a scalar field throws`() {
         val name = ResponseBodySpec().field("name", "name", "John")
 

@@ -23,9 +23,8 @@ class ResourceSpec(
 
     init {
         summary = ""
-        val randomSuffix = randomSuffix()
-        request.schema = "$documentName Request ($randomSuffix)"
-        response.schema = "$documentName Response ($randomSuffix)"
+        request.schema = "$documentName Request"
+        response.schema = "$documentName Response"
     }
 
     fun link(rel: String): Link {

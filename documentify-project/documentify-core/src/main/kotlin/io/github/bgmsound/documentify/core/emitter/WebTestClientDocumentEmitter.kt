@@ -39,7 +39,9 @@ class WebTestClientDocumentEmitter(
             .method(method())
             .uri(uriTemplate, samplePathVariables + queryVariables)
             .headers { headers ->
-                headers.addAll(sampleHeaders.toMultiValueMap())
+               sampleHeaders.forEach { (key, value) ->
+                   headers.add(key, value.toString())
+               }
             }
             .bodyIfExist(sampleFields)
             .exchange()
@@ -75,7 +77,7 @@ class WebTestClientDocumentEmitter(
                 .configureClient()
                 .filter(WebTestClientRestDocumentation.documentationConfiguration(provider))
                 .build()
-
+            val snippets = response.build()
             webTestClient
                 .method(method())
                 .uri(uriTemplate, samplePathVariables + queryVariables)
@@ -91,7 +93,7 @@ class WebTestClientDocumentEmitter(
                         "${documentSpec.name}-case-${index + 1}",
                         preprocessRequest(prettyPrint(), *requestPreprocessors),
                         preprocessResponse(prettyPrint(), *responsePreprocessors),
-                        response.buildResource(index)
+                        *(snippets + listOf(response.buildResource(index))).toTypedArray()
                     )
                 )
         }
