@@ -39,7 +39,9 @@ class WebTestClientDocumentEmitter(
             .method(method())
             .uri(uriTemplate, samplePathVariables + queryVariables)
             .headers { headers ->
-                headers.addAll(sampleHeaders.toMultiValueMap())
+               sampleHeaders.forEach { (key, value) ->
+                   headers.add(key, value.toString())
+               }
             }
             .bodyIfExist(sampleFields)
             .exchange()
