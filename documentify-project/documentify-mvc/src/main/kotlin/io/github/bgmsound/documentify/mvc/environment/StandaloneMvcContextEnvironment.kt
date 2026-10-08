@@ -2,7 +2,7 @@ package io.github.bgmsound.documentify.mvc.environment
 
 import io.github.bgmsound.documentify.core.environment.AbstractStandaloneContextEnvironment
 import org.springframework.boot.convert.ApplicationConversionService
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -42,7 +42,7 @@ class StandaloneMvcContextEnvironment private constructor(
             })
             .apply { if (codec != null) {
                 val objectMapper = codec!!
-                setMessageConverters(MappingJackson2HttpMessageConverter(objectMapper))
+                setMessageConverters(JacksonJsonHttpMessageConverter(objectMapper))
             }}
             .build()
         return MockMvcWebTestClient

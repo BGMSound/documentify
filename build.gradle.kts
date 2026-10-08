@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
-import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.Year
@@ -18,12 +17,12 @@ group = extra["project.group"] as String
 version = extra["project.version.id"] as String
 
 val publicModulePathSet = setOf(
-    rootProject.projects.documentifyProject.documentifyCore.identityPath.path,
-    rootProject.projects.documentifyProject.documentifyGradlePlugin.identityPath.path,
-    rootProject.projects.documentifyProject.documentifyMvc.identityPath.path,
-    rootProject.projects.documentifyProject.documentifyReactive.identityPath.path,
-    rootProject.projects.documentifyStarters.documentifyStarterMvc.identityPath.path,
-    rootProject.projects.documentifyStarters.documentifyStarterReactive.identityPath.path
+    rootProject.projects.documentifyProject.documentifyCore.path,
+    rootProject.projects.documentifyProject.documentifyGradlePlugin.path,
+    rootProject.projects.documentifyProject.documentifyMvc.path,
+    rootProject.projects.documentifyProject.documentifyReactive.path,
+    rootProject.projects.documentifyStarters.documentifyStarterMvc.path,
+    rootProject.projects.documentifyStarters.documentifyStarterReactive.path
 )
 
 repositories {
@@ -39,6 +38,9 @@ subprojects {
     }
     repositories {
         mavenCentral()
+    }
+    dependencies {
+        "testRuntimeOnly"(rootProject.libs.junit.platform.launcher)
     }
     tasks {
         java {
@@ -69,7 +71,7 @@ subprojects {
             sign(publishing.publications)
         }
         configure<MavenPublishBaseExtension> {
-            publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
+            publishToMavenCentral(automaticRelease = true)
 
             val projectGroup = property("project.group").toString()
             val projectArtifactId = name.replace("-gradle-plugin", ".gradle.plugin")
@@ -124,11 +126,11 @@ subprojects {
 kover {
     merge {
         projects(
-            rootProject.projects.documentifyProject.documentifyCore.identityPath.path,
-            rootProject.projects.documentifyProject.documentifyMvc.identityPath.path,
-            rootProject.projects.documentifyProject.documentifyReactive.identityPath.path,
-            rootProject.projects.documentifySample.mvcSample.identityPath.path,
-            rootProject.projects.documentifySample.reactiveSample.identityPath.path
+            rootProject.projects.documentifyProject.documentifyCore.path,
+            rootProject.projects.documentifyProject.documentifyMvc.path,
+            rootProject.projects.documentifyProject.documentifyReactive.path,
+            rootProject.projects.documentifySample.mvcSample.path,
+            rootProject.projects.documentifySample.reactiveSample.path
         )
     }
     reports {
