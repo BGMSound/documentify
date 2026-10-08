@@ -22,7 +22,7 @@ jobs:
           distribution: 'adopt'
           java-version: '21'
       - name: Gradle 애드온 준비하기
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v6
       - name: 프로젝트 빌드
         run: |
           chmod +x gradlew
@@ -39,9 +39,4 @@ jobs:
           echo "gpg.passphrase=$GPG_PASSPHRASE" >> gradle.properties
           echo "mavenCentralUsername=$MAVEN_CENTRAL_USERNAME" >> gradle.properties
           echo "mavenCentralPassword=$MAVEN_CENTRAL_PASSWORD" >> gradle.properties
-          ./gradlew --stacktrace documentify-project:documentify-core:publish
-          ./gradlew --stacktrace documentify-project:documentify-gradle-plugin:publish
-          ./gradlew --stacktrace documentify-project:documentify-mvc:publish
-          ./gradlew --stacktrace documentify-project:documentify-reactive:publish
-          ./gradlew --stacktrace documentify-starters:documentify-starter-mvc:publish
-          ./gradlew --stacktrace documentify-starters:documentify-starter-reactive:publish
+          ./gradlew --stacktrace publishAndReleaseToMavenCentral
