@@ -1,15 +1,15 @@
 package io.github.bgmsound.documentify.reactive.environment
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.bgmsound.documentify.core.environment.AbstractStandaloneContextEnvironment
 import org.springframework.http.MediaType
-import org.springframework.http.codec.json.Jackson2JsonDecoder
-import org.springframework.http.codec.json.Jackson2JsonEncoder
+import org.springframework.http.codec.json.JacksonJsonDecoder
+import org.springframework.http.codec.json.JacksonJsonEncoder
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver
+import tools.jackson.databind.json.JsonMapper
 
 
 class StandaloneReactiveContextEnvironment private constructor(
@@ -46,8 +46,8 @@ class StandaloneReactiveContextEnvironment private constructor(
             }
             .httpMessageCodecs { configurer -> if (codec != null) {
                 val objectMapper = codec!!
-                configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
-                configurer.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
+                configurer.defaultCodecs().jacksonJsonDecoder(JacksonJsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
+                configurer.defaultCodecs().jacksonJsonEncoder(JacksonJsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
             }}
             .configureClient()
             .include(codec)
@@ -55,11 +55,11 @@ class StandaloneReactiveContextEnvironment private constructor(
             .build()
     }
 
-    private fun WebTestClient.Builder.include(objectMapper: ObjectMapper?): WebTestClient.Builder {
+    private fun WebTestClient.Builder.include(objectMapper: JsonMapper?): WebTestClient.Builder {
         if (objectMapper == null) return this
         return exchangeStrategies(ExchangeStrategies.builder().codecs { configurer ->
-            configurer.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
-            configurer.defaultCodecs().jackson2JsonEncoder(Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
+            configurer.defaultCodecs().jacksonJsonDecoder(JacksonJsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
+            configurer.defaultCodecs().jacksonJsonEncoder(JacksonJsonEncoder(objectMapper, MediaType.APPLICATION_JSON))
         }.build())
     }
 

@@ -22,7 +22,7 @@ jobs:
           distribution: 'adopt'
           java-version: '21'
       - name: Gradle 애드온 준비하기
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v6
       - name: 커버리지 측정 및 리포트 생성
         run: |
           chmod +x gradlew

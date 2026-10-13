@@ -1,10 +1,10 @@
 plugins {
-    id("io.github.bgmsound.documentify") version "1.3.6" apply false
+    alias(libs.plugins.restdocs.api.spec) apply false
 }
 
 subprojects {
     with(pluginManager) {
-        apply("io.github.bgmsound.documentify")
+        apply(rootProject.libs.plugins.restdocs.api.spec.get().pluginId)
     }
     dependencies {
         implementation(rootProject.libs.jackson.kotlin)

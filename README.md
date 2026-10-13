@@ -1,10 +1,20 @@
 # 📝 Documentify
-[![Kotlin](https://img.shields.io/badge/kotlin-2.0.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.2.21-blue.svg?logo=kotlin)](http://kotlinlang.org)
 ![Latest Release](https://img.shields.io/github/v/release/BGMSound/documentify)
 [![Apache 2.0 license](https://img.shields.io/badge/License-APACHE%202.0-green.svg?logo=APACHE&style=flat)](https://opensource.org/licenses/Apache-2.0)
 <br>
 Documentify allows easy and convenient creation of OpenAPI specification documents through Kotlin DSL, making users from the complexity of traditional RestDocs. 
 It combines the advantages of both Swagger and RestDocs for efficient and intuitive document management.
+
+## Compatibility
+
+| Documentify | Spring Boot | Spring REST Docs | Jackson | Java | Kotlin |
+|---|---|---|---|---|---|
+| 2.0.x (milestones) | 4.0.x | 4.0.x | 3.x | 21+ | 2.2+ |
+| 1.4.x | 3.x | 3.0.x | 2.x | 21+ | 2.0+ |
+
+Upgrading from 1.x? See the [2.0 Migration Guide](docs/migration-guide-2.0.md).
+Release notes for each version are published on [GitHub Releases](https://github.com/BGMSound/documentify/releases).
 
 ## Installation and Getting Started
 ### Installation
@@ -102,7 +112,7 @@ fun documentationGetApi() {
         responseBody {
             field("testField", "test", "test")
         }
-    }.jsonPath("$testField").value("test")
+    }.jsonPath("$.testField").isEqualTo("test")
 }
 ```
 

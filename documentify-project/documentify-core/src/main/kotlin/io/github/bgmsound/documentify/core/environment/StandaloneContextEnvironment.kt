@@ -1,11 +1,11 @@
 package io.github.bgmsound.documentify.core.environment
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.json.JsonMapper
 import org.springframework.core.convert.converter.Converter
 
 interface StandaloneContextEnvironment<T : StandaloneContextEnvironment<T>> : DocumentContextEnvironment {
 
-    fun codec(codec: ObjectMapper): T
+    fun codec(codec: JsonMapper): T
 
     fun controller(controller: Any): T
 

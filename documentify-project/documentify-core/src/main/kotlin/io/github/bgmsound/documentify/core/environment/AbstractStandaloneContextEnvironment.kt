@@ -1,8 +1,8 @@
 package io.github.bgmsound.documentify.core.environment
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.bgmsound.documentify.core.specification.DocumentifyDsl
 import org.springframework.core.convert.converter.Converter
+import tools.jackson.databind.json.JsonMapper
 
 @DocumentifyDsl
 @Suppress("UNCHECKED_CAST")
@@ -10,9 +10,9 @@ abstract class AbstractStandaloneContextEnvironment<T : StandaloneContextEnviron
     protected val controllers: MutableList<Any> = mutableListOf()
     protected val controllerAdvices: MutableList<Any> = mutableListOf()
     protected val converters: MutableList<Converter<*, *>> = mutableListOf()
-    protected var codec: ObjectMapper? = null
+    protected var codec: JsonMapper? = null
 
-    override fun codec(codec: ObjectMapper): T {
+    override fun codec(codec: JsonMapper): T {
         this.codec = codec
         return this as T
     }

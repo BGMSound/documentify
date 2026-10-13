@@ -1,8 +1,9 @@
 package io.github.bgmsound.documentify.core.specification.element
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import org.springframework.restdocs.snippet.AbstractDescriptor
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.cfg.DateTimeFeature
+import tools.jackson.databind.json.JsonMapper
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -31,9 +32,10 @@ abstract class SpecElement(
     companion object {
         const val SAMPLE_KEY = "sample"
 
-        private val OBJECT_MAPPER: ObjectMapper = ObjectMapper()
-            .findAndRegisterModules()
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        private val OBJECT_MAPPER: ObjectMapper = JsonMapper.builder()
+            .findAndAddModules()
+            .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .build()
     }
 
     enum class Requirement {
